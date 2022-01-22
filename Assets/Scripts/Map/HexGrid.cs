@@ -7,9 +7,9 @@ namespace HexMap.Map
    public class HexGrid : MonoBehaviour
    {
       [NonSerialized]
-      public int width = 6;
+      public int mapWidth = 6;
       [NonSerialized]
-      public int height = 6;
+      public int mapHeight = 6;
       [NonSerialized]
       public Color defaultColor = Color.white;
       [NonSerialized]
@@ -22,15 +22,20 @@ namespace HexMap.Map
       HexCell[] m_Cells = default;
       HexMesh m_HexMesh = default;
 
+      public enum HexDirection
+      {
+         NE, E, SE, SW, W, NW
+      }
+
       void Awake()
       {
          m_GridCanvas = GetComponentInChildren<Canvas>();
          m_HexMesh = GetComponentInChildren<HexMesh>();
-         m_Cells = new HexCell[height * width];
+         m_Cells = new HexCell[mapHeight * mapWidth];
 
-         for (int z = 0, i = 0; z < height; z++)
+         for (int z = 0, i = 0; z < mapHeight; z++)
          {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < mapWidth; x++)
             {
                CreateCell(x, z, i++);
             }
@@ -56,6 +61,31 @@ namespace HexMap.Map
          cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
          cell.color = defaultColor;
 
+         if (x > 0)
+         {
+            cell.SetNeighbor(HexDirection.W, m_Cells[i - 1]);
+         }
+
+         if (z > 0)
+         {
+            if ((z & 1) == 0)
+            {
+               cell.SetNeighbor(HexDirection.SE, m_Cells[i - mapWidth]);
+               if (x > 0)
+               {
+                  cell.SetNeighbor(HexDirection.SW, m_Cells[i - mapWidth - 1]);
+               }
+            }
+            else
+            {
+               cell.SetNeighbor(HexDirection.SW, m_Cells[i - mapWidth]);
+               if (x < mapWidth - 1)
+               {
+                  cell.SetNeighbor(HexDirection.SE, m_Cells[i - mapWidth + 1]);
+               }
+            }
+         }
+
          TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(cellLabelPrefab);
          label.rectTransform.SetParent(m_GridCanvas.transform, false);
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
@@ -66,7 +96,7 @@ namespace HexMap.Map
       {
          position = transform.InverseTransformPoint(position);
          HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-         int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
+         int index = coordinates.X + coordinates.Z * mapWidth + coordinates.Z / 2;
          HexCell cell = m_Cells[index];
          cell.color = color;
          m_HexMesh.Triangulate(m_Cells);
