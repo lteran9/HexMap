@@ -27,6 +27,11 @@ namespace HexMap.Map
          NE, E, SE, SW, W, NW
       }
 
+      public enum HexEdgeType
+      {
+         Flat, Slope, Cliff
+      }
+
       void Awake()
       {
          m_GridCanvas = GetComponentInChildren<Canvas>();
@@ -90,15 +95,20 @@ namespace HexMap.Map
          label.rectTransform.SetParent(m_GridCanvas.transform, false);
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
          label.text = cell.coordinates.ToStringOnSeparateLines();
+
+         cell.uiRect = label.rectTransform;
       }
 
-      public void ColorCell(Vector3 position, Color color)
+      public HexCell GetCell(Vector3 position)
       {
          position = transform.InverseTransformPoint(position);
          HexCoordinates coordinates = HexCoordinates.FromPosition(position);
          int index = coordinates.X + coordinates.Z * mapWidth + coordinates.Z / 2;
-         HexCell cell = m_Cells[index];
-         cell.color = color;
+         return m_Cells[index];
+      }
+
+      public void Refresh()
+      {
          m_HexMesh.Triangulate(m_Cells);
       }
    }

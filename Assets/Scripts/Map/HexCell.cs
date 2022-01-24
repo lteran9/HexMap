@@ -8,10 +8,34 @@ namespace HexMap.Map
 {
    public class HexCell : MonoBehaviour
    {
+      int elevation;
+
+      public int Elevation
+      {
+         get
+         {
+            return elevation;
+         }
+         set
+         {
+            elevation = value;
+            Vector3 position = transform.localPosition;
+            position.y = value * HexMetrics.elevationStep;
+            transform.localPosition = position;
+
+            Vector3 uiPosition = uiRect.localPosition;
+            uiPosition.z = elevation * -HexMetrics.elevationStep;
+            uiRect.localPosition = uiPosition;
+         }
+      }
+
       [NonSerialized]
       public HexCoordinates coordinates = default;
       [NonSerialized]
       public Color color = default;
+      [NonSerialized]
+      public RectTransform uiRect;
+
       [SerializeField]
       HexCell[] neighbors = default;
 
@@ -24,6 +48,20 @@ namespace HexMap.Map
       {
          neighbors[(int)direction] = cell;
          cell.neighbors[(int)direction.Opposite()] = this;
+      }
+
+      public HexGrid.HexEdgeType GetEdgeType(HexGrid.HexDirection direction)
+      {
+         return HexMetrics.GetEdgeType(
+            elevation, neighbors[(int)direction].elevation
+         );
+      }
+
+      public HexGrid.HexEdgeType GetEdgeType(HexCell otherCell)
+      {
+         return HexMetrics.GetEdgeType(
+            elevation, otherCell.elevation
+         );
       }
    }
 }
