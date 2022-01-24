@@ -10,6 +10,7 @@ namespace HexMap.Input
    public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
    {
       public event UnityAction onMouseClick = delegate { };
+      public event UnityAction<Vector2> onMove = delegate { };
 
       private PlayerControls playerControls;
 
@@ -34,8 +35,16 @@ namespace HexMap.Input
       {
          if (context.phase == InputActionPhase.Performed)
          {
+            Debug.Log("Click Invoked");
             onMouseClick.Invoke();
          }
+      }
+
+      public void OnMove(InputAction.CallbackContext context)
+      {
+         Debug.Log("Move Invoked");
+         var direction = context.ReadValue<Vector2>();
+         onMove.Invoke(direction);
       }
    }
 }
