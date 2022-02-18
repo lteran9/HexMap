@@ -161,8 +161,7 @@ namespace HexMap.Map
       void TriangulateCorner(
        Vector3 bottom, HexCell bottomCell,
        Vector3 left, HexCell leftCell,
-       Vector3 right, HexCell rightCell
-    )
+       Vector3 right, HexCell rightCell)
       {
          HexGrid.HexEdgeType leftEdgeType = bottomCell.GetEdgeType(leftCell);
          HexGrid.HexEdgeType rightEdgeType = bottomCell.GetEdgeType(rightCell);
