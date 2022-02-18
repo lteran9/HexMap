@@ -29,10 +29,10 @@ namespace HexMap.Input
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""a5162412-66fa-4c77-9864-3d0db8053d9b"",
-                    ""expectedControlType"": ""Vector3"",
+                    ""name"": ""MouseMove"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b3f1cd0e-1bf1-46b9-a318-598c02247ac1"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -50,59 +50,15 @@ namespace HexMap.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""f337660f-c017-4eba-9721-240db61f7cd2"",
-                    ""path"": ""2DVector"",
+                    ""name"": """",
+                    ""id"": ""d4e21ee9-c0d0-4af8-bfa9-2839d24623a5"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
+                    ""action"": ""MouseMove"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""8a2b1c4a-f1cf-4146-bf04-8f2cb830a909"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""84d7899b-39d4-401b-9d3b-7db0380616da"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""cf716848-e288-493a-b87d-997a101f374c"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""12db9ac8-f548-436a-aa3b-e274675d913c"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -129,7 +85,7 @@ namespace HexMap.Input
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
-            m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+            m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -180,13 +136,13 @@ namespace HexMap.Input
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Click;
-        private readonly InputAction m_Player_Move;
+        private readonly InputAction m_Player_MouseMove;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Click => m_Wrapper.m_Player_Click;
-            public InputAction @Move => m_Wrapper.m_Player_Move;
+            public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -199,9 +155,9 @@ namespace HexMap.Input
                     @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                    @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                    @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                    @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                    @MouseMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
+                    @MouseMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
+                    @MouseMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -209,9 +165,9 @@ namespace HexMap.Input
                     @Click.started += instance.OnClick;
                     @Click.performed += instance.OnClick;
                     @Click.canceled += instance.OnClick;
-                    @Move.started += instance.OnMove;
-                    @Move.performed += instance.OnMove;
-                    @Move.canceled += instance.OnMove;
+                    @MouseMove.started += instance.OnMouseMove;
+                    @MouseMove.performed += instance.OnMouseMove;
+                    @MouseMove.canceled += instance.OnMouseMove;
                 }
             }
         }
@@ -228,7 +184,7 @@ namespace HexMap.Input
         public interface IPlayerActions
         {
             void OnClick(InputAction.CallbackContext context);
-            void OnMove(InputAction.CallbackContext context);
+            void OnMouseMove(InputAction.CallbackContext context);
         }
     }
 }

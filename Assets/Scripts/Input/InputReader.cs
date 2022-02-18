@@ -40,11 +40,9 @@ namespace HexMap.Input
          }
       }
 
-      public void OnMove(InputAction.CallbackContext context)
+      public void OnMouseMove(InputAction.CallbackContext context)
       {
-         Debug.Log("Move Invoked");
-         var direction = context.ReadValue<Vector2>();
-         onMove.Invoke(direction);
+        Debug.Log("Mouse Moved");
       }
    }
 }
