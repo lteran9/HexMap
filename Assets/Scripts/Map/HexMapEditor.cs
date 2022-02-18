@@ -22,7 +22,7 @@ namespace HexMap.Map
 
       void Start()
       {
-         inputReader.onMouseClick += OnClick;
+         inputReader.MenuMouseClick += OnClick;
       }
 
       void OnClick()

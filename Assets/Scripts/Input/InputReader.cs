@@ -9,8 +9,8 @@ namespace HexMap.Input
    [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
    public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
    {
-      public event UnityAction onMouseClick = delegate { };
-      public event UnityAction<Vector2> onMove = delegate { };
+      public event UnityAction MenuMouseMove = delegate { };
+      public event UnityAction MenuMouseClick = delegate { };
 
       private PlayerControls playerControls;
 
@@ -20,6 +20,7 @@ namespace HexMap.Input
          {
             playerControls = new PlayerControls();
             playerControls.Player.SetCallbacks(this);
+            playerControls.Player.Enable();
          }
       }
 
@@ -35,14 +36,14 @@ namespace HexMap.Input
       {
          if (context.phase == InputActionPhase.Performed)
          {
-            Debug.Log("Click Invoked");
-            onMouseClick.Invoke();
+            MenuMouseClick.Invoke();
          }
       }
 
       public void OnMouseMove(InputAction.CallbackContext context)
       {
-        Debug.Log("Mouse Moved");
+         if (context.phase == InputActionPhase.Performed)
+            MenuMouseMove.Invoke();
       }
    }
 }
