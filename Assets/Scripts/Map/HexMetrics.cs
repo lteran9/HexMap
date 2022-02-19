@@ -16,6 +16,8 @@ namespace HexMap.Map
       public const float horizontalTerraceStepSize = 1f / terraceSteps;
       public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 
+      public static Texture2D noiseSource;
+
       static Vector3[] corners = {
          new Vector3(0f, 0f, outerRadius),
          new Vector3(innerRadius, 0f, 0.5f * outerRadius),

@@ -468,6 +468,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: noiseSource
+      value: 
+      objectReference: {fileID: 2800000, guid: c2186fedb655a4db7861ba6c455ff7c7, type: 3}
     - target: {fileID: 5140604653758627179, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: m_Name
       value: HexGrid
