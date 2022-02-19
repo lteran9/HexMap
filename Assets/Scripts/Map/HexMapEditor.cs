@@ -8,7 +8,6 @@ namespace HexMap.Map
    public class HexMapEditor : MonoBehaviour
    {
       [SerializeField] Color[] colors;
-
       [SerializeField] HexGrid hexGrid;
       [SerializeField] InputReader inputReader = default;
 
@@ -59,6 +58,11 @@ namespace HexMap.Map
       public void SetElevation(float elevation)
       {
          activeElevation = (int)elevation;
+      }
+
+      public void ResetMap()
+      {
+         hexGrid.Refresh(true);
       }
    }
 }

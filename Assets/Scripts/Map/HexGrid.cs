@@ -118,8 +118,17 @@ namespace HexMap.Map
          return m_Cells[index];
       }
 
-      public void Refresh()
+      public void Refresh(bool reset = false)
       {
+         if (reset)
+         {
+            for (int i = 0; i < m_Cells.Length; i++)
+            {
+               m_Cells[i].color = Color.white;
+               m_Cells[i].Elevation = 0;
+            }
+         }
+
          m_HexMesh.Triangulate(m_Cells);
       }
    }
