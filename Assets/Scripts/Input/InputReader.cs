@@ -11,6 +11,8 @@ namespace HexMap.Input
    {
       public event UnityAction MenuMouseMove = delegate { };
       public event UnityAction MenuMouseClick = delegate { };
+      public event UnityAction RotateCameraLeft = delegate { };
+      public event UnityAction RotateCameraRight = delegate { };
 
       private PlayerControls playerControls;
 
@@ -44,6 +46,18 @@ namespace HexMap.Input
       {
          if (context.phase == InputActionPhase.Performed)
             MenuMouseMove.Invoke();
+      }
+
+      public void OnRotateCameraLeft(InputAction.CallbackContext context)
+      {
+         if (context.phase == InputActionPhase.Performed)
+            RotateCameraLeft.Invoke();
+      }
+
+      public void OnRotateCameraRight(InputAction.CallbackContext context)
+      {
+         if (context.phase == InputActionPhase.Performed)
+            RotateCameraRight.Invoke();
       }
    }
 }

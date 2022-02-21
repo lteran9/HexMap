@@ -35,6 +35,22 @@ namespace HexMap.Input
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RotateCameraLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d31c86d-7af6-41f7-8ef0-71d5876d5fdc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RotateCameraRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""0460bdd4-f102-43c3-b9e2-b50d28d1e16d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -57,6 +73,28 @@ namespace HexMap.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""364c4402-95f9-40b8-a128-41c655d8f46b"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""RotateCameraLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1e02107-2e37-4960-b617-f4e9b453afcb"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""RotateCameraRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -86,6 +124,8 @@ namespace HexMap.Input
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
+            m_Player_RotateCameraLeft = m_Player.FindAction("RotateCameraLeft", throwIfNotFound: true);
+            m_Player_RotateCameraRight = m_Player.FindAction("RotateCameraRight", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -137,12 +177,16 @@ namespace HexMap.Input
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Click;
         private readonly InputAction m_Player_MouseMove;
+        private readonly InputAction m_Player_RotateCameraLeft;
+        private readonly InputAction m_Player_RotateCameraRight;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
+            public InputAction @RotateCameraLeft => m_Wrapper.m_Player_RotateCameraLeft;
+            public InputAction @RotateCameraRight => m_Wrapper.m_Player_RotateCameraRight;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -158,6 +202,12 @@ namespace HexMap.Input
                     @MouseMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
                     @MouseMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
                     @MouseMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
+                    @RotateCameraLeft.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
+                    @RotateCameraLeft.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
+                    @RotateCameraLeft.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
+                    @RotateCameraRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
+                    @RotateCameraRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
+                    @RotateCameraRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -168,6 +218,12 @@ namespace HexMap.Input
                     @MouseMove.started += instance.OnMouseMove;
                     @MouseMove.performed += instance.OnMouseMove;
                     @MouseMove.canceled += instance.OnMouseMove;
+                    @RotateCameraLeft.started += instance.OnRotateCameraLeft;
+                    @RotateCameraLeft.performed += instance.OnRotateCameraLeft;
+                    @RotateCameraLeft.canceled += instance.OnRotateCameraLeft;
+                    @RotateCameraRight.started += instance.OnRotateCameraRight;
+                    @RotateCameraRight.performed += instance.OnRotateCameraRight;
+                    @RotateCameraRight.canceled += instance.OnRotateCameraRight;
                 }
             }
         }
@@ -185,6 +241,8 @@ namespace HexMap.Input
         {
             void OnClick(InputAction.CallbackContext context);
             void OnMouseMove(InputAction.CallbackContext context);
+            void OnRotateCameraLeft(InputAction.CallbackContext context);
+            void OnRotateCameraRight(InputAction.CallbackContext context);
         }
     }
 }
