@@ -6,17 +6,20 @@ using HexMap.Input;
 
 public class CameraManager : MonoBehaviour
 {
-   [SerializeField] int activeCamIdx { get; set; }
+   [SerializeField] int activeCamIdx = default;
 
    [SerializeField] InputReader inputReader = default;
 
-   [SerializeField] CinemachineVirtualCamera[] VCams { get; set; }
+   [SerializeField] CinemachineVirtualCamera[] VCams = default;
 
-   void Awake()
+   void OnEnable()
    {
-      for (int i = 0; i < VCams.Length; i++)
+      if (VCams.Length > 0)
       {
-         VCams[i].enabled = false;
+         for (int i = 0; i < VCams.Length; i++)
+         {
+            VCams[i].enabled = false;
+         }
       }
    }
 
@@ -29,10 +32,7 @@ public class CameraManager : MonoBehaviour
    // Update is called once per frame
    void Update()
    {
-      if (VCams.Length > 0)
-      {
-         VCams[activeCamIdx].enabled = true;
-      }
+      //
    }
 
    public void RotateCameraLeft()
@@ -46,6 +46,12 @@ public class CameraManager : MonoBehaviour
    {
       var oldIdx = activeCamIdx;
       activeCamIdx--;
+
+      if (activeCamIdx < 0)
+      {
+         activeCamIdx = VCams.Length;
+      }
+
       VCams[oldIdx].enabled = false;
    }
 }
