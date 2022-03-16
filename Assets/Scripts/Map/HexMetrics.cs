@@ -82,5 +82,10 @@ namespace HexMap.Map
          }
          return HexGrid.HexEdgeType.Cliff;
       }
+
+      public static Vector4 SampleNoise(Vector3 position)
+      {
+         return noiseSource.GetPixelBilinear(position.x, position.z);
+      }
    }
 }

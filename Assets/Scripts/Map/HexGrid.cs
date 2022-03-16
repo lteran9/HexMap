@@ -17,12 +17,11 @@ namespace HexMap.Map
 
       [SerializeField] HexCell cellPrefab = default;
       [SerializeField] TextMeshProUGUI cellLabelPrefab = default;
+      [SerializeField] Texture2D noiseSource = default;
 
       Canvas m_GridCanvas = default;
       HexCell[] m_Cells = default;
       HexMesh m_HexMesh = default;
-
-      public Texture2D noiseSource;
 
       public enum HexDirection
       {
@@ -51,14 +50,14 @@ namespace HexMap.Map
          }
       }
 
-      void Start()
-      {
-         m_HexMesh.Triangulate(m_Cells);
-      }
-
       void OnEnable()
       {
          HexMetrics.noiseSource = noiseSource;
+      }
+
+      void Start()
+      {
+         m_HexMesh.Triangulate(m_Cells);
       }
 
       void CreateCell(int x, int z, int i)

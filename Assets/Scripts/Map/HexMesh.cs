@@ -133,7 +133,9 @@ namespace HexMap.Map
          }
       }
 
-      void TriangulateEdgeTerraces(Vector3 beginLeft, Vector3 beginRight, HexCell beginCell, Vector3 endLeft, Vector3 endRight, HexCell endCell)
+      void TriangulateEdgeTerraces(
+         Vector3 beginLeft, Vector3 beginRight, HexCell beginCell,
+         Vector3 endLeft, Vector3 endRight, HexCell endCell)
       {
          Vector3 v3 = HexMetrics.TerraceLerp(beginLeft, endLeft, 1);
          Vector3 v4 = HexMetrics.TerraceLerp(beginRight, endRight, 1);
