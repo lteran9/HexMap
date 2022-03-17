@@ -107,6 +107,7 @@ namespace HexMap.Map
          label.text = cell.coordinates.ToStringOnSeparateLines();
 
          cell.uiRect = label.rectTransform;
+         cell.Elevation = 0;
       }
 
       public HexCell GetCell(Vector3 position)

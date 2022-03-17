@@ -15,7 +15,6 @@ namespace HexMap.Map
       List<Vector3> m_Vertices = default;
       List<Color> m_Colors = default;
 
-
       void Awake()
       {
          GetComponent<MeshFilter>().mesh = m_HexMesh = new Mesh();
@@ -28,12 +27,14 @@ namespace HexMap.Map
          m_Colors = new List<Color>();
       }
 
+      #region Triangles 
+
       void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
       {
          int vertexIndex = m_Vertices.Count;
-         m_Vertices.Add(v1);
-         m_Vertices.Add(v2);
-         m_Vertices.Add(v3);
+         m_Vertices.Add(Perturb(v1));
+         m_Vertices.Add(Perturb(v2));
+         m_Vertices.Add(Perturb(v3));
          m_Triangles.Add(vertexIndex);
          m_Triangles.Add(vertexIndex + 1);
          m_Triangles.Add(vertexIndex + 2);
@@ -68,7 +69,7 @@ namespace HexMap.Map
 
       void Triangulate(HexGrid.HexDirection direction, HexCell cell)
       {
-         Vector3 center = cell.transform.localPosition;
+         Vector3 center = cell.Position;
          Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(direction);
          Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(direction);
 
@@ -93,7 +94,7 @@ namespace HexMap.Map
          Vector3 bridge = HexMetrics.GetBridge(direction);
          Vector3 v3 = v1 + bridge;
          Vector3 v4 = v2 + bridge;
-         v3.y = v4.y = neighbor.Elevation * HexMetrics.elevationStep;
+         v3.y = v4.y = neighbor.Position.y;
 
          if (cell.GetEdgeType(direction) == HexGrid.HexEdgeType.Slope)
          {
@@ -109,7 +110,7 @@ namespace HexMap.Map
          if (direction <= HexGrid.HexDirection.E && nextNeighbor != null)
          {
             Vector3 v5 = v2 + HexMetrics.GetBridge(direction.Next());
-            v5.y = nextNeighbor.Elevation * HexMetrics.elevationStep;
+            v5.y = nextNeighbor.Position.y;
 
             if (cell.Elevation <= neighbor.Elevation)
             {
@@ -161,9 +162,9 @@ namespace HexMap.Map
       }
 
       void TriangulateCorner(
-       Vector3 bottom, HexCell bottomCell,
-       Vector3 left, HexCell leftCell,
-       Vector3 right, HexCell rightCell)
+         Vector3 bottom, HexCell bottomCell,
+         Vector3 left, HexCell leftCell,
+         Vector3 right, HexCell rightCell)
       {
          HexGrid.HexEdgeType leftEdgeType = bottomCell.GetEdgeType(leftCell);
          HexGrid.HexEdgeType rightEdgeType = bottomCell.GetEdgeType(rightCell);
@@ -244,9 +245,9 @@ namespace HexMap.Map
       }
 
       void TriangulateCornerTerracesCliff(
-            Vector3 begin, HexCell beginCell,
-            Vector3 left, HexCell leftCell,
-            Vector3 right, HexCell rightCell)
+         Vector3 begin, HexCell beginCell,
+         Vector3 left, HexCell leftCell,
+         Vector3 right, HexCell rightCell)
       {
          float b = 1f / (rightCell.Elevation - beginCell.Elevation);
          if (b < 0)
@@ -270,9 +271,9 @@ namespace HexMap.Map
       }
 
       void TriangulateCornerCliffTerraces(
-                  Vector3 begin, HexCell beginCell,
-                  Vector3 left, HexCell leftCell,
-                  Vector3 right, HexCell rightCell)
+         Vector3 begin, HexCell beginCell,
+         Vector3 left, HexCell leftCell,
+         Vector3 right, HexCell rightCell)
       {
          float b = 1f / (leftCell.Elevation - beginCell.Elevation);
          if (b < 0)
@@ -294,7 +295,6 @@ namespace HexMap.Map
             AddTriangleColor(leftCell.color, rightCell.color, boundaryColor);
          }
       }
-
 
       void TriangulateBoundaryTriangle(
          Vector3 begin, HexCell beginCell,
@@ -335,13 +335,17 @@ namespace HexMap.Map
          m_Colors.Add(c3);
       }
 
+      #endregion 
+
+      #region Quads
+
       void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
       {
          int vertexIndex = m_Vertices.Count;
-         m_Vertices.Add(v1);
-         m_Vertices.Add(v2);
-         m_Vertices.Add(v3);
-         m_Vertices.Add(v4);
+         m_Vertices.Add(Perturb(v1));
+         m_Vertices.Add(Perturb(v2));
+         m_Vertices.Add(Perturb(v3));
+         m_Vertices.Add(Perturb(v4));
          m_Triangles.Add(vertexIndex);
          m_Triangles.Add(vertexIndex + 2);
          m_Triangles.Add(vertexIndex + 1);
@@ -353,7 +357,7 @@ namespace HexMap.Map
       void AddQuadColor(Color c1, Color c2, Color c3, Color c4)
       {
          m_Colors.Add(c1);
-         m_Colors.Add(c1);
+         m_Colors.Add(c2);
          m_Colors.Add(c3);
          m_Colors.Add(c4);
       }
@@ -364,6 +368,17 @@ namespace HexMap.Map
          m_Colors.Add(c1);
          m_Colors.Add(c2);
          m_Colors.Add(c2);
+      }
+
+      #endregion
+
+      Vector3 Perturb(Vector3 position)
+      {
+         Vector4 sample = HexMetrics.SampleNoise(position);
+         position.x += ((sample.x * 2f - 1) * HexMetrics.cellPerturbStrength);
+         //position.y += ((sample.y * 2f - 1) * HexMetrics.cellPerturbStrength);
+         position.z += ((sample.z * 2f - 1) * HexMetrics.cellPerturbStrength);
+         return position;
       }
    }
 }
