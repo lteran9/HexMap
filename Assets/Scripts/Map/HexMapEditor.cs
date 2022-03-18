@@ -47,7 +47,6 @@ namespace HexMap.Map
       {
          cell.color = activeColor;
          cell.Elevation = activeElevation;
-         hexGrid.Refresh();
       }
 
       public void SelectColor(int index)
@@ -62,7 +61,7 @@ namespace HexMap.Map
 
       public void ResetMap()
       {
-         hexGrid.Refresh(true);
+         // TODO
       }
    }
 }
