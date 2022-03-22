@@ -168,7 +168,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0894929622e63437985d601a97a27849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
+  _StickMinZoom: -250
+  _StickMaxZoom: -45
+  _Stick: {fileID: 2037534654}
+  _Swivel: {fileID: 1966946231}
+  _InputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
+  _HexGrid: {fileID: 1809051975}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

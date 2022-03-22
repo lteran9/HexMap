@@ -149,5 +149,15 @@ namespace HexMap.Map
          int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
          return m_Cells[index];
       }
+
+      public int GetChunkX()
+      {
+         return chunkCountX;
+      }
+
+      public int GetChunkZ()
+      {
+         return chunkCountZ;
+      }
    }
 }
