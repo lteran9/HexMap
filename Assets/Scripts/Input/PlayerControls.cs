@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Settings/PlayerControls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Settings/Input/PlayerControls.inputactions'
 
 using System;
 using System.Collections;
@@ -51,6 +51,14 @@ namespace HexMap.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""da81db53-241c-4a41-98b6-4928f756a5e0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -97,6 +105,17 @@ namespace HexMap.Input
                     ""action"": ""RotateCameraRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0442b244-207d-445e-99dd-8461bc765606"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -126,6 +145,7 @@ namespace HexMap.Input
             m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
             m_Player_RotateCameraLeft = m_Player.FindAction("RotateCameraLeft", throwIfNotFound: true);
             m_Player_RotateCameraRight = m_Player.FindAction("RotateCameraRight", throwIfNotFound: true);
+            m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -179,6 +199,7 @@ namespace HexMap.Input
         private readonly InputAction m_Player_MouseMove;
         private readonly InputAction m_Player_RotateCameraLeft;
         private readonly InputAction m_Player_RotateCameraRight;
+        private readonly InputAction m_Player_Zoom;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -187,6 +208,7 @@ namespace HexMap.Input
             public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
             public InputAction @RotateCameraLeft => m_Wrapper.m_Player_RotateCameraLeft;
             public InputAction @RotateCameraRight => m_Wrapper.m_Player_RotateCameraRight;
+            public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -208,6 +230,9 @@ namespace HexMap.Input
                     @RotateCameraRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
                     @RotateCameraRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
                     @RotateCameraRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
+                    @Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    @Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    @Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -224,6 +249,9 @@ namespace HexMap.Input
                     @RotateCameraRight.started += instance.OnRotateCameraRight;
                     @RotateCameraRight.performed += instance.OnRotateCameraRight;
                     @RotateCameraRight.canceled += instance.OnRotateCameraRight;
+                    @Zoom.started += instance.OnZoom;
+                    @Zoom.performed += instance.OnZoom;
+                    @Zoom.canceled += instance.OnZoom;
                 }
             }
         }
@@ -243,6 +271,7 @@ namespace HexMap.Input
             void OnMouseMove(InputAction.CallbackContext context);
             void OnRotateCameraLeft(InputAction.CallbackContext context);
             void OnRotateCameraRight(InputAction.CallbackContext context);
+            void OnZoom(InputAction.CallbackContext context);
         }
     }
 }

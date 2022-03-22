@@ -13,6 +13,7 @@ namespace HexMap.Input
       public event UnityAction MenuMouseClick = delegate { };
       public event UnityAction RotateCameraLeft = delegate { };
       public event UnityAction RotateCameraRight = delegate { };
+      public event UnityAction<float> ZoomCamera = delegate { };
 
       private PlayerControls playerControls;
 
@@ -58,6 +59,14 @@ namespace HexMap.Input
       {
          if (context.phase == InputActionPhase.Performed)
             RotateCameraRight.Invoke();
+      }
+
+      public void OnZoom(InputAction.CallbackContext context)
+      {
+         if (context.phase == InputActionPhase.Performed)
+         {
+            ZoomCamera.Invoke(context.ReadValue<float>());
+         }
       }
    }
 }
