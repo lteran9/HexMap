@@ -8,12 +8,15 @@ namespace HexMap.Map
    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
    public class HexMesh : MonoBehaviour
    {
+      #region Buffers
+      static List<Vector3> Vertices = new List<Vector3>();
+      static List<Color> Colors = new List<Color>();
+      static List<int> Triangles = new List<int>();
+      #endregion
+
       Mesh m_HexMesh = default;
       MeshRenderer m_MeshRenderer = default;
       MeshCollider m_Collider = default;
-      List<int> m_Triangles = default;
-      List<Vector3> m_Vertices = default;
-      List<Color> m_Colors = default;
 
       void Awake()
       {
@@ -22,49 +25,46 @@ namespace HexMap.Map
          m_Collider = gameObject.AddComponent<MeshCollider>();
 
          m_HexMesh.name = "Hex Mesh";
-         m_Triangles = new List<int>();
-         m_Vertices = new List<Vector3>();
-         m_Colors = new List<Color>();
       }
 
       #region Triangles 
 
       void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
       {
-         int vertexIndex = m_Vertices.Count;
-         m_Vertices.Add(Perturb(v1));
-         m_Vertices.Add(Perturb(v2));
-         m_Vertices.Add(Perturb(v3));
-         m_Triangles.Add(vertexIndex);
-         m_Triangles.Add(vertexIndex + 1);
-         m_Triangles.Add(vertexIndex + 2);
+         int vertexIndex = Vertices.Count;
+         Vertices.Add(Perturb(v1));
+         Vertices.Add(Perturb(v2));
+         Vertices.Add(Perturb(v3));
+         Triangles.Add(vertexIndex);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 2);
       }
 
       void AddTriangleUnperturbed(Vector3 v1, Vector3 v2, Vector3 v3)
       {
-         int vertexIndex = m_Vertices.Count;
-         m_Vertices.Add(v1);
-         m_Vertices.Add(v2);
-         m_Vertices.Add(v3);
-         m_Triangles.Add(vertexIndex);
-         m_Triangles.Add(vertexIndex + 1);
-         m_Triangles.Add(vertexIndex + 2);
+         int vertexIndex = Vertices.Count;
+         Vertices.Add(v1);
+         Vertices.Add(v2);
+         Vertices.Add(v3);
+         Triangles.Add(vertexIndex);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 2);
       }
 
       public void Triangulate(HexCell[] cells)
       {
          m_HexMesh.Clear();
-         m_Vertices.Clear();
-         m_Triangles.Clear();
-         m_Colors.Clear();
+         Vertices.Clear();
+         Triangles.Clear();
+         Colors.Clear();
 
          for (int i = 0; i < cells.Length; i++)
          {
             Triangulate(cells[i]);
          }
-         m_HexMesh.vertices = m_Vertices.ToArray();
-         m_HexMesh.triangles = m_Triangles.ToArray();
-         m_HexMesh.SetColors(m_Colors.ToArray());
+         m_HexMesh.vertices = Vertices.ToArray();
+         m_HexMesh.triangles = Triangles.ToArray();
+         m_HexMesh.SetColors(Colors.ToArray());
          m_HexMesh.RecalculateNormals();
 
          m_Collider.sharedMesh = m_HexMesh;
@@ -361,16 +361,16 @@ namespace HexMap.Map
 
       void AddTriangleColor(Color color)
       {
-         m_Colors.Add(color);
-         m_Colors.Add(color);
-         m_Colors.Add(color);
+         Colors.Add(color);
+         Colors.Add(color);
+         Colors.Add(color);
       }
 
       void AddTriangleColor(Color c1, Color c2, Color c3)
       {
-         m_Colors.Add(c1);
-         m_Colors.Add(c2);
-         m_Colors.Add(c3);
+         Colors.Add(c1);
+         Colors.Add(c2);
+         Colors.Add(c3);
       }
 
       #endregion 
@@ -379,33 +379,33 @@ namespace HexMap.Map
 
       void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
       {
-         int vertexIndex = m_Vertices.Count;
-         m_Vertices.Add(Perturb(v1));
-         m_Vertices.Add(Perturb(v2));
-         m_Vertices.Add(Perturb(v3));
-         m_Vertices.Add(Perturb(v4));
-         m_Triangles.Add(vertexIndex);
-         m_Triangles.Add(vertexIndex + 2);
-         m_Triangles.Add(vertexIndex + 1);
-         m_Triangles.Add(vertexIndex + 1);
-         m_Triangles.Add(vertexIndex + 2);
-         m_Triangles.Add(vertexIndex + 3);
+         int vertexIndex = Vertices.Count;
+         Vertices.Add(Perturb(v1));
+         Vertices.Add(Perturb(v2));
+         Vertices.Add(Perturb(v3));
+         Vertices.Add(Perturb(v4));
+         Triangles.Add(vertexIndex);
+         Triangles.Add(vertexIndex + 2);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 2);
+         Triangles.Add(vertexIndex + 3);
       }
 
       void AddQuadColor(Color c1, Color c2, Color c3, Color c4)
       {
-         m_Colors.Add(c1);
-         m_Colors.Add(c2);
-         m_Colors.Add(c3);
-         m_Colors.Add(c4);
+         Colors.Add(c1);
+         Colors.Add(c2);
+         Colors.Add(c3);
+         Colors.Add(c4);
       }
 
       void AddQuadColor(Color c1, Color c2)
       {
-         m_Colors.Add(c1);
-         m_Colors.Add(c1);
-         m_Colors.Add(c2);
-         m_Colors.Add(c2);
+         Colors.Add(c1);
+         Colors.Add(c1);
+         Colors.Add(c2);
+         Colors.Add(c2);
       }
 
       #endregion
