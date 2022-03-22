@@ -59,6 +59,14 @@ namespace HexMap.Input
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""CameraMove"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d3ec747f-0054-4233-b23d-72a0def7fff6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -116,6 +124,61 @@ namespace HexMap.Input
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""730e9a2f-d1b1-4249-9209-2f077052948a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""2f7bf6bc-f5ee-42b0-8d0a-6b5e17b81f9d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""53e0e360-5291-42b0-b9e2-a8f8f5d3b1eb"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2a31d236-6ec0-4edc-ada0-e1f413d806ab"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8ee79b2c-9a36-4f07-a5cf-9dcc0ef2ed54"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -146,6 +209,7 @@ namespace HexMap.Input
             m_Player_RotateCameraLeft = m_Player.FindAction("RotateCameraLeft", throwIfNotFound: true);
             m_Player_RotateCameraRight = m_Player.FindAction("RotateCameraRight", throwIfNotFound: true);
             m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
+            m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -200,6 +264,7 @@ namespace HexMap.Input
         private readonly InputAction m_Player_RotateCameraLeft;
         private readonly InputAction m_Player_RotateCameraRight;
         private readonly InputAction m_Player_Zoom;
+        private readonly InputAction m_Player_CameraMove;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -209,6 +274,7 @@ namespace HexMap.Input
             public InputAction @RotateCameraLeft => m_Wrapper.m_Player_RotateCameraLeft;
             public InputAction @RotateCameraRight => m_Wrapper.m_Player_RotateCameraRight;
             public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
+            public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -233,6 +299,9 @@ namespace HexMap.Input
                     @Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    @CameraMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
+                    @CameraMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
+                    @CameraMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -252,6 +321,9 @@ namespace HexMap.Input
                     @Zoom.started += instance.OnZoom;
                     @Zoom.performed += instance.OnZoom;
                     @Zoom.canceled += instance.OnZoom;
+                    @CameraMove.started += instance.OnCameraMove;
+                    @CameraMove.performed += instance.OnCameraMove;
+                    @CameraMove.canceled += instance.OnCameraMove;
                 }
             }
         }
@@ -272,6 +344,7 @@ namespace HexMap.Input
             void OnRotateCameraLeft(InputAction.CallbackContext context);
             void OnRotateCameraRight(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
+            void OnCameraMove(InputAction.CallbackContext context);
         }
     }
 }

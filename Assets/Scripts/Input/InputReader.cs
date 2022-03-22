@@ -14,6 +14,7 @@ namespace HexMap.Input
       public event UnityAction RotateCameraLeft = delegate { };
       public event UnityAction RotateCameraRight = delegate { };
       public event UnityAction<float> ZoomCamera = delegate { };
+      public event UnityAction<Vector2> MoveEvent = delegate { };
 
       private PlayerControls playerControls;
 
@@ -64,9 +65,12 @@ namespace HexMap.Input
       public void OnZoom(InputAction.CallbackContext context)
       {
          if (context.phase == InputActionPhase.Performed)
-         {
             ZoomCamera.Invoke(context.ReadValue<float>());
-         }
+      }
+
+      public void OnCameraMove(InputAction.CallbackContext context)
+      {
+         MoveEvent.Invoke(context.ReadValue<Vector2>());
       }
    }
 }
