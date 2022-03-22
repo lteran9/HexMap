@@ -1253,9 +1253,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: chunkPrefab
+      value: 
+      objectReference: {fileID: 2684866027671048218, guid: ba2b2e63a3bda41d68e2a0f8ab3ec3a4, type: 3}
+    - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: noiseSource
       value: 
       objectReference: {fileID: 2800000, guid: c2186fedb655a4db7861ba6c455ff7c7, type: 3}
+    - target: {fileID: 5140604653758627179, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 5140604653758627179, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: m_Name
       value: HexGrid

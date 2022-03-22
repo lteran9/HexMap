@@ -94,7 +94,7 @@ namespace HexMap.Map
          cell.transform.localPosition = position;
          cell.name = $"Cell #{i}";
          cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-         cell.color = defaultColor;
+         cell.Color = defaultColor;
 
          if (x > 0)
          {

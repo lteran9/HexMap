@@ -20,28 +20,23 @@ namespace HexMap.Map
          m_Cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
       }
 
-      // Start is called before the first frame update
-      void Start()
+      void LateUpdate()
       {
          hexMesh.Triangulate(m_Cells);
-      }
-
-      // Update is called once per frame
-      void Update()
-      {
-
+         enabled = false;
       }
 
       public void AddCell(int index, HexCell cell)
       {
          m_Cells[index] = cell;
+         cell.chunk = this;
          cell.transform.SetParent(transform, false);
          cell.uiRect.SetParent(gridCanvas.transform, false);
       }
 
       public void Refresh()
       {
-         hexMesh.Triangulate(m_Cells);
+         enabled = true;
       }
    }
 }
