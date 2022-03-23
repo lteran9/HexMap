@@ -6,15 +6,14 @@ using UnityEditor;
 
 namespace HexMap.Editor
 {
+   /// <summary>
+   /// This class will draw a custom view in the inspector for HexCoordinates mainly to handle the display of the coordinates.
+   /// </summary>
    [CustomPropertyDrawer(typeof(HexCoordinates))]
    public class HexCoordinatesDrawer : PropertyDrawer
    {
-      public override void OnGUI(
-         Rect position, SerializedProperty property, GUIContent label
-      )
+      public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
       {
-
-
          // Draw Label
          GUI.Label(position, "Coordinates");
          position = EditorGUI.PrefixLabel(position, label);
