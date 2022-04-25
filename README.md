@@ -15,5 +15,9 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
  - Triangulate slopes
  - Insert terraces
  - Merge terraces and cliffs
-## Chapter 4 [ ]
+## Chapter 4 [X]
+- Use noise to add irregularities
+- Added a noise scale to perturb edges
+- Subdividing the cell edges and edge connections
+- Connecting cliffs and terraces
 ## Chapter 5 [ ]
