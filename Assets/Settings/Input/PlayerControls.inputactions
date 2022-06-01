@@ -115,7 +115,7 @@
                     "id": "730e9a2f-d1b1-4249-9209-2f077052948a",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.6,y=0.8)",
                     "groups": "",
                     "action": "CameraMove",
                     "isComposite": true,

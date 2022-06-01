@@ -13,6 +13,7 @@ public class CameraManager : MonoBehaviour
    [SerializeField] HexGrid _HexGrid = default;
 
    float zoom = 1f, moveSpeed = 250f;
+   Vector2 movementInput;
 
    void OnEnable()
    {
@@ -36,6 +37,16 @@ public class CameraManager : MonoBehaviour
       }
    }
 
+   void LateUpdate()
+   {
+      float xDelta = movementInput.x;
+      float zDelta = movementInput.y;
+      if (xDelta != 0f || zDelta != 0f)
+      {
+         AdjustPosition(xDelta, zDelta);
+      }
+   }
+
    #region Zoom 
 
    void AdjustZoom(float delta)
@@ -43,8 +54,6 @@ public class CameraManager : MonoBehaviour
       if (delta != 0)
       {
          zoom = Mathf.Clamp01(zoom + delta);
-
-         Debug.Log(zoom);
 
          float distance = Mathf.Lerp(_StickMinZoom, _StickMaxZoom, zoom);
          _Stick.localPosition = new Vector3(0f, 0f, distance);
@@ -57,12 +66,7 @@ public class CameraManager : MonoBehaviour
 
    void MoveCamera(Vector2 movement)
    {
-      float xDelta = movement.x;
-      float zDelta = movement.y;
-      if (xDelta != 0f || zDelta != 0f)
-      {
-         AdjustPosition(xDelta, zDelta);
-      }
+      movementInput = movement;
    }
 
    void AdjustPosition(float xDelta, float zDelta)

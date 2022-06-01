@@ -50,11 +50,6 @@ namespace HexMap.Map
          HexMetrics.noiseSource = noiseSource;
       }
 
-      void Start()
-      {
-
-      }
-
       void CreateChunks()
       {
          m_Chunks = new HexGridChunk[chunkCountX * chunkCountZ];
