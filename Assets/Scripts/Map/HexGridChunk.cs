@@ -18,6 +18,7 @@ namespace HexMap.Map
          hexMesh = GetComponentInChildren<HexMesh>();
 
          m_Cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
+         ShowUI(false);
       }
 
       void LateUpdate()
@@ -37,6 +38,11 @@ namespace HexMap.Map
       public void Refresh()
       {
          enabled = true;
+      }
+
+      public void ShowUI(bool visible)
+      {
+         gridCanvas.gameObject.SetActive(visible);
       }
    }
 }

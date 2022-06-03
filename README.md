@@ -20,7 +20,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Added a noise scale to perturb edges
 - Subdividing the cell edges and edge connections
 - Connecting cliffs and terraces
-## Chapter 5 [ ]
+## Chapter 5 [X]
 - Split the grid into chunks.
 - Control the camera.
 - Paint color and elevation separately.

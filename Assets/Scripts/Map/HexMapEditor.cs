@@ -105,6 +105,11 @@ namespace HexMap.Map
          applyElevation = toggle;
       }
 
+      public void ShowUI(bool visible)
+      {
+         hexGrid.ShowUI(visible);
+      }
+
       public void ResetMap()
       {
          // TODO
