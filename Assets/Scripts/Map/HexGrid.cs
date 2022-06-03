@@ -169,5 +169,13 @@ namespace HexMap.Map
       {
          return chunkCountZ;
       }
+
+      public void ShowUI(bool visible)
+      {
+         for (int i = 0; i < m_Chunks.Length; i++)
+         {
+            m_Chunks[i].ShowUI(visible);
+         }
+      }
    }
 }
