@@ -175,7 +175,7 @@ namespace HexMap.Input
                 {
                     ""name"": ""positive"",
                     ""id"": ""2d03e465-eb84-439a-93d1-e2028be2a610"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Default"",
