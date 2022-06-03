@@ -30,7 +30,7 @@ namespace HexMap.Map
             transform.localPosition = position;
 
             Vector3 uiPosition = uiRect.localPosition;
-            uiPosition.z = elevation * -position.y;
+            uiPosition.z = elevation * -HexMetrics.elevationStep;
             uiRect.localPosition = uiPosition;
             Refresh();
          }

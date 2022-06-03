@@ -47,5 +47,5 @@ MonoBehaviour:
   chunkCountZ: 3
   cellPrefab: {fileID: 2876132088134003966, guid: 1f2726c8283904d53bc8bbd7eb02bded, type: 3}
   cellLabelPrefab: {fileID: 4129102967557465843, guid: 823d935deed7c41ff97607c2edb222f8, type: 3}
-  noiseSource: {fileID: 0}
-  chunkPrefab: {fileID: 0}
+  noiseSource: {fileID: 2800000, guid: c2186fedb655a4db7861ba6c455ff7c7, type: 3}
+  chunkPrefab: {fileID: 2684866027671048218, guid: ba2b2e63a3bda41d68e2a0f8ab3ec3a4, type: 3}

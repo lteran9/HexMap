@@ -1923,5 +1923,5 @@ MonoBehaviour:
   - {r: 0.05504057, g: 0.3207547, b: 0.01966893, a: 0}
   - {r: 0.015574936, g: 0.035072263, b: 0.6603774, a: 0}
   - {r: 0.82354814, g: 0.8679245, b: 0.31523672, a: 0}
-  hexGrid: {fileID: 0}
+  hexGrid: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
   inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
