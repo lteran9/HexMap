@@ -37,22 +37,6 @@ namespace HexMap.Input
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""RotateCameraLeft"",
-                    ""type"": ""Button"",
-                    ""id"": ""1d31c86d-7af6-41f7-8ef0-71d5876d5fdc"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""RotateCameraRight"",
-                    ""type"": ""Button"",
-                    ""id"": ""0460bdd4-f102-43c3-b9e2-b50d28d1e16d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Zoom"",
                     ""type"": ""PassThrough"",
                     ""id"": ""da81db53-241c-4a41-98b6-4928f756a5e0"",
@@ -65,6 +49,14 @@ namespace HexMap.Input
                     ""type"": ""PassThrough"",
                     ""id"": ""d3ec747f-0054-4233-b23d-72a0def7fff6"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CameraRotate"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""2c17cea8-7f84-4d5a-a375-26fd5b3acfa3"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -89,28 +81,6 @@ namespace HexMap.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""364c4402-95f9-40b8-a128-41c655d8f46b"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""RotateCameraLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a1e02107-2e37-4960-b617-f4e9b453afcb"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default"",
-                    ""action"": ""RotateCameraRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -179,6 +149,39 @@ namespace HexMap.Input
                     ""action"": ""CameraMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""5a799ca0-d6f2-4d92-98f4-e18a0ecbb163"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ac347b48-0672-486f-ad29-2360403894d9"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2d03e465-eb84-439a-93d1-e2028be2a610"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""CameraRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -206,10 +209,9 @@ namespace HexMap.Input
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
-            m_Player_RotateCameraLeft = m_Player.FindAction("RotateCameraLeft", throwIfNotFound: true);
-            m_Player_RotateCameraRight = m_Player.FindAction("RotateCameraRight", throwIfNotFound: true);
             m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
             m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
+            m_Player_CameraRotate = m_Player.FindAction("CameraRotate", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -261,20 +263,18 @@ namespace HexMap.Input
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Click;
         private readonly InputAction m_Player_MouseMove;
-        private readonly InputAction m_Player_RotateCameraLeft;
-        private readonly InputAction m_Player_RotateCameraRight;
         private readonly InputAction m_Player_Zoom;
         private readonly InputAction m_Player_CameraMove;
+        private readonly InputAction m_Player_CameraRotate;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
-            public InputAction @RotateCameraLeft => m_Wrapper.m_Player_RotateCameraLeft;
-            public InputAction @RotateCameraRight => m_Wrapper.m_Player_RotateCameraRight;
             public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
             public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
+            public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -290,18 +290,15 @@ namespace HexMap.Input
                     @MouseMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
                     @MouseMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
                     @MouseMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
-                    @RotateCameraLeft.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
-                    @RotateCameraLeft.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
-                    @RotateCameraLeft.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraLeft;
-                    @RotateCameraRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
-                    @RotateCameraRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
-                    @RotateCameraRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotateCameraRight;
                     @Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @CameraMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
                     @CameraMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
                     @CameraMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraMove;
+                    @CameraRotate.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
+                    @CameraRotate.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
+                    @CameraRotate.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -312,18 +309,15 @@ namespace HexMap.Input
                     @MouseMove.started += instance.OnMouseMove;
                     @MouseMove.performed += instance.OnMouseMove;
                     @MouseMove.canceled += instance.OnMouseMove;
-                    @RotateCameraLeft.started += instance.OnRotateCameraLeft;
-                    @RotateCameraLeft.performed += instance.OnRotateCameraLeft;
-                    @RotateCameraLeft.canceled += instance.OnRotateCameraLeft;
-                    @RotateCameraRight.started += instance.OnRotateCameraRight;
-                    @RotateCameraRight.performed += instance.OnRotateCameraRight;
-                    @RotateCameraRight.canceled += instance.OnRotateCameraRight;
                     @Zoom.started += instance.OnZoom;
                     @Zoom.performed += instance.OnZoom;
                     @Zoom.canceled += instance.OnZoom;
                     @CameraMove.started += instance.OnCameraMove;
                     @CameraMove.performed += instance.OnCameraMove;
                     @CameraMove.canceled += instance.OnCameraMove;
+                    @CameraRotate.started += instance.OnCameraRotate;
+                    @CameraRotate.performed += instance.OnCameraRotate;
+                    @CameraRotate.canceled += instance.OnCameraRotate;
                 }
             }
         }
@@ -341,10 +335,9 @@ namespace HexMap.Input
         {
             void OnClick(InputAction.CallbackContext context);
             void OnMouseMove(InputAction.CallbackContext context);
-            void OnRotateCameraLeft(InputAction.CallbackContext context);
-            void OnRotateCameraRight(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
             void OnCameraMove(InputAction.CallbackContext context);
+            void OnCameraRotate(InputAction.CallbackContext context);
         }
     }
 }

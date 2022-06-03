@@ -12,7 +12,11 @@ public class CameraManager : MonoBehaviour
    [SerializeField] InputReader _InputReader = default;
    [SerializeField] HexGrid _HexGrid = default;
 
-   float zoom = 1f, moveSpeed = 250f;
+   float zoom = 1f,
+      moveSpeed = 250f,
+      rotationAngle = 0,
+      rotationSpeed = 180,
+      rotateInput = 0;
    Vector2 movementInput;
 
    void OnEnable()
@@ -21,8 +25,7 @@ public class CameraManager : MonoBehaviour
       {
          _InputReader.ZoomCamera += AdjustZoom;
          _InputReader.MoveEvent += MoveCamera;
-         _InputReader.RotateCameraLeft += OnRotateCameraLeft;
-         _InputReader.RotateCameraRight += OnRotateCameraRight;
+         _InputReader.RotateEvent += RotateCamera;
       }
    }
 
@@ -32,8 +35,7 @@ public class CameraManager : MonoBehaviour
       {
          _InputReader.ZoomCamera -= AdjustZoom;
          _InputReader.MoveEvent -= MoveCamera;
-         _InputReader.RotateCameraLeft -= OnRotateCameraLeft;
-         _InputReader.RotateCameraRight -= OnRotateCameraRight;
+         _InputReader.RotateEvent -= RotateCamera;
       }
    }
 
@@ -44,6 +46,11 @@ public class CameraManager : MonoBehaviour
       if (xDelta != 0f || zDelta != 0f)
       {
          AdjustPosition(xDelta, zDelta);
+      }
+
+      if (rotateInput != 0f)
+      {
+         AdjustRotation(rotateInput);
       }
    }
 
@@ -99,14 +106,23 @@ public class CameraManager : MonoBehaviour
 
    #region Rotate
 
-   void OnRotateCameraLeft()
+   void RotateCamera(float movement)
    {
-      transform.Rotate(Vector3.up, -90f);
+      rotateInput = movement;
    }
 
-   void OnRotateCameraRight()
+   void AdjustRotation(float delta)
    {
-      transform.Rotate(Vector3.up, 90f);
+      rotationAngle += delta * rotationSpeed * Time.deltaTime;
+      if (rotationAngle < 0f)
+      {
+         rotationAngle += 360f;
+      }
+      else if (rotationAngle >= 360f)
+      {
+         rotationAngle -= 360f;
+      }
+      transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
    }
 
    #endregion 
