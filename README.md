@@ -25,3 +25,10 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Control the camera.
 - Paint color and elevation separately.
 - Use a larger cell brush.
+## Chapter 6 [ ]
+- Add river data to cells
+- Support dragging to draw rivers
+- Create river channels
+- Use more than one mesh per chunk
+- Make generic pool for lists
+- Tirangulate and animate flowing water

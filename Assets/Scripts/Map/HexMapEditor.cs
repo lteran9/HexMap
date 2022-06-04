@@ -1,7 +1,8 @@
+using HexMap.Input;
+using HexMap.Extensions;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using HexMap.Input;
 
 namespace HexMap.Map
 {
@@ -12,8 +13,16 @@ namespace HexMap.Map
       [SerializeField] InputReader inputReader = default;
 
       int activeElevation, brushSize;
-      bool applyColor, applyElevation = true;
+      bool applyColor, isDrag, applyElevation = true;
+      HexGrid.HexDirection dragDirection;
+      HexCell previousCell;
       Color activeColor;
+      OptionalToggle riverMode;
+
+      enum OptionalToggle
+      {
+         Ignore, Yes, No
+      }
 
       void Awake()
       {
@@ -32,6 +41,10 @@ namespace HexMap.Map
             // Register click
             HandleInput();
          }
+         else
+         {
+            previousCell = null;
+         }
       }
 
       void HandleInput()
@@ -40,7 +53,21 @@ namespace HexMap.Map
          Ray inputRay = Camera.main.ScreenPointToRay(position);
          if (Physics.Raycast(inputRay, out RaycastHit hit))
          {
-            EditCells(hexGrid.GetCell(hit.point));
+            HexCell currentCell = hexGrid.GetCell(hit.point);
+            if (previousCell && previousCell != currentCell)
+            {
+               ValidateDrag(currentCell);
+            }
+            else
+            {
+               isDrag = false;
+            }
+            EditCells(currentCell);
+            previousCell = currentCell;
+         }
+         else
+         {
+            previousCell = null;
          }
       }
 
@@ -55,6 +82,19 @@ namespace HexMap.Map
             if (applyElevation)
             {
                cell.Elevation = activeElevation;
+            }
+
+            if (riverMode == OptionalToggle.No)
+            {
+               cell.RemoveRiver();
+            }
+            else if (isDrag && riverMode == OptionalToggle.Yes)
+            {
+               HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
+               if (otherCell)
+               {
+                  otherCell.SetOutgoingRiver(dragDirection);
+               }
             }
          }
       }
@@ -81,6 +121,19 @@ namespace HexMap.Map
          }
       }
 
+      void ValidateDrag(HexCell currentCell)
+      {
+         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
+         {
+            if (previousCell.GetNeighbor(dragDirection) == currentCell)
+            {
+               isDrag = true;
+               return;
+            }
+         }
+         isDrag = false;
+      }
+
       public void SelectColor(int index)
       {
          applyColor = index >= 0;
@@ -103,6 +156,11 @@ namespace HexMap.Map
       public void SetApplyElevation(bool toggle)
       {
          applyElevation = toggle;
+      }
+
+      public void SetRiverMode(int mode)
+      {
+         riverMode = (OptionalToggle)mode;
       }
 
       public void ShowUI(bool visible)
