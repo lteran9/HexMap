@@ -29,12 +29,12 @@ namespace HexMap.Input
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MouseMove"",
+                    ""name"": ""MouseDrag"",
                     ""type"": ""PassThrough"",
                     ""id"": ""b3f1cd0e-1bf1-46b9-a318-598c02247ac1"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""MouseDrag""
                 },
                 {
                     ""name"": ""Zoom"",
@@ -70,17 +70,6 @@ namespace HexMap.Input
                     ""processors"": """",
                     ""groups"": ""Default"",
                     ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d4e21ee9-c0d0-4af8-bfa9-2839d24623a5"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MouseMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -182,6 +171,50 @@ namespace HexMap.Input
                     ""action"": ""CameraRotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Drag"",
+                    ""id"": ""cceda71f-c34e-49de-8b7f-f8357ed15524"",
+                    ""path"": ""MouseDrag"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseDrag"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""e82d3bf2-315c-4548-a058-4fbeccf4da62"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""MouseDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Axis1"",
+                    ""id"": ""4b5d0468-b22a-4517-99e0-f5a7c315c107"",
+                    ""path"": ""<Mouse>/delta/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""MouseDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Axis2"",
+                    ""id"": ""f523f1d8-de8e-49c5-9252-a0e128fb5b90"",
+                    ""path"": ""<Mouse>/delta/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""MouseDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -208,7 +241,7 @@ namespace HexMap.Input
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
-            m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
+            m_Player_MouseDrag = m_Player.FindAction("MouseDrag", throwIfNotFound: true);
             m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
             m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
             m_Player_CameraRotate = m_Player.FindAction("CameraRotate", throwIfNotFound: true);
@@ -262,7 +295,7 @@ namespace HexMap.Input
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Click;
-        private readonly InputAction m_Player_MouseMove;
+        private readonly InputAction m_Player_MouseDrag;
         private readonly InputAction m_Player_Zoom;
         private readonly InputAction m_Player_CameraMove;
         private readonly InputAction m_Player_CameraRotate;
@@ -271,7 +304,7 @@ namespace HexMap.Input
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Click => m_Wrapper.m_Player_Click;
-            public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
+            public InputAction @MouseDrag => m_Wrapper.m_Player_MouseDrag;
             public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
             public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
             public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
@@ -287,9 +320,9 @@ namespace HexMap.Input
                     @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                    @MouseMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
-                    @MouseMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
-                    @MouseMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseMove;
+                    @MouseDrag.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
+                    @MouseDrag.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
+                    @MouseDrag.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
                     @Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
                     @Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
@@ -306,9 +339,9 @@ namespace HexMap.Input
                     @Click.started += instance.OnClick;
                     @Click.performed += instance.OnClick;
                     @Click.canceled += instance.OnClick;
-                    @MouseMove.started += instance.OnMouseMove;
-                    @MouseMove.performed += instance.OnMouseMove;
-                    @MouseMove.canceled += instance.OnMouseMove;
+                    @MouseDrag.started += instance.OnMouseDrag;
+                    @MouseDrag.performed += instance.OnMouseDrag;
+                    @MouseDrag.canceled += instance.OnMouseDrag;
                     @Zoom.started += instance.OnZoom;
                     @Zoom.performed += instance.OnZoom;
                     @Zoom.canceled += instance.OnZoom;
@@ -334,7 +367,7 @@ namespace HexMap.Input
         public interface IPlayerActions
         {
             void OnClick(InputAction.CallbackContext context);
-            void OnMouseMove(InputAction.CallbackContext context);
+            void OnMouseDrag(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
             void OnCameraMove(InputAction.CallbackContext context);
             void OnCameraRotate(InputAction.CallbackContext context);

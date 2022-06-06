@@ -9,12 +9,11 @@ namespace HexMap.Input
    [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
    public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
    {
-      public event UnityAction MenuMouseMove = delegate { };
+      public event UnityAction MouseDrag = delegate { };
       public event UnityAction MenuMouseClick = delegate { };
       public event UnityAction<float> ZoomCamera = delegate { };
       public event UnityAction<float> RotateEvent = delegate { };
       public event UnityAction<Vector2> MoveEvent = delegate { };
-
 
       private PlayerControls playerControls;
 
@@ -44,10 +43,11 @@ namespace HexMap.Input
          }
       }
 
-      public void OnMouseMove(InputAction.CallbackContext context)
+      public void OnMouseDrag(InputAction.CallbackContext context)
       {
+         Debug.Log(context.ReadValue<Vector2>());
          if (context.phase == InputActionPhase.Performed)
-            MenuMouseMove.Invoke();
+            MouseDrag.Invoke();
       }
 
       public void OnZoom(InputAction.CallbackContext context)

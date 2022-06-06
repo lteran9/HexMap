@@ -14,12 +14,12 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MouseMove",
+                    "name": "MouseDrag",
                     "type": "PassThrough",
                     "id": "b3f1cd0e-1bf1-46b9-a318-598c02247ac1",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "MouseDrag"
                 },
                 {
                     "name": "Zoom",
@@ -55,17 +55,6 @@
                     "processors": "",
                     "groups": "Default",
                     "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d4e21ee9-c0d0-4af8-bfa9-2839d24623a5",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -165,6 +154,50 @@
                     "processors": "",
                     "groups": "Default",
                     "action": "CameraRotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Drag",
+                    "id": "cceda71f-c34e-49de-8b7f-f8357ed15524",
+                    "path": "MouseDrag",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseDrag",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Button",
+                    "id": "e82d3bf2-315c-4548-a058-4fbeccf4da62",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "MouseDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Axis1",
+                    "id": "4b5d0468-b22a-4517-99e0-f5a7c315c107",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "MouseDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Axis2",
+                    "id": "f523f1d8-de8e-49c5-9252-a0e128fb5b90",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "MouseDrag",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

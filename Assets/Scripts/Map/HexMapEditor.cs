@@ -29,9 +29,14 @@ namespace HexMap.Map
          SelectColor(0);
       }
 
-      void Start()
+      void OnEnable()
       {
          inputReader.MenuMouseClick += OnClick;
+      }
+
+      void OnDisable()
+      {
+         inputReader.MenuMouseClick -= OnClick;
       }
 
       void OnClick()
