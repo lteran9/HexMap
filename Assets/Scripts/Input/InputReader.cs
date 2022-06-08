@@ -45,7 +45,6 @@ namespace HexMap.Input
 
       public void OnMouseDrag(InputAction.CallbackContext context)
       {
-         Debug.Log(context.ReadValue<Vector2>());
          if (context.phase == InputActionPhase.Performed)
             MouseDrag.Invoke();
       }

@@ -14,10 +14,10 @@ namespace HexMap.Map
 
       int activeElevation, brushSize;
       bool applyColor, isDrag, applyElevation = true;
-      HexGrid.HexDirection dragDirection;
       HexCell previousCell;
       Color activeColor;
-      OptionalToggle riverMode;
+      OptionalToggle riverMode = OptionalToggle.Ignore;
+      HexGrid.HexDirection dragDirection;
 
       enum OptionalToggle
       {
@@ -32,11 +32,13 @@ namespace HexMap.Map
       void OnEnable()
       {
          inputReader.MenuMouseClick += OnClick;
+         inputReader.MouseDrag += OnClick;
       }
 
       void OnDisable()
       {
          inputReader.MenuMouseClick -= OnClick;
+         inputReader.MouseDrag -= OnClick;
       }
 
       void OnClick()
@@ -95,6 +97,7 @@ namespace HexMap.Map
             }
             else if (isDrag && riverMode == OptionalToggle.Yes)
             {
+               Debug.Log(dragDirection);
                HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
                if (otherCell)
                {
@@ -165,6 +168,7 @@ namespace HexMap.Map
 
       public void SetRiverMode(int mode)
       {
+         Debug.Log(mode);
          riverMode = (OptionalToggle)mode;
       }
 

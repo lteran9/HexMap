@@ -7,6 +7,7 @@ namespace HexMap.Map
    public static class HexMetrics
    {
       public const int terracesPerSlope = 2;
+      public const int chunkSizeX = 5, chunkSizeZ = 5;
       public const int terraceSteps = terracesPerSlope * 2 + 1;
       public const float outerRadius = 10f;
       public const float innerRadius = outerRadius * 0.866025404f;
@@ -18,7 +19,7 @@ namespace HexMap.Map
       public const float cellPerturbStrength = 4f;
       public const float noiseScale = 0.003f;
       public const float elevationPerturbStrength = 1.5f;
-      public const int chunkSizeX = 5, chunkSizeZ = 5;
+      public const float streamBedElevationOffset = -1;
 
 
       public static Texture2D noiseSource;

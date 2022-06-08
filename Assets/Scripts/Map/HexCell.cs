@@ -70,12 +70,19 @@ namespace HexMap.Map
             return hasIncomingRiver;
          }
       }
-
       public bool HasOutgoingRiver
       {
          get
          {
             return hasOutgoingRiver;
+         }
+      }
+
+      public float StreamBedY
+      {
+         get
+         {
+            return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
          }
       }
 
