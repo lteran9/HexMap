@@ -16,7 +16,7 @@ namespace HexMap.Map
       public const float elevationStep = 3f;
       public const float horizontalTerraceStepSize = 1f / terraceSteps;
       public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
-      public const float cellPerturbStrength = 4f;
+      public const float cellPerturbStrength = 0f;//4f;
       public const float noiseScale = 0.003f;
       public const float elevationPerturbStrength = 1.5f;
       public const float streamBedElevationOffset = -1;

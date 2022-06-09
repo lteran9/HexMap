@@ -78,7 +78,9 @@ namespace HexMap.Map
          }
       }
 
-      void Triangulate(HexGrid.HexDirection direction, HexCell cell)
+      void Triangulate(
+         HexGrid.HexDirection direction,
+         HexCell cell)
       {
          Vector3 center = cell.Position;
          EdgeVertices eVertices = new EdgeVertices(
@@ -86,13 +88,27 @@ namespace HexMap.Map
             center + HexMetrics.GetSecondSolidCorner(direction)
          );
 
-         if (cell.HasRiverThroughEdge(direction))
+         if (cell.HasRiver)
          {
-            eVertices.v3.y = cell.StreamBedY;
+            if (cell.HasRiverThroughEdge(direction))
+            {
+               eVertices.v3.y = cell.StreamBedY;
+               if (cell.HasRiverBeginOrEnd)
+               {
+                  TriangulateWithRiverBeginOrEnd(direction, cell, center, eVertices);
+               }
+               else
+               {
+                  TriangulateWithRiver(direction, cell, center, eVertices);
+               }
+            }
          }
+         else
+         {
+            // Add Triangles
+            TriangulateEdgeFan(center, eVertices, cell.Color);
 
-         // Add Triangles
-         TriangulateEdgeFan(center, eVertices, cell.Color);
+         }
 
          if (direction <= HexGrid.HexDirection.SE)
          {
@@ -373,6 +389,54 @@ namespace HexMap.Map
          AddQuadColor(c1, c2);
       }
 
+      void TriangulateWithRiver(
+         HexGrid.HexDirection direction,
+         HexCell cell,
+         Vector3 center,
+         EdgeVertices eVertices)
+      {
+         Vector3 centerL = center + HexMetrics.GetFirstSolidCorner(direction.Previous()) * 0.25f;
+         Vector3 centerR = center + HexMetrics.GetSecondSolidCorner(direction.Next()) * 0.25f;
+         EdgeVertices middle = new EdgeVertices(
+            Vector3.Lerp(centerL, eVertices.v1, 0.5f),
+            Vector3.Lerp(centerR, eVertices.v5, 0.5f),
+            1f / 6f
+         );
+
+         middle.v3.y = center.y = eVertices.v3.y;
+
+         TriangulateEdgeStrip(middle, cell.Color, eVertices, cell.Color);
+
+         AddTriangle(centerL, middle.v1, middle.v2);
+         AddTriangleColor(cell.Color);
+         AddQuad(centerL, center, middle.v2, middle.v3);
+         AddQuadColor(cell.Color);
+         AddQuad(center, centerR, middle.v3, middle.v4);
+         AddQuadColor(cell.Color);
+         AddTriangle(centerR, middle.v4, middle.v5);
+         AddTriangleColor(cell.Color);
+
+      }
+
+      void TriangulateWithRiverBeginOrEnd(
+         HexGrid.HexDirection direction,
+         HexCell cell,
+         Vector3 center,
+         EdgeVertices eVertices)
+      {
+         EdgeVertices middle = new EdgeVertices(
+            Vector3.Lerp(center, eVertices.v1, 0.5f),
+            Vector3.Lerp(center, eVertices.v5, 0.5f)
+         );
+
+         middle.v3.y = eVertices.v3.y;
+
+         TriangulateEdgeStrip(middle, cell.Color, eVertices, cell.Color);
+         TriangulateEdgeFan(center, middle, cell.Color);
+
+
+      }
+
       void AddTriangleColor(Color color)
       {
          Colors.Add(color);
@@ -406,12 +470,12 @@ namespace HexMap.Map
          Triangles.Add(vertexIndex + 3);
       }
 
-      void AddQuadColor(Color c1, Color c2, Color c3, Color c4)
+      void AddQuadColor(Color color)
       {
-         Colors.Add(c1);
-         Colors.Add(c2);
-         Colors.Add(c3);
-         Colors.Add(c4);
+         Colors.Add(color);
+         Colors.Add(color);
+         Colors.Add(color);
+         Colors.Add(color);
       }
 
       void AddQuadColor(Color c1, Color c2)
@@ -420,6 +484,14 @@ namespace HexMap.Map
          Colors.Add(c1);
          Colors.Add(c2);
          Colors.Add(c2);
+      }
+
+      void AddQuadColor(Color c1, Color c2, Color c3, Color c4)
+      {
+         Colors.Add(c1);
+         Colors.Add(c2);
+         Colors.Add(c3);
+         Colors.Add(c4);
       }
 
       #endregion
