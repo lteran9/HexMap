@@ -31,6 +31,18 @@ namespace HexMap.Extensions
       {
          return direction == HexGrid.HexDirection.NW ? HexGrid.HexDirection.NE : (direction + 1);
       }
+
+      public static HexGrid.HexDirection Previous2(this HexGrid.HexDirection direction)
+      {
+         direction -= 2;
+         return direction >= HexGrid.HexDirection.NE ? direction : (direction + 6);
+      }
+
+      public static HexGrid.HexDirection Next2(this HexGrid.HexDirection direction)
+      {
+         direction += 2;
+         return direction <= HexGrid.HexDirection.NW ? direction : (direction - 6);
+      }
    }
 
    #endregion

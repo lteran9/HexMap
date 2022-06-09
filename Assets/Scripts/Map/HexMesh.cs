@@ -395,8 +395,36 @@ namespace HexMap.Map
          Vector3 center,
          EdgeVertices eVertices)
       {
-         Vector3 centerL = center + HexMetrics.GetFirstSolidCorner(direction.Previous()) * 0.25f;
-         Vector3 centerR = center + HexMetrics.GetSecondSolidCorner(direction.Next()) * 0.25f;
+         Vector3 centerL;
+         Vector3 centerR;
+         if (cell.HasRiverThroughEdge(direction.Opposite()))
+         {
+            centerL = center + HexMetrics.GetFirstSolidCorner(direction.Previous()) * 0.25f;
+            centerR = center + HexMetrics.GetSecondSolidCorner(direction.Next()) * 0.25f;
+         }
+         else if (cell.HasRiverThroughEdge(direction.Next()))
+         {
+            centerL = center;
+            centerR = Vector3.Lerp(center, eVertices.v5, 2f / 3f);
+         }
+         else if (cell.HasRiverThroughEdge(direction.Previous()))
+         {
+            centerL = Vector3.Lerp(center, eVertices.v1, 2f / 3f);
+            centerR = center;
+         }
+         else if (cell.HasRiverThroughEdge(direction.Next2()))
+         {
+            centerL = center;
+            centerR = center + HexMetrics.GetSolidEdgeMiddle(direction.Next()) * (0.5f * HexMetrics.innerToOuter);
+         }
+         else
+         {
+            centerL = center + HexMetrics.GetSolidEdgeMiddle(direction.Previous()) * (0.5f * HexMetrics.innerToOuter);
+            centerR = center;
+         }
+
+         center = Vector3.Lerp(centerL, centerR, 0.5f);
+
          EdgeVertices middle = new EdgeVertices(
             Vector3.Lerp(centerL, eVertices.v1, 0.5f),
             Vector3.Lerp(centerR, eVertices.v5, 0.5f),
@@ -415,7 +443,6 @@ namespace HexMap.Map
          AddQuadColor(cell.Color);
          AddTriangle(centerR, middle.v4, middle.v5);
          AddTriangleColor(cell.Color);
-
       }
 
       void TriangulateWithRiverBeginOrEnd(
