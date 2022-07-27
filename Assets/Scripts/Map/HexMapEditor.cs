@@ -8,9 +8,9 @@ namespace HexMap.Map
 {
    public class HexMapEditor : MonoBehaviour
    {
-      [SerializeField] Color[] colors;
-      [SerializeField] HexGrid hexGrid;
-      [SerializeField] InputReader inputReader = default;
+      [SerializeField] Color[] _colors;
+      [SerializeField] HexGrid _hexGrid;
+      [SerializeField] InputReader _inputReader = default;
 
       int activeElevation, brushSize;
       bool applyColor, isDrag, applyElevation = true;
@@ -31,14 +31,14 @@ namespace HexMap.Map
 
       void OnEnable()
       {
-         inputReader.MenuMouseClick += OnClick;
-         inputReader.MouseDrag += OnClick;
+         _inputReader.MenuMouseClick += OnClick;
+         _inputReader.MouseDrag += OnClick;
       }
 
       void OnDisable()
       {
-         inputReader.MenuMouseClick -= OnClick;
-         inputReader.MouseDrag -= OnClick;
+         _inputReader.MenuMouseClick -= OnClick;
+         _inputReader.MouseDrag -= OnClick;
       }
 
       void OnClick()
@@ -60,7 +60,7 @@ namespace HexMap.Map
          Ray inputRay = Camera.main.ScreenPointToRay(position);
          if (Physics.Raycast(inputRay, out RaycastHit hit))
          {
-            HexCell currentCell = hexGrid.GetCell(hit.point);
+            HexCell currentCell = _hexGrid.GetCell(hit.point);
             if (previousCell && previousCell != currentCell)
             {
                ValidateDrag(currentCell);
@@ -116,7 +116,7 @@ namespace HexMap.Map
          {
             for (int x = centerX - r; x <= centerX + brushSize; x++)
             {
-               EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+               EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
             }
          }
 
@@ -124,7 +124,7 @@ namespace HexMap.Map
          {
             for (int x = centerX - brushSize; x <= centerX + r; x++)
             {
-               EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+               EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
             }
          }
       }
@@ -147,7 +147,7 @@ namespace HexMap.Map
          applyColor = index >= 0;
          if (applyColor)
          {
-            activeColor = colors[index];
+            activeColor = _colors[index];
          }
       }
 
@@ -174,7 +174,7 @@ namespace HexMap.Map
 
       public void ShowUI(bool visible)
       {
-         hexGrid.ShowUI(visible);
+         _hexGrid.ShowUI(visible);
       }
 
       public void ResetMap()

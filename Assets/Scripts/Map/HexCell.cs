@@ -112,15 +112,15 @@ namespace HexMap.Map
       {
          get
          {
-            return color;
+            return _color;
          }
          set
          {
-            if (color == value)
+            if (_color == value)
             {
                return;
             }
-            color = value;
+            _color = value;
             Refresh();
          }
       }
@@ -128,17 +128,17 @@ namespace HexMap.Map
       [NonSerialized] public HexCoordinates coordinates = default;
       [NonSerialized] public RectTransform uiRect = default;
 
-      [SerializeField] Color color = default;
-      [SerializeField] HexCell[] neighbors = default;
+      [SerializeField] Color _color = default;
+      [SerializeField] HexCell[] _neighbors = default;
 
       void Refresh()
       {
          if (chunk)
          {
             chunk.Refresh();
-            for (int i = 0; i < neighbors.Length; i++)
+            for (int i = 0; i < _neighbors.Length; i++)
             {
-               HexCell neighbor = neighbors[i];
+               HexCell neighbor = _neighbors[i];
                if (neighbor != null && neighbor.chunk != chunk)
                {
                   neighbor.chunk.Refresh();
@@ -154,19 +154,19 @@ namespace HexMap.Map
 
       public HexCell GetNeighbor(HexGrid.HexDirection direction)
       {
-         return neighbors[(int)direction];
+         return _neighbors[(int)direction];
       }
 
       public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell)
       {
-         neighbors[(int)direction] = cell;
-         cell.neighbors[(int)direction.Opposite()] = this;
+         _neighbors[(int)direction] = cell;
+         cell._neighbors[(int)direction.Opposite()] = this;
       }
 
       public HexGrid.HexEdgeType GetEdgeType(HexGrid.HexDirection direction)
       {
          return HexMetrics.GetEdgeType(
-            elevation, neighbors[(int)direction].elevation
+            elevation, _neighbors[(int)direction].elevation
          );
       }
 

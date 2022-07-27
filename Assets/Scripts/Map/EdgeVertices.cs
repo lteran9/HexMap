@@ -24,8 +24,7 @@ namespace HexMap.Map
          v5 = corner2;
       }
 
-      public static EdgeVertices TerraceLerp(
-         EdgeVertices a, EdgeVertices b, int step)
+      public static EdgeVertices TerraceLerp(EdgeVertices a, EdgeVertices b, int step)
       {
          EdgeVertices result;
          result.v1 = HexMetrics.TerraceLerp(a.v1, b.v1, step);

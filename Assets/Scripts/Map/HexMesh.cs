@@ -14,17 +14,17 @@ namespace HexMap.Map
       static List<int> Triangles = new List<int>();
       #endregion
 
-      Mesh m_HexMesh = default;
-      MeshRenderer m_MeshRenderer = default;
-      MeshCollider m_Collider = default;
+      Mesh hexMesh = default;
+      MeshRenderer meshRenderer = default;
+      MeshCollider meshCollider = default;
 
       void Awake()
       {
-         GetComponent<MeshFilter>().mesh = m_HexMesh = new Mesh();
-         m_MeshRenderer = GetComponent<MeshRenderer>();
-         m_Collider = gameObject.AddComponent<MeshCollider>();
+         GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
+         meshRenderer = GetComponent<MeshRenderer>();
+         meshCollider = gameObject.AddComponent<MeshCollider>();
 
-         m_HexMesh.name = "Hex Mesh";
+         hexMesh.name = "Hex Mesh";
       }
 
       #region Triangles 
@@ -53,7 +53,7 @@ namespace HexMap.Map
 
       public void Triangulate(HexCell[] cells)
       {
-         m_HexMesh.Clear();
+         hexMesh.Clear();
          Vertices.Clear();
          Triangles.Clear();
          Colors.Clear();
@@ -62,12 +62,12 @@ namespace HexMap.Map
          {
             Triangulate(cells[i]);
          }
-         m_HexMesh.vertices = Vertices.ToArray();
-         m_HexMesh.triangles = Triangles.ToArray();
-         m_HexMesh.SetColors(Colors.ToArray());
-         m_HexMesh.RecalculateNormals();
+         hexMesh.vertices = Vertices.ToArray();
+         hexMesh.triangles = Triangles.ToArray();
+         hexMesh.SetColors(Colors.ToArray());
+         hexMesh.RecalculateNormals();
 
-         m_Collider.sharedMesh = m_HexMesh;
+         meshCollider.sharedMesh = hexMesh;
       }
 
       void Triangulate(HexCell cell)
