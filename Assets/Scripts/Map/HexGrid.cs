@@ -14,10 +14,10 @@ namespace HexMap.Map
 
       [SerializeField] int chunkCountX = 4;
       [SerializeField] int chunkCountZ = 3;
-      [SerializeField] HexCell cellPrefab = default;
       [SerializeField] TextMeshProUGUI cellLabelPrefab = default;
       [SerializeField] Texture2D noiseSource = default;
       [SerializeField] HexGridChunk chunkPrefab = default;
+      [SerializeField] HexCell cellPrefab = default;
 
       int cellCountX, cellCountZ;
 

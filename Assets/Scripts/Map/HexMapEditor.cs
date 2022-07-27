@@ -82,11 +82,11 @@ namespace HexMap.Map
       {
          if (cell != null)
          {
-            if (applyColor)
+            if (applyColor && riverMode == OptionalToggle.No)
             {
                cell.Color = activeColor;
             }
-            if (applyElevation)
+            if (applyElevation && riverMode == OptionalToggle.No)
             {
                cell.Elevation = activeElevation;
             }
@@ -95,9 +95,8 @@ namespace HexMap.Map
             {
                cell.RemoveRiver();
             }
-            else if (isDrag && riverMode == OptionalToggle.Yes)
+            else if (isDrag == true && riverMode == OptionalToggle.Yes)
             {
-               Debug.Log(dragDirection);
                HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
                if (otherCell)
                {

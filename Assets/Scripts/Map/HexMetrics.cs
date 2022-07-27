@@ -22,6 +22,7 @@ namespace HexMap.Map
       public const float noiseScale = 0.003f;
       public const float elevationPerturbStrength = 1.5f;
       public const float streamBedElevationOffset = -1;
+      public const float riverSurfaceElevationOffset = -0.5f;
 
 
       public static Texture2D noiseSource;

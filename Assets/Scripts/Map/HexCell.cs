@@ -85,6 +85,13 @@ namespace HexMap.Map
             return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
          }
       }
+      public float RiverSurfaceY
+      {
+         get
+         {
+            return (elevation + HexMetrics.riverSurfaceElevationOffset) * HexMetrics.elevationStep;
+         }
+      }
 
       public HexGrid.HexDirection IncomingRiver
       {
