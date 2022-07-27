@@ -32,9 +32,9 @@ namespace HexMap.Map
       void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
       {
          int vertexIndex = Vertices.Count;
-         Vertices.Add(Perturb(v1));
-         Vertices.Add(Perturb(v2));
-         Vertices.Add(Perturb(v3));
+         Vertices.Add(HexMetrics.Perturb(v1));
+         Vertices.Add(HexMetrics.Perturb(v2));
+         Vertices.Add(HexMetrics.Perturb(v3));
          Triangles.Add(vertexIndex);
          Triangles.Add(vertexIndex + 1);
          Triangles.Add(vertexIndex + 2);
@@ -101,6 +101,10 @@ namespace HexMap.Map
                {
                   TriangulateWithRiver(direction, cell, center, eVertices);
                }
+            }
+            else
+            {
+               TriangulateAdjacentToRiver(direction, cell, center, eVertices);
             }
          }
          else
@@ -292,7 +296,7 @@ namespace HexMap.Map
             b = -b;
          }
 
-         Vector3 boundary = Vector3.Lerp(Perturb(begin), Perturb(right), b);
+         Vector3 boundary = Vector3.Lerp(HexMetrics.Perturb(begin), HexMetrics.Perturb(right), b);
          Color boundaryColor = Color.Lerp(beginCell.Color, rightCell.Color, b);
 
          TriangulateBoundaryTriangle(begin, beginCell, left, leftCell, boundary, boundaryColor);
@@ -303,7 +307,7 @@ namespace HexMap.Map
          }
          else
          {
-            AddTriangleUnperturbed(Perturb(left), Perturb(right), boundary);
+            AddTriangleUnperturbed(HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
             AddTriangleColor(leftCell.Color, rightCell.Color, boundaryColor);
          }
       }
@@ -319,7 +323,7 @@ namespace HexMap.Map
             b = -b;
          }
 
-         Vector3 boundary = Vector3.Lerp(Perturb(begin), Perturb(left), b);
+         Vector3 boundary = Vector3.Lerp(HexMetrics.Perturb(begin), HexMetrics.Perturb(left), b);
          Color boundaryColor = Color.Lerp(beginCell.Color, leftCell.Color, b);
 
          TriangulateBoundaryTriangle(right, rightCell, begin, beginCell, boundary, boundaryColor);
@@ -330,7 +334,7 @@ namespace HexMap.Map
          }
          else
          {
-            AddTriangleUnperturbed(Perturb(left), Perturb(right), boundary);
+            AddTriangleUnperturbed(HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
             AddTriangleColor(leftCell.Color, rightCell.Color, boundaryColor);
          }
       }
@@ -340,23 +344,23 @@ namespace HexMap.Map
          Vector3 left, HexCell leftCell,
          Vector3 boundary, Color boundaryColor)
       {
-         Vector3 v2 = Perturb(HexMetrics.TerraceLerp(begin, left, 1));
+         Vector3 v2 = HexMetrics.Perturb(HexMetrics.TerraceLerp(begin, left, 1));
          Color c2 = HexMetrics.TerraceLerp(beginCell.Color, leftCell.Color, 1);
 
-         AddTriangleUnperturbed(Perturb(begin), v2, boundary);
+         AddTriangleUnperturbed(HexMetrics.Perturb(begin), v2, boundary);
          AddTriangleColor(beginCell.Color, c2, boundaryColor);
 
          for (int i = 2; i < HexMetrics.terraceSteps; i++)
          {
             Vector3 v1 = v2;
             Color c1 = c2;
-            v2 = Perturb(HexMetrics.TerraceLerp(begin, left, i));
+            v2 = HexMetrics.Perturb(HexMetrics.TerraceLerp(begin, left, i));
             c2 = HexMetrics.TerraceLerp(beginCell.Color, leftCell.Color, i);
             AddTriangleUnperturbed(v1, v2, boundary);
             AddTriangleColor(c1, c2, boundaryColor);
          }
 
-         AddTriangleUnperturbed(v2, Perturb(left), boundary);
+         AddTriangleUnperturbed(v2, HexMetrics.Perturb(left), boundary);
          AddTriangleColor(c2, leftCell.Color, boundaryColor);
       }
 
@@ -397,6 +401,7 @@ namespace HexMap.Map
       {
          Vector3 centerL;
          Vector3 centerR;
+
          if (cell.HasRiverThroughEdge(direction.Opposite()))
          {
             centerL = center + HexMetrics.GetFirstSolidCorner(direction.Previous()) * 0.25f;
@@ -464,6 +469,34 @@ namespace HexMap.Map
 
       }
 
+      void TriangulateAdjacentToRiver(
+         HexGrid.HexDirection direction, HexCell cell, Vector3 center, EdgeVertices eVertices)
+      {
+         if (cell.HasRiverThroughEdge(direction.Next()))
+         {
+            if (cell.HasRiverThroughEdge(direction.Previous()))
+            {
+               center += HexMetrics.GetSolidEdgeMiddle(direction) * (HexMetrics.innerToOuter * 0.5f);
+            }
+            else if (cell.HasRiverThroughEdge(direction.Previous2()))
+            {
+               center += HexMetrics.GetFirstSolidCorner(direction) * 0.25f;
+            }
+         }
+         else if (cell.HasRiverThroughEdge(direction.Previous()) && cell.HasRiverThroughEdge(direction.Next2()))
+         {
+            center += HexMetrics.GetSecondSolidCorner(direction) * 0.25f;
+         }
+
+         EdgeVertices mVertices = new EdgeVertices(
+            Vector3.Lerp(center, eVertices.v1, 0.5f),
+            Vector3.Lerp(center, eVertices.v5, 0.5f)
+         );
+
+         TriangulateEdgeStrip(mVertices, cell.Color, eVertices, cell.Color);
+         TriangulateEdgeFan(center, mVertices, cell.Color);
+      }
+
       void AddTriangleColor(Color color)
       {
          Colors.Add(color);
@@ -485,10 +518,10 @@ namespace HexMap.Map
       void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
       {
          int vertexIndex = Vertices.Count;
-         Vertices.Add(Perturb(v1));
-         Vertices.Add(Perturb(v2));
-         Vertices.Add(Perturb(v3));
-         Vertices.Add(Perturb(v4));
+         Vertices.Add(HexMetrics.Perturb(v1));
+         Vertices.Add(HexMetrics.Perturb(v2));
+         Vertices.Add(HexMetrics.Perturb(v3));
+         Vertices.Add(HexMetrics.Perturb(v4));
          Triangles.Add(vertexIndex);
          Triangles.Add(vertexIndex + 2);
          Triangles.Add(vertexIndex + 1);
@@ -522,14 +555,5 @@ namespace HexMap.Map
       }
 
       #endregion
-
-      Vector3 Perturb(Vector3 position)
-      {
-         Vector4 sample = HexMetrics.SampleNoise(position);
-         position.x += ((sample.x * 2f - 1) * HexMetrics.cellPerturbStrength);
-         //position.y += ((sample.y * 2f - 1) * HexMetrics.cellPerturbStrength);
-         position.z += ((sample.z * 2f - 1) * HexMetrics.cellPerturbStrength);
-         return position;
-      }
    }
 }

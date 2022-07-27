@@ -168,7 +168,6 @@ namespace HexMap.Map
 
       public void SetRiverMode(int mode)
       {
-         Debug.Log(mode);
          riverMode = (OptionalToggle)mode;
       }
 

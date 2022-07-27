@@ -104,5 +104,13 @@ namespace HexMap.Map
          return
             (corners[(int)direction] + corners[(int)direction + 1]) * (0.5f * solidFactor);
       }
+
+      public static Vector3 Perturb(Vector3 position)
+      {
+         Vector4 sample = SampleNoise(position);
+         position.x += ((sample.x * 2f - 1) * cellPerturbStrength);
+         position.z += ((sample.z * 2f - 1) * cellPerturbStrength);
+         return position;
+      }
    }
 }
