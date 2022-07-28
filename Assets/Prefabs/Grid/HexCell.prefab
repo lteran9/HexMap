@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunk: {fileID: 0}
+  _roads: 000000000000
   _color: {r: 0, g: 0, b: 0, a: 0}
   _neighbors:
   - {fileID: 0}

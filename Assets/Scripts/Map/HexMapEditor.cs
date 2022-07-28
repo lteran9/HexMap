@@ -16,7 +16,7 @@ namespace HexMap.Map
       bool applyColor, isDrag, applyElevation = true;
       HexCell previousCell;
       Color activeColor;
-      OptionalToggle riverMode = OptionalToggle.Ignore;
+      OptionalToggle riverMode = OptionalToggle.Ignore, roadMode = OptionalToggle.Ignore;
       HexGrid.HexDirection dragDirection;
 
       enum OptionalToggle
@@ -43,15 +43,14 @@ namespace HexMap.Map
 
       void OnClick()
       {
-         if (EventSystem.current.IsPointerOverGameObject() == false)
-         {
-            // Register click
-            HandleInput();
-         }
-         else
-         {
-            previousCell = null;
-         }
+         // if (EventSystem.current.IsPointerOverGameObject() == false)
+         // {
+         HandleInput();
+         // }
+         // else
+         // {
+         //    previousCell = null;
+         // }
       }
 
       void HandleInput()
@@ -82,25 +81,45 @@ namespace HexMap.Map
       {
          if (cell != null)
          {
-            if (applyColor && riverMode == OptionalToggle.No)
+            if (applyColor && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
             {
                cell.Color = activeColor;
             }
-            if (applyElevation && riverMode == OptionalToggle.No)
+            if (applyElevation && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
             {
                cell.Elevation = activeElevation;
             }
 
             if (riverMode == OptionalToggle.No)
             {
+               var tempBrushSize = brushSize;
+               brushSize = 0;
                cell.RemoveRiver();
+               brushSize = tempBrushSize;
             }
-            else if (isDrag == true && riverMode == OptionalToggle.Yes)
+
+            if (roadMode == OptionalToggle.No)
+            {
+               var tempBrushSize = brushSize;
+               brushSize = 0;
+               cell.RemoveRoads();
+               brushSize = tempBrushSize;
+            }
+
+            if (isDrag)
             {
                HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
                if (otherCell)
                {
-                  otherCell.SetOutgoingRiver(dragDirection);
+                  if (riverMode == OptionalToggle.Yes)
+                  {
+                     otherCell.SetOutgoingRiver(dragDirection);
+                  }
+
+                  if (roadMode == OptionalToggle.Yes)
+                  {
+                     otherCell.AddRoad(dragDirection);
+                  }
                }
             }
          }
@@ -168,6 +187,11 @@ namespace HexMap.Map
       public void SetRiverMode(int mode)
       {
          riverMode = (OptionalToggle)mode;
+      }
+
+      public void SetRoadMode(int mode)
+      {
+         roadMode = (OptionalToggle)mode;
       }
 
       public void ShowUI(bool visible)

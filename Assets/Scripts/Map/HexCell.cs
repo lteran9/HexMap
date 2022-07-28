@@ -12,6 +12,10 @@ namespace HexMap.Map
       bool hasIncomingRiver, hasOutgoingRiver;
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
+      [SerializeField] bool[] _roads;
+      [SerializeField] Color _color = default;
+      [SerializeField] HexCell[] _neighbors = default;
+
       public int Elevation
       {
          get
@@ -45,6 +49,14 @@ namespace HexMap.Map
                RemoveIncomingRiver();
             }
 
+            for (int i = 0; i < _roads.Length; i++)
+            {
+               if (_roads[i] && GetElevationDifference((HexGrid.HexDirection)i) > 1)
+               {
+                  SetRoad(i, false);
+               }
+            }
+
             Refresh();
          }
       }
@@ -75,6 +87,22 @@ namespace HexMap.Map
          get
          {
             return hasOutgoingRiver;
+         }
+      }
+      public bool HasRoads
+      {
+         get
+         {
+            for (int i = 0; i < _roads.Length; i++)
+            {
+               if (_roads[i])
+               {
+                  return true;
+               }
+
+            }
+
+            return false;
          }
       }
 
@@ -135,9 +163,6 @@ namespace HexMap.Map
       [NonSerialized] public HexCoordinates coordinates = default;
       [NonSerialized] public RectTransform uiRect = default;
 
-      [SerializeField] Color _color = default;
-      [SerializeField] HexCell[] _neighbors = default;
-
       void Refresh()
       {
          if (chunk)
@@ -184,12 +209,7 @@ namespace HexMap.Map
          );
       }
 
-      public bool HasRiverThroughEdge(HexGrid.HexDirection direction)
-      {
-         return
-            hasIncomingRiver && incomingRiver == direction ||
-            hasOutgoingRiver && outgoingRiver == direction;
-      }
+      #region Rivers
 
       public void RemoveOutgoingRiver()
       {
@@ -225,6 +245,13 @@ namespace HexMap.Map
          RemoveIncomingRiver();
       }
 
+      public bool HasRiverThroughEdge(HexGrid.HexDirection direction)
+      {
+         return
+            hasIncomingRiver && incomingRiver == direction ||
+            hasOutgoingRiver && outgoingRiver == direction;
+      }
+
       public void SetOutgoingRiver(HexGrid.HexDirection direction)
       {
          if (hasOutgoingRiver && outgoingRiver == direction)
@@ -246,12 +273,57 @@ namespace HexMap.Map
 
          hasOutgoingRiver = true;
          outgoingRiver = direction;
-         RefreshSelfOnly();
 
          neighbor.RemoveIncomingRiver();
          neighbor.hasIncomingRiver = true;
          neighbor.incomingRiver = direction.Opposite();
-         neighbor.RefreshSelfOnly();
+
+         SetRoad((int)direction, false);
       }
+
+      #endregion
+
+      #region Roads
+
+      public void AddRoad(HexGrid.HexDirection direction)
+      {
+         if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && GetElevationDifference(direction) <= 1)
+         {
+            SetRoad((int)direction, true);
+         }
+      }
+
+      public void SetRoad(int index, bool state)
+      {
+         _roads[index] = state;
+         _neighbors[index]._roads[(int)((HexGrid.HexDirection)index).Opposite()] = state;
+         _neighbors[index].RefreshSelfOnly();
+         RefreshSelfOnly();
+      }
+
+      public void RemoveRoads()
+      {
+         for (int i = 0; i < _roads.Length; i++)
+         {
+            if (_roads[i])
+            {
+               SetRoad(i, false);
+            }
+         }
+      }
+
+      public bool HasRoadThroughEdge(HexGrid.HexDirection direction)
+      {
+         return _roads[(int)direction];
+      }
+
+      public int GetElevationDifference(HexGrid.HexDirection direction)
+      {
+         int difference = elevation - GetNeighbor(direction).elevation;
+         return difference >= 0 ? difference : -difference;
+      }
+
+      #endregion
+
    }
 }
