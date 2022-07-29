@@ -121,20 +121,6 @@ namespace HexMap.Map
          }
       }
 
-      public HexGrid.HexDirection IncomingRiver
-      {
-         get
-         {
-            return incomingRiver;
-         }
-      }
-      public HexGrid.HexDirection OutgoingRiver
-      {
-         get
-         {
-            return outgoingRiver;
-         }
-      }
       public Vector3 Position
       {
          get
@@ -142,7 +128,6 @@ namespace HexMap.Map
             return transform.localPosition;
          }
       }
-      public HexGridChunk chunk = default;
       public Color Color
       {
          get
@@ -159,6 +144,29 @@ namespace HexMap.Map
             Refresh();
          }
       }
+      public HexGrid.HexDirection IncomingRiver
+      {
+         get
+         {
+            return incomingRiver;
+         }
+      }
+      public HexGrid.HexDirection OutgoingRiver
+      {
+         get
+         {
+            return outgoingRiver;
+         }
+      }
+      public HexGrid.HexDirection RiverBeginOrEndDirection
+      {
+         get
+         {
+            return hasIncomingRiver ? incomingRiver : outgoingRiver;
+         }
+      }
+
+      public HexGridChunk chunk = default;
 
       [NonSerialized] public HexCoordinates coordinates = default;
       [NonSerialized] public RectTransform uiRect = default;
