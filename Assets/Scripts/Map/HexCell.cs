@@ -39,15 +39,7 @@ namespace HexMap.Map
             uiPosition.z = elevation * -HexMetrics.elevationStep;
             uiRect.localPosition = uiPosition;
 
-            if (hasOutgoingRiver && elevation < GetNeighbor(outgoingRiver).elevation)
-            {
-               RemoveOutgoingRiver();
-            }
-
-            if (hasIncomingRiver && elevation > GetNeighbor(incomingRiver).elevation)
-            {
-               RemoveIncomingRiver();
-            }
+            ValidateRivers();
 
             for (int i = 0; i < _roads.Length; i++)
             {
@@ -74,6 +66,7 @@ namespace HexMap.Map
             }
 
             waterLevel = value;
+            ValidateRivers();
             Refresh();
          }
       }
@@ -299,7 +292,7 @@ namespace HexMap.Map
          }
 
          HexCell neighbor = GetNeighbor(direction);
-         if (!neighbor || elevation < neighbor.elevation)
+         if (!IsValidRiverDestination(neighbor))
          {
             return;
          }
@@ -318,6 +311,25 @@ namespace HexMap.Map
          neighbor.incomingRiver = direction.Opposite();
 
          SetRoad((int)direction, false);
+      }
+
+      bool IsValidRiverDestination(HexCell neighbor)
+      {
+         return neighbor && (
+            elevation >= neighbor.elevation || waterLevel == neighbor.elevation
+         );
+      }
+
+      void ValidateRivers()
+      {
+         if (hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(outgoingRiver)))
+         {
+            RemoveOutgoingRiver();
+         }
+         if (hasIncomingRiver && !GetNeighbor(incomingRiver).IsValidRiverDestination(this))
+         {
+            RemoveIncomingRiver();
+         }
       }
 
       #endregion

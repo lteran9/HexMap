@@ -844,7 +844,7 @@ namespace HexMap.Map
 
          if (cell.HasRiverThroughEdge(direction))
          {
-            TriangulateEstuary(e1, e2);
+            TriangulateEstuary(e1, e2, cell.IncomingRiver == direction);
          }
          else
          {
@@ -900,7 +900,7 @@ namespace HexMap.Map
 
       #region Estuaries
 
-      void TriangulateEstuary(EdgeVertices e1, EdgeVertices e2)
+      void TriangulateEstuary(EdgeVertices e1, EdgeVertices e2, bool incomingRiver)
       {
          _waterShore.AddTriangle(e2.v1, e1.v2, e1.v1);
          _waterShore.AddTriangle(e2.v5, e1.v5, e1.v4);
@@ -922,19 +922,43 @@ namespace HexMap.Map
          _estuaries.AddTriangleUV(
             new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 1f)
          );
-         _estuaries.AddQuadUV(0f, 0f, 0f, 1f);
+         _estuaries.AddQuadUV(
+            new Vector2(0f, 0f), new Vector2(0f, 0f),
+            new Vector2(1f, 1f), new Vector2(0f, 1f)
+         );
 
-         _estuaries.AddQuadUV2(
-            new Vector2(1f, 0f), new Vector2(1f, 1f),
-            new Vector2(1f, 0f), new Vector2(0.5f, 1f)
-         );
-         _estuaries.AddTriangleUV2(
-            new Vector2(0.5f, 1f), new Vector2(1f, 0f), new Vector2(0f, 0f)
-         );
-         _estuaries.AddQuadUV2(
-            new Vector2(0.5f, 1f), new Vector2(0f, 1f),
-            new Vector2(0f, 0f), new Vector2(0f, 0f)
-         );
+         if (incomingRiver)
+         {
+            _estuaries.AddQuadUV2(
+               new Vector2(1.5f, 1f), new Vector2(0.7f, 1.15f),
+               new Vector2(1f, 0.8f), new Vector2(0.5f, 1.1f)
+            );
+            _estuaries.AddTriangleUV2(
+               new Vector2(0.5f, 1.1f),
+               new Vector2(1f, 0.8f),
+               new Vector2(0f, 0.8f)
+            );
+            _estuaries.AddQuadUV2(
+               new Vector2(0.5f, 1.1f), new Vector2(0.3f, 1.15f),
+               new Vector2(0f, 0.8f), new Vector2(-0.5f, 1f)
+            );
+         }
+         else
+         {
+            _estuaries.AddQuadUV2(
+               new Vector2(-0.5f, -0.2f), new Vector2(0.3f, -0.35f),
+               new Vector2(0f, 0f), new Vector2(0.5f, -0.3f)
+            );
+            _estuaries.AddTriangleUV2(
+               new Vector2(0.5f, -0.3f),
+               new Vector2(0f, 0f),
+               new Vector2(1f, 0f)
+            );
+            _estuaries.AddQuadUV2(
+               new Vector2(0.5f, -0.3f), new Vector2(0.7f, -0.35f),
+               new Vector2(1f, 0f), new Vector2(1.5f, -0.2f)
+            );
+         }
       }
 
       #endregion 
