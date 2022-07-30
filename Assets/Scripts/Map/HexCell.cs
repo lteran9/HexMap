@@ -8,7 +8,7 @@ namespace HexMap.Map
 {
    public class HexCell : MonoBehaviour
    {
-      int elevation = int.MinValue;
+      int elevation = -1, waterLevel = -1;
       bool hasIncomingRiver, hasOutgoingRiver;
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
@@ -60,6 +60,23 @@ namespace HexMap.Map
             Refresh();
          }
       }
+      public int WaterLevel
+      {
+         get
+         {
+            return waterLevel;
+         }
+         set
+         {
+            if (WaterLevel == value)
+            {
+               return;
+            }
+
+            waterLevel = value;
+            Refresh();
+         }
+      }
 
       public bool HasRiver
       {
@@ -105,6 +122,13 @@ namespace HexMap.Map
             return false;
          }
       }
+      public bool IsUnderwater
+      {
+         get
+         {
+            return waterLevel > elevation;
+         }
+      }
 
       public float StreamBedY
       {
@@ -117,7 +141,14 @@ namespace HexMap.Map
       {
          get
          {
-            return (elevation + HexMetrics.riverSurfaceElevationOffset) * HexMetrics.elevationStep;
+            return (elevation + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
+         }
+      }
+      public float WaterSurfaceY
+      {
+         get
+         {
+            return (waterLevel + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
          }
       }
 

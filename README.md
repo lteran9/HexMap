@@ -32,8 +32,13 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Use more than one mesh per chunk
 - Make generic pool for lists
 - Tirangulate and animate flowing water
-## Chapter 7 [ ]
+## Chapter 7 [X]
 - Add support for roads
 - Triangulate roads
 - Combine roads and rivers
 - Give roads a rugged appearance
+## Chapter 8 [ ]
+- Add water to cells
+- Triangulate a water surface
+- Create shore water with foam
+- Make water and rivers play nice

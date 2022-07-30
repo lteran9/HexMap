@@ -12,8 +12,15 @@ namespace HexMap.Map
       [SerializeField] HexGrid _hexGrid;
       [SerializeField] InputReader _inputReader = default;
 
-      int activeElevation, brushSize;
-      bool applyColor, isDrag, applyElevation = true;
+      int activeElevation,
+         activeWaterLevel,
+         brushSize;
+
+      bool applyColor,
+         isDrag,
+         applyElevation = true,
+         applyWaterLevel = true;
+
       HexCell previousCell;
       Color activeColor;
       OptionalToggle riverMode = OptionalToggle.Ignore, roadMode = OptionalToggle.Ignore;
@@ -88,6 +95,10 @@ namespace HexMap.Map
             if (applyElevation && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
             {
                cell.Elevation = activeElevation;
+            }
+            if (applyWaterLevel && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
+            {
+               cell.WaterLevel = activeWaterLevel;
             }
 
             if (riverMode == OptionalToggle.No)
@@ -174,6 +185,11 @@ namespace HexMap.Map
          activeElevation = (int)elevation;
       }
 
+      public void SetWaterLevel(float level)
+      {
+         activeWaterLevel = (int)level;
+      }
+
       public void SetBrushSize(float size)
       {
          brushSize = (int)size;
@@ -182,6 +198,11 @@ namespace HexMap.Map
       public void SetApplyElevation(bool toggle)
       {
          applyElevation = toggle;
+      }
+
+      public void SetApplyWaterLevel(bool toggle)
+      {
+         applyWaterLevel = toggle;
       }
 
       public void SetRiverMode(int mode)
