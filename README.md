@@ -37,8 +37,13 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Triangulate roads
 - Combine roads and rivers
 - Give roads a rugged appearance
-## Chapter 8 [ ]
+## Chapter 8 [X]
 - Add water to cells
 - Triangulate a water surface
 - Create shore water with foam
 - Make water and rivers play nice
+## Chapter 9 [ ]
+- Add detail objects to the terrain
+- Support feature density levels
+- Use a variety of objects per level
+- Mix three different feature types

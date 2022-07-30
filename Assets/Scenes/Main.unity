@@ -1062,11 +1062,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: chunkCountX
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: chunkCountZ
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627179, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: m_Icon

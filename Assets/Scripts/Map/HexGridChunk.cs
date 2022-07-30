@@ -18,6 +18,8 @@ namespace HexMap.Map
       [SerializeField] HexMesh _waterShore = default;
       [SerializeField] HexMesh _estuaries = default;
 
+      [SerializeField] HexFeatureManager _featureManager = default;
+
       void Awake()
       {
          gridCanvas = GetComponentInChildren<Canvas>();
@@ -33,14 +35,6 @@ namespace HexMap.Map
          enabled = false;
       }
 
-      public void AddCell(int index, HexCell cell)
-      {
-         hexCells[index] = cell;
-         cell.chunk = this;
-         cell.transform.SetParent(transform, false);
-         cell.uiRect.SetParent(gridCanvas.transform, false);
-      }
-
       public void Refresh()
       {
          enabled = true;
@@ -50,6 +44,15 @@ namespace HexMap.Map
       {
          gridCanvas.gameObject.SetActive(visible);
       }
+
+      public void AddCell(int index, HexCell cell)
+      {
+         hexCells[index] = cell;
+         cell.chunk = this;
+         cell.transform.SetParent(transform, false);
+         cell.uiRect.SetParent(gridCanvas.transform, false);
+      }
+
 
       #region Triangulate 
 
@@ -61,6 +64,7 @@ namespace HexMap.Map
          _water.Clear();
          _waterShore.Clear();
          _estuaries.Clear();
+         _featureManager.Clear();
 
          for (int i = 0; i < cells.Length; i++)
          {
@@ -73,6 +77,7 @@ namespace HexMap.Map
          _water.Apply();
          _waterShore.Apply();
          _estuaries.Apply();
+         _featureManager.Apply();
       }
 
       void Triangulate(HexCell cell)
@@ -80,6 +85,11 @@ namespace HexMap.Map
          for (var d = HexGrid.HexDirection.NE; d <= HexGrid.HexDirection.NW; d++)
          {
             Triangulate(d, cell);
+         }
+
+         if (!cell.IsUnderwater && !cell.HasRiver && !cell.HasRoads)
+         {
+            _featureManager.AddFeature(cell.Position);
          }
       }
 
