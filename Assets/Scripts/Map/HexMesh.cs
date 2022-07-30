@@ -11,7 +11,7 @@ namespace HexMap.Map
 
       [NonSerialized] List<int> Triangles = default;
       [NonSerialized] List<Color> Colors = default;
-      [NonSerialized] List<Vector2> UVs = default;
+      [NonSerialized] List<Vector2> UVs, UV2s = default;
       [NonSerialized] List<Vector3> Vertices = default;
 
       #endregion
@@ -20,7 +20,7 @@ namespace HexMap.Map
       MeshRenderer meshRenderer = default;
       MeshCollider meshCollider = default;
 
-      public bool useCollider, useColors, useUVCoordinates;
+      public bool useCollider, useColors, useUVCoordinates, useUV2Coordinates;
 
       void Awake()
       {
@@ -45,6 +45,10 @@ namespace HexMap.Map
          {
             UVs = ListPool<Vector2>.Get();
          }
+         if (useUV2Coordinates)
+         {
+            UV2s = ListPool<Vector2>.Get();
+         }
          Triangles = ListPool<int>.Get();
       }
 
@@ -61,6 +65,11 @@ namespace HexMap.Map
          {
             hexMesh.SetUVs(0, UVs);
             ListPool<Vector2>.Add(UVs);
+         }
+         if (useUV2Coordinates)
+         {
+            hexMesh.SetUVs(1, UV2s);
+            ListPool<Vector2>.Add(UV2s);
          }
          hexMesh.SetTriangles(Triangles, 0);
          ListPool<int>.Add(Triangles);
@@ -115,6 +124,13 @@ namespace HexMap.Map
          UVs.Add(uv1);
          UVs.Add(uv2);
          UVs.Add(uv3);
+      }
+
+      public void AddTriangleUV2(Vector2 uv1, Vector2 uv2, Vector3 uv3)
+      {
+         UV2s.Add(uv1);
+         UV2s.Add(uv2);
+         UV2s.Add(uv3);
       }
 
       #endregion 
@@ -174,6 +190,37 @@ namespace HexMap.Map
          UVs.Add(new Vector2(uMax, vMin));
          UVs.Add(new Vector2(uMin, vMax));
          UVs.Add(new Vector2(uMax, vMax));
+      }
+
+      public void AddQuadUV2(Vector2 uv1, Vector2 uv2, Vector3 uv3, Vector3 uv4)
+      {
+         UV2s.Add(uv1);
+         UV2s.Add(uv2);
+         UV2s.Add(uv3);
+         UV2s.Add(uv4);
+      }
+
+      public void AddQuadUV2(float uMin, float uMax, float vMin, float vMax)
+      {
+         UV2s.Add(new Vector2(uMin, vMin));
+         UV2s.Add(new Vector2(uMax, vMin));
+         UV2s.Add(new Vector2(uMin, vMax));
+         UV2s.Add(new Vector2(uMax, vMax));
+      }
+
+      public void AddQuadUnperturbed(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
+      {
+         int vertexIndex = Vertices.Count;
+         Vertices.Add(v1);
+         Vertices.Add(v2);
+         Vertices.Add(v3);
+         Vertices.Add(v4);
+         Triangles.Add(vertexIndex);
+         Triangles.Add(vertexIndex + 2);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 1);
+         Triangles.Add(vertexIndex + 2);
+         Triangles.Add(vertexIndex + 3);
       }
 
       #endregion
