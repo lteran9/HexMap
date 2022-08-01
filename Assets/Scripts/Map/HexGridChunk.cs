@@ -123,6 +123,11 @@ namespace HexMap.Map
          else
          {
             TriangulateWithoutRiver(direction, cell, center, eVertices);
+
+            if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
+            {
+               _featureManager.AddFeature((center + eVertices.v1 + eVertices.v5) * (1f / 3f));
+            }
          }
 
          if (direction <= HexGrid.HexDirection.SE)
@@ -606,6 +611,11 @@ namespace HexMap.Map
 
          TriangulateEdgeStrip(mVertices, cell.Color, eVertices, cell.Color);
          TriangulateEdgeFan(center, mVertices, cell.Color);
+
+         if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
+         {
+            _featureManager.AddFeature((center + eVertices.v1 + eVertices.v5) * (1f / 3f));
+         }
       }
 
       void TriangulateRiverQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, float y, float v, bool reversed)
@@ -785,7 +795,7 @@ namespace HexMap.Map
 
       void TriangulateWater(
             HexGrid.HexDirection direction, HexCell cell, Vector3 center
-         )
+      )
       {
          center.y = cell.WaterSurfaceY;
          HexCell neighbor = cell.GetNeighbor(direction);
@@ -797,7 +807,6 @@ namespace HexMap.Map
          {
             TriangulateOpenWater(direction, cell, neighbor, center);
          }
-
       }
 
       void TriangulateOpenWater(
@@ -809,7 +818,7 @@ namespace HexMap.Map
 
          _water.AddTriangle(center, c1, c2);
 
-         if (direction <= HexGrid.HexDirection.SE)
+         if (direction <= HexGrid.HexDirection.SE && neighbor != null)
          {
             Vector3 bridge = HexMetrics.GetWaterBridge(direction);
             Vector3 e1 = c1 + bridge;
