@@ -8,20 +8,24 @@ namespace HexMap.Map
 {
    public class HexMapEditor : MonoBehaviour
    {
-      [SerializeField] Color[] _colors;
-      [SerializeField] HexGrid _hexGrid;
+      [SerializeField] Color[] _colors = default;
+      [SerializeField] HexGrid _hexGrid = default;
       [SerializeField] InputReader _inputReader = default;
 
       int activeElevation,
          activeWaterLevel,
          activeUrbanLevel,
+         activeFarmLevel,
+         activePlantLevel,
          brushSize;
 
       bool applyColor,
          isDrag,
          applyElevation = true,
          applyWaterLevel = false,
-         applyUrbanLevel = false;
+         applyUrbanLevel = false,
+         applyFarmLevel = false,
+         applyPlantLevel = false;
 
       HexCell previousCell;
       Color activeColor;
@@ -106,7 +110,14 @@ namespace HexMap.Map
             {
                cell.UrbanLevel = activeUrbanLevel;
             }
-
+            if (applyFarmLevel)
+            {
+               cell.FarmLevel = activeFarmLevel;
+            }
+            if (applyPlantLevel)
+            {
+               cell.PlantLevel = activePlantLevel;
+            }
 
             if (riverMode == OptionalToggle.No)
             {
@@ -202,6 +213,16 @@ namespace HexMap.Map
          activeUrbanLevel = (int)level;
       }
 
+      public void SetFarmLevel(float level)
+      {
+         activeFarmLevel = (int)level;
+      }
+
+      public void SetPlantLevel(float level)
+      {
+         activePlantLevel = (int)level;
+      }
+
       public void SetBrushSize(float size)
       {
          brushSize = (int)size;
@@ -220,6 +241,16 @@ namespace HexMap.Map
       public void SetApplyUrbanLevel(bool toggle)
       {
          applyUrbanLevel = toggle;
+      }
+
+      public void SetApplyFarmLevel(bool toggle)
+      {
+         applyFarmLevel = toggle;
+      }
+
+      public void SetApplyPlantLevel(bool toggle)
+      {
+         applyPlantLevel = toggle;
       }
 
       public void SetRiverMode(int mode)
