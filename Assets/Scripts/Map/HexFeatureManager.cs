@@ -5,7 +5,7 @@ public class HexFeatureManager : MonoBehaviour
 {
    Transform container = default;
 
-   [SerializeField] Transform featurePrefab = default;
+   [SerializeField] Transform[] urbanPrefabs = default;
 
    public void Clear()
    {
@@ -19,11 +19,18 @@ public class HexFeatureManager : MonoBehaviour
 
    public void Apply() { }
 
-   public void AddFeature(Vector3 position)
+   public void AddFeature(HexCell cell, Vector3 position)
    {
-      Transform instance = Instantiate(featurePrefab);
+      HexHash hash = HexMetrics.SampleHashGrid(position);
+      if (hash.a >= cell.UrbanLevel * 0.25f)
+      {
+         return;
+      }
+
+      Transform instance = Instantiate(urbanPrefabs[cell.UrbanLevel - 1]);
       position.y += instance.localScale.y * 0.5f;
       instance.localPosition = HexMetrics.Perturb(position);
+      instance.localRotation = Quaternion.Euler(0f, 360f * hash.b, 0f);
       instance.SetParent(container, false);
    }
 }

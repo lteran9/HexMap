@@ -9,6 +9,8 @@ namespace HexMap.Map
       public const int terracesPerSlope = 2;
       public const int chunkSizeX = 5, chunkSizeZ = 5;
       public const int terraceSteps = terracesPerSlope * 2 + 1;
+      public const int hashGridSize = 256;
+      public const float hashGridScale = 0.25f;
       public const float outerRadius = 10f;
       public const float innerRadius = outerRadius * outerToInner;
       public const float outerToInner = 0.866025404f;
@@ -26,9 +28,9 @@ namespace HexMap.Map
       public const float streamBedElevationOffset = -1.75f;
       public const float waterElevationOffset = -0.5f;
 
-      public static Texture2D noiseSource;
+      public static Texture2D noiseSource = default;
 
-      static Vector3[] corners = {
+      public static Vector3[] corners = {
          new Vector3(0f, 0f, outerRadius),
          new Vector3(innerRadius, 0f, 0.5f * outerRadius),
          new Vector3(innerRadius, 0f, -0.5f * outerRadius),
@@ -37,6 +39,20 @@ namespace HexMap.Map
          new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
          new Vector3(0f, 0f, outerRadius)
       };
+
+      public static HexHash[] hashGrid = default;
+
+      public static void InitializeHashGrid(int seed)
+      {
+         hashGrid = new HexHash[hashGridSize * hashGridSize];
+         Random.State currentState = Random.state;
+         Random.InitState(seed);
+         for (int i = 0; i < hashGrid.Length; i++)
+         {
+            hashGrid[i] = HexHash.Create();
+         }
+         Random.state = currentState;
+      }
 
       public static Vector3 GetFirstCorner(HexGrid.HexDirection direction)
       {
@@ -114,6 +130,21 @@ namespace HexMap.Map
             position.x * noiseScale,
             position.z * noiseScale
          );
+      }
+
+      public static HexHash SampleHashGrid(Vector3 position)
+      {
+         int x = (int)(position.x * hashGridScale) % hashGridSize;
+         if (x < 0)
+         {
+            x += hashGridSize;
+         }
+         int z = (int)(position.z * hashGridScale) % hashGridSize;
+         if (z < 0)
+         {
+            z += hashGridSize;
+         }
+         return hashGrid[x + z * hashGridSize];
       }
 
       public static Vector3 GetSolidEdgeMiddle(HexGrid.HexDirection direction)

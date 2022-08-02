@@ -89,7 +89,7 @@ namespace HexMap.Map
 
          if (!cell.IsUnderwater && !cell.HasRiver && !cell.HasRoads)
          {
-            _featureManager.AddFeature(cell.Position);
+            _featureManager.AddFeature(cell, cell.Position);
          }
       }
 
@@ -126,7 +126,7 @@ namespace HexMap.Map
 
             if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
             {
-               _featureManager.AddFeature((center + eVertices.v1 + eVertices.v5) * (1f / 3f));
+               _featureManager.AddFeature(cell, (center + eVertices.v1 + eVertices.v5) * (1f / 3f));
             }
          }
 
@@ -614,7 +614,7 @@ namespace HexMap.Map
 
          if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
          {
-            _featureManager.AddFeature((center + eVertices.v1 + eVertices.v5) * (1f / 3f));
+            _featureManager.AddFeature(cell, (center + eVertices.v1 + eVertices.v5) * (1f / 3f));
          }
       }
 

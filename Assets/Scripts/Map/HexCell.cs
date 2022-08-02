@@ -8,7 +8,7 @@ namespace HexMap.Map
 {
    public class HexCell : MonoBehaviour
    {
-      int elevation = -1, waterLevel = -1;
+      int elevation = -1, waterLevel = -1, urbanLevel = 0;
       bool hasIncomingRiver, hasOutgoingRiver;
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
@@ -68,6 +68,22 @@ namespace HexMap.Map
             waterLevel = value;
             ValidateRivers();
             Refresh();
+         }
+      }
+      public int UrbanLevel
+      {
+         get
+         {
+            return urbanLevel;
+         }
+
+         set
+         {
+            if (urbanLevel != value)
+            {
+               urbanLevel = value;
+               RefreshSelfOnly();
+            }
          }
       }
 

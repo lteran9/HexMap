@@ -14,12 +14,14 @@ namespace HexMap.Map
 
       int activeElevation,
          activeWaterLevel,
+         activeUrbanLevel,
          brushSize;
 
       bool applyColor,
          isDrag,
          applyElevation = true,
-         applyWaterLevel = true;
+         applyWaterLevel = false,
+         applyUrbanLevel = false;
 
       HexCell previousCell;
       Color activeColor;
@@ -100,6 +102,11 @@ namespace HexMap.Map
             {
                cell.WaterLevel = activeWaterLevel;
             }
+            if (applyUrbanLevel)
+            {
+               cell.UrbanLevel = activeUrbanLevel;
+            }
+
 
             if (riverMode == OptionalToggle.No)
             {
@@ -190,6 +197,11 @@ namespace HexMap.Map
          activeWaterLevel = (int)level;
       }
 
+      public void SetUrbanLevel(float level)
+      {
+         activeUrbanLevel = (int)level;
+      }
+
       public void SetBrushSize(float size)
       {
          brushSize = (int)size;
@@ -203,6 +215,11 @@ namespace HexMap.Map
       public void SetApplyWaterLevel(bool toggle)
       {
          applyWaterLevel = toggle;
+      }
+
+      public void SetApplyUrbanLevel(bool toggle)
+      {
+         applyUrbanLevel = toggle;
       }
 
       public void SetRiverMode(int mode)

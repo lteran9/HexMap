@@ -12,6 +12,7 @@ namespace HexMap.Map
       public Color touchedColor = Color.green;
 
 
+      [SerializeField] int seed = 0;
       [SerializeField] int chunkCountX = 4;
       [SerializeField] int chunkCountZ = 3;
       [SerializeField] TextMeshProUGUI cellLabelPrefab = default;
@@ -37,6 +38,7 @@ namespace HexMap.Map
       void Awake()
       {
          HexMetrics.noiseSource = noiseSource;
+         HexMetrics.InitializeHashGrid(seed);
 
          cellCountX = chunkCountX * HexMetrics.chunkSizeX;
          cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -47,7 +49,11 @@ namespace HexMap.Map
 
       void OnEnable()
       {
-         HexMetrics.noiseSource = noiseSource;
+         if (!HexMetrics.noiseSource)
+         {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+         }
       }
 
       void CreateChunks()
