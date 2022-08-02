@@ -1,36 +1,55 @@
 using HexMap.Map;
 using UnityEngine;
 
-public class HexFeatureManager : MonoBehaviour
+namespace HexMap.Map
 {
-   Transform container = default;
-
-   [SerializeField] Transform[] urbanPrefabs = default;
-
-   public void Clear()
+   public class HexFeatureManager : MonoBehaviour
    {
-      if (container)
-      {
-         Destroy(container.gameObject);
-      }
-      container = new GameObject("Features Container").transform;
-      container.SetParent(transform, false);
-   }
+      Transform container = default;
 
-   public void Apply() { }
+      [SerializeField] HexFeatureCollection[] urbanPrefabs = default;
 
-   public void AddFeature(HexCell cell, Vector3 position)
-   {
-      HexHash hash = HexMetrics.SampleHashGrid(position);
-      if (hash.a >= cell.UrbanLevel * 0.25f)
+      public void Clear()
       {
-         return;
+         if (container)
+         {
+            Destroy(container.gameObject);
+         }
+         container = new GameObject("Features Container").transform;
+         container.SetParent(transform, false);
       }
 
-      Transform instance = Instantiate(urbanPrefabs[cell.UrbanLevel - 1]);
-      position.y += instance.localScale.y * 0.5f;
-      instance.localPosition = HexMetrics.Perturb(position);
-      instance.localRotation = Quaternion.Euler(0f, 360f * hash.b, 0f);
-      instance.SetParent(container, false);
+      public void Apply() { }
+
+      public void AddFeature(HexCell cell, Vector3 position)
+      {
+         HexHash hash = HexMetrics.SampleHashGrid(position);
+         Transform prefab = PickPrefab(cell.UrbanLevel, hash.a, hash.b);
+         if (!prefab)
+         {
+            return;
+         }
+         Transform instance = Instantiate(prefab);
+         position.y += instance.localScale.y * 0.5f;
+         instance.localPosition = HexMetrics.Perturb(position);
+         instance.localRotation = Quaternion.Euler(0f, 360f * hash.c, 0f);
+         instance.SetParent(container, false);
+      }
+
+      Transform PickPrefab(int level, float hash, float choice)
+      {
+         if (level > 0)
+         {
+            float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
+            for (int i = 0; i < thresholds.Length; i++)
+            {
+               if (hash < thresholds[i])
+               {
+                  return urbanPrefabs[i].Pick(choice);
+               }
+            }
+         }
+         return null;
+      }
    }
 }

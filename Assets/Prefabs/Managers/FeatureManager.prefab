@@ -45,6 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   urbanPrefabs:
-  - {fileID: 839548926693866862, guid: 6836c8154b0cd4cc99206cb9be790726, type: 3}
-  - {fileID: 839548926693866862, guid: ef42380317024443a9c0781f476ee186, type: 3}
-  - {fileID: 839548926693866862, guid: b9c88de85838645349aacc5b400c9743, type: 3}
+  - prefabs:
+    - {fileID: 839548926693866862, guid: b9c88de85838645349aacc5b400c9743, type: 3}
+    - {fileID: 839548926693866862, guid: 019728c0b61a74f2690cc301852c9f6c, type: 3}
+  - prefabs:
+    - {fileID: 839548926693866862, guid: ef42380317024443a9c0781f476ee186, type: 3}
+    - {fileID: 839548926693866862, guid: a2bb4298748924ad49743589f052a139, type: 3}
+  - prefabs:
+    - {fileID: 839548926693866862, guid: 6836c8154b0cd4cc99206cb9be790726, type: 3}
+    - {fileID: 839548926693866862, guid: 6685efaeb88d34aabb810bfbec7fc074, type: 3}

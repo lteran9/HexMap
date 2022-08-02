@@ -30,6 +30,13 @@ namespace HexMap.Map
 
       public static Texture2D noiseSource = default;
 
+      public static float[][] featureThresholds = {
+         new float[] { 0.0f, 0.0f, 0.4f },
+         new float[] { 0.0f, 0.4f, 0.6f },
+         new float[] { 0.4f, 0.6f, 0.8f }
+      };
+
+
       public static Vector3[] corners = {
          new Vector3(0f, 0f, outerRadius),
          new Vector3(innerRadius, 0f, 0.5f * outerRadius),
@@ -159,6 +166,11 @@ namespace HexMap.Map
          position.x += ((sample.x * 2f - 1) * cellPerturbStrength);
          position.z += ((sample.z * 2f - 1) * cellPerturbStrength);
          return position;
+      }
+
+      public static float[] GetFeatureThresholds(int level)
+      {
+         return featureThresholds[level];
       }
    }
 }
