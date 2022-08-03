@@ -224,6 +224,8 @@ namespace HexMap.Map
             );
          }
 
+         _featureManager.AddWall(e1, cell, e2, neighbor);
+
          HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
          if (direction <= HexGrid.HexDirection.E && nextNeighbor != null)
          {
@@ -302,6 +304,8 @@ namespace HexMap.Map
             _terrain.AddTriangle(bottom, left, right);
             _terrain.AddTriangleColor(bottomCell.Color, leftCell.Color, rightCell.Color);
          }
+
+         _featureManager.AddWall(bottom, bottomCell, left, leftCell, right, rightCell);
       }
 
       void TriangulateCornerTerraces(
