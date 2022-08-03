@@ -29,7 +29,9 @@ namespace HexMap.Map
 
       HexCell previousCell;
       Color activeColor;
-      OptionalToggle riverMode = OptionalToggle.Ignore, roadMode = OptionalToggle.Ignore;
+      OptionalToggle riverMode = OptionalToggle.Ignore,
+         roadMode = OptionalToggle.Ignore,
+         walledMode = OptionalToggle.Ignore;
       HexGrid.HexDirection dragDirection;
 
       enum OptionalToggle
@@ -133,6 +135,11 @@ namespace HexMap.Map
                brushSize = 0;
                cell.RemoveRoads();
                brushSize = tempBrushSize;
+            }
+
+            if (walledMode != OptionalToggle.Ignore)
+            {
+               cell.Walled = walledMode == OptionalToggle.Yes;
             }
 
             if (isDrag)
@@ -261,6 +268,11 @@ namespace HexMap.Map
       public void SetRoadMode(int mode)
       {
          roadMode = (OptionalToggle)mode;
+      }
+
+      public void SetWalledMode(int mode)
+      {
+         walledMode = (OptionalToggle)mode;
       }
 
       public void ShowUI(bool visible)

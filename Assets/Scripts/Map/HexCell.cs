@@ -13,7 +13,9 @@ namespace HexMap.Map
          urbanLevel = 0,
          farmLevel = 0,
          plantLevel = 0;
-      bool hasIncomingRiver, hasOutgoingRiver;
+      bool hasIncomingRiver,
+         hasOutgoingRiver,
+         walled;
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
       [SerializeField] bool[] _roads;
@@ -169,6 +171,21 @@ namespace HexMap.Map
          get
          {
             return waterLevel > elevation;
+         }
+      }
+      public bool Walled
+      {
+         get
+         {
+            return walled;
+         }
+         set
+         {
+            if (walled != value)
+            {
+               walled = value;
+               Refresh();
+            }
          }
       }
 

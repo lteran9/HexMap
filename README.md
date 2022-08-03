@@ -42,8 +42,13 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Triangulate a water surface
 - Create shore water with foam
 - Make water and rivers play nice
-## Chapter 9 [ ]
+## Chapter 9 [X]
 - Add detail objects to the terrain
 - Support feature density levels
 - Use a variety of objects per level
 - Mix three different feature types
+## Chapter 10 [ ]
+- Wall off cells
+- Build walls along cell edges
+- Let rivers and roads go through
+- Avoid water and connect with cliffs
