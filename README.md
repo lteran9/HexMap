@@ -47,7 +47,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Support feature density levels
 - Use a variety of objects per level
 - Mix three different feature types
-## Chapter 10 [ ]
+## Chapter 10 [X]
 - Wall off cells
 - Build walls along cell edges
 - Let rivers and roads go through

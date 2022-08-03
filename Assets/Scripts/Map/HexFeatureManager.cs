@@ -29,6 +29,8 @@ namespace HexMap.Map
          _walls.Apply();
       }
 
+      #region Features
+
       public void AddFeature(HexCell cell, Vector3 position)
       {
          HexHash hash = HexMetrics.SampleHashGrid(position);
@@ -71,16 +73,45 @@ namespace HexMap.Map
          instance.SetParent(container, false);
       }
 
+      Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice)
+      {
+         if (level > 0)
+         {
+            float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
+            for (int i = 0; i < thresholds.Length; i++)
+            {
+               if (hash < thresholds[i])
+               {
+                  return collection[i].Pick(choice);
+               }
+            }
+         }
+         return null;
+      }
+
+      #endregion
+
+      #region Walls
+
       public void AddWall(
          EdgeVertices near, HexCell nearCell,
-         EdgeVertices far, HexCell farCell
+         EdgeVertices far, HexCell farCell,
+         bool hasRiver, bool hasRoad
       )
       {
-         if (nearCell.Walled != farCell.Walled)
+         if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexGrid.HexEdgeType.Cliff)
          {
             AddWallSegment(near.v1, far.v1, near.v2, far.v2);
-            AddWallSegment(near.v2, far.v2, near.v3, far.v3);
-            AddWallSegment(near.v3, far.v3, near.v4, far.v4);
+            if (hasRiver || hasRoad)
+            {
+               AddWallCap(near.v2, far.v2);
+               AddWallCap(far.v4, near.v4);
+            }
+            else
+            {
+               AddWallSegment(near.v2, far.v2, near.v3, far.v3);
+               AddWallSegment(near.v3, far.v3, near.v4, far.v4);
+            }
             AddWallSegment(near.v4, far.v4, near.v5, far.v5);
          }
       }
@@ -171,23 +202,83 @@ namespace HexMap.Map
          Vector3 right, HexCell rightCell
       )
       {
-         AddWallSegment(pivot, left, pivot, right);
-      }
-
-      Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice)
-      {
-         if (level > 0)
+         if (pivotCell.IsUnderwater)
          {
-            float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
-            for (int i = 0; i < thresholds.Length; i++)
+            return;
+         }
+
+         bool hasLeftWall = !leftCell.IsUnderwater &&
+            pivotCell.GetEdgeType(leftCell) != HexGrid.HexEdgeType.Cliff;
+         bool hasRighWall = !rightCell.IsUnderwater &&
+            pivotCell.GetEdgeType(rightCell) != HexGrid.HexEdgeType.Cliff;
+
+         if (hasLeftWall)
+         {
+            if (hasRighWall)
             {
-               if (hash < thresholds[i])
-               {
-                  return collection[i].Pick(choice);
-               }
+               AddWallSegment(pivot, left, pivot, right);
+            }
+            else if (leftCell.Elevation < rightCell.Elevation)
+            {
+               AddWallWedge(pivot, left, right);
+            }
+            else
+            {
+               AddWallCap(pivot, left);
             }
          }
-         return null;
+         else if (hasRighWall)
+         {
+            if (rightCell.Elevation < leftCell.Elevation)
+            {
+               AddWallWedge(right, pivot, left);
+            }
+            else
+            {
+               AddWallCap(right, pivot);
+            }
+         }
       }
+
+      void AddWallCap(Vector3 near, Vector3 far)
+      {
+         near = HexMetrics.Perturb(near);
+         far = HexMetrics.Perturb(far);
+
+         Vector3 center = HexMetrics.WallLerp(near, far);
+         Vector3 thickness = HexMetrics.WallThicknessOffset(near, far);
+
+         Vector3 v1, v2, v3, v4;
+
+         v1 = v3 = center - thickness;
+         v2 = v4 = center + thickness;
+         v3.y = v4.y = center.y + HexMetrics.wallHeight;
+         _walls.AddQuadUnperturbed(v1, v2, v3, v4);
+      }
+
+      void AddWallWedge(Vector3 near, Vector3 far, Vector3 point)
+      {
+         near = HexMetrics.Perturb(near);
+         far = HexMetrics.Perturb(far);
+         point = HexMetrics.Perturb(point);
+
+         Vector3 center = HexMetrics.WallLerp(near, far);
+         Vector3 thickness = HexMetrics.WallThicknessOffset(near, far);
+
+         Vector3 v1, v2, v3, v4;
+         Vector3 pointTop = point;
+         point.y = center.y;
+
+         v1 = v3 = center - thickness;
+         v2 = v4 = center + thickness;
+         v3.y = v4.y = pointTop.y = center.y + HexMetrics.wallHeight;
+
+         _walls.AddQuadUnperturbed(v1, point, v3, pointTop);
+         _walls.AddQuadUnperturbed(point, v2, pointTop, v4);
+         _walls.AddTriangleUnperturbed(pointTop, v3, v4);
+      }
+
+
+      #endregion
    }
 }
