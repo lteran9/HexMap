@@ -6,19 +6,14 @@ namespace HexMap.Map
 {
    public class HexGrid : MonoBehaviour
    {
-      [NonSerialized]
-      public Color defaultColor = Color.white;
-      [NonSerialized]
-      public Color touchedColor = Color.green;
-
-
-      [SerializeField] int seed = 0;
-      [SerializeField] int chunkCountX = 4;
-      [SerializeField] int chunkCountZ = 3;
-      [SerializeField] TextMeshProUGUI cellLabelPrefab = default;
-      [SerializeField] Texture2D noiseSource = default;
-      [SerializeField] HexGridChunk chunkPrefab = default;
-      [SerializeField] HexCell cellPrefab = default;
+      [SerializeField] int _seed = 0;
+      [SerializeField] int _chunkCountX = 4;
+      [SerializeField] int _chunkCountZ = 3;
+      [SerializeField] Texture2D _noiseSource = default;
+      [SerializeField] HexGridChunk _chunkPrefab = default;
+      [SerializeField] HexCell _cellPrefab = default;
+      [SerializeField] TextMeshProUGUI _cellLabelPrefab = default;
+      [SerializeField] Color[] _colors;
 
       int cellCountX, cellCountZ;
 
@@ -37,11 +32,12 @@ namespace HexMap.Map
 
       void Awake()
       {
-         HexMetrics.noiseSource = noiseSource;
-         HexMetrics.InitializeHashGrid(seed);
+         HexMetrics.noiseSource = _noiseSource;
+         HexMetrics.InitializeHashGrid(_seed);
+         HexMetrics.colors = _colors;
 
-         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+         cellCountX = _chunkCountX * HexMetrics.chunkSizeX;
+         cellCountZ = _chunkCountZ * HexMetrics.chunkSizeZ;
 
          CreateChunks();
          CreateCells();
@@ -51,20 +47,21 @@ namespace HexMap.Map
       {
          if (!HexMetrics.noiseSource)
          {
-            HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
+            HexMetrics.noiseSource = _noiseSource;
+            HexMetrics.InitializeHashGrid(_seed);
+            HexMetrics.colors = _colors;
          }
       }
 
       void CreateChunks()
       {
-         m_Chunks = new HexGridChunk[chunkCountX * chunkCountZ];
+         m_Chunks = new HexGridChunk[_chunkCountX * _chunkCountZ];
 
-         for (int z = 0, i = 0; z < chunkCountZ; z++)
+         for (int z = 0, i = 0; z < _chunkCountZ; z++)
          {
-            for (int x = 0; x < chunkCountX; x++)
+            for (int x = 0; x < _chunkCountX; x++)
             {
-               HexGridChunk chunk = m_Chunks[i++] = Instantiate(chunkPrefab);
+               HexGridChunk chunk = m_Chunks[i++] = Instantiate(_chunkPrefab);
                chunk.transform.SetParent(transform);
             }
          }
@@ -91,11 +88,10 @@ namespace HexMap.Map
          position.y = 0f;
          position.z = z * (HexMetrics.outerRadius * 1.5f);
 
-         HexCell cell = m_Cells[i] = Instantiate<HexCell>(cellPrefab);
+         HexCell cell = m_Cells[i] = Instantiate<HexCell>(_cellPrefab);
          cell.transform.localPosition = position;
          cell.name = $"Cell #{i}";
          cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-         cell.Color = defaultColor;
 
          if (x > 0)
          {
@@ -122,7 +118,7 @@ namespace HexMap.Map
             }
          }
 
-         TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(cellLabelPrefab);
+         TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(_cellLabelPrefab);
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
          label.text = cell.coordinates.ToStringOnSeparateLines();
 
@@ -136,7 +132,7 @@ namespace HexMap.Map
       {
          int chunkX = x / HexMetrics.chunkSizeX;
          int chunkZ = z / HexMetrics.chunkSizeZ;
-         HexGridChunk chunk = m_Chunks[chunkX + chunkZ * chunkCountX];
+         HexGridChunk chunk = m_Chunks[chunkX + chunkZ * _chunkCountX];
 
          int localX = x - chunkX * HexMetrics.chunkSizeX;
          int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
@@ -168,12 +164,12 @@ namespace HexMap.Map
 
       public int GetChunkX()
       {
-         return chunkCountX;
+         return _chunkCountX;
       }
 
       public int GetChunkZ()
       {
-         return chunkCountZ;
+         return _chunkCountZ;
       }
 
       public void ShowUI(bool visible)

@@ -1,14 +1,13 @@
 using HexMap.Input;
 using HexMap.Extensions;
 using System;
+using System.IO;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace HexMap.Map
 {
    public class HexMapEditor : MonoBehaviour
    {
-      [SerializeField] Color[] _colors = default;
       [SerializeField] HexGrid _hexGrid = default;
       [SerializeField] InputReader _inputReader = default;
 
@@ -18,10 +17,10 @@ namespace HexMap.Map
          activeFarmLevel,
          activePlantLevel,
          activeSpecialIndex,
+         activeTerrainTypeIndex,
          brushSize;
 
-      bool applyColor,
-         isDrag,
+      bool isDrag,
          applyElevation = true,
          applyWaterLevel = false,
          applyUrbanLevel = false,
@@ -30,7 +29,6 @@ namespace HexMap.Map
          applySpecialIndex = false;
 
       HexCell previousCell;
-      Color activeColor;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
@@ -43,7 +41,7 @@ namespace HexMap.Map
 
       void Awake()
       {
-         SelectColor(0);
+         //
       }
 
       void OnEnable()
@@ -98,9 +96,9 @@ namespace HexMap.Map
       {
          if (cell != null)
          {
-            if (applyColor && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
+            if (activeTerrainTypeIndex >= 0)
             {
-               cell.Color = activeColor;
+               cell.TerrainTypeIndex = activeTerrainTypeIndex;
             }
             if (applyElevation && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
             {
@@ -189,27 +187,7 @@ namespace HexMap.Map
          }
       }
 
-      void ValidateDrag(HexCell currentCell)
-      {
-         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
-         {
-            if (previousCell.GetNeighbor(dragDirection) == currentCell)
-            {
-               isDrag = true;
-               return;
-            }
-         }
-         isDrag = false;
-      }
-
-      public void SelectColor(int index)
-      {
-         applyColor = index >= 0;
-         if (applyColor)
-         {
-            activeColor = _colors[index];
-         }
-      }
+      #region UI
 
       public void SetElevation(float elevation)
       {
@@ -290,6 +268,50 @@ namespace HexMap.Map
       {
          walledMode = (OptionalToggle)mode;
       }
+
+      public void SetTerrainTypeIndex(int index)
+      {
+         activeTerrainTypeIndex = index;
+      }
+
+      void ValidateDrag(HexCell currentCell)
+      {
+         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
+         {
+            if (previousCell.GetNeighbor(dragDirection) == currentCell)
+            {
+               isDrag = true;
+               return;
+            }
+         }
+         isDrag = false;
+      }
+
+      #endregion
+
+      #region Data Storage
+
+      public void Save()
+      {
+         string path = Path.Combine(Application.persistentDataPath, "test.map");
+         Debug.Log(path);
+         using (var writer = new BinaryWriter(File.Open(path, FileMode.Create)))
+         {
+            writer.Write(123);
+         }
+
+      }
+
+      public void Load()
+      {
+         string path = Path.Combine(Application.persistentDataPath, "test.map");
+         using (var reader = new BinaryReader(File.OpenRead(path)))
+         {
+            Debug.Log(reader.ReadInt32());
+         }
+      }
+
+      #endregion
 
       public void ShowUI(bool visible)
       {

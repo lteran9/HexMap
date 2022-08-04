@@ -13,7 +13,8 @@ namespace HexMap.Map
          urbanLevel = 0,
          farmLevel = 0,
          plantLevel = 0,
-         specialIndex = 0;
+         specialIndex = 0,
+         terrainTypeIndex;
       bool hasIncomingRiver,
          hasOutgoingRiver,
          walled;
@@ -21,7 +22,6 @@ namespace HexMap.Map
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
       [SerializeField] bool[] _roads;
-      [SerializeField] Color _color = default;
       [SerializeField] HexCell[] _neighbors = default;
 
       public int Elevation
@@ -139,6 +139,21 @@ namespace HexMap.Map
             }
          }
       }
+      public int TerrainTypeIndex
+      {
+         get
+         {
+            return terrainTypeIndex;
+         }
+         set
+         {
+            if (terrainTypeIndex != value)
+            {
+               terrainTypeIndex = value;
+               Refresh();
+            }
+         }
+      }
 
       public bool IsSpecial
       {
@@ -236,27 +251,18 @@ namespace HexMap.Map
          }
       }
 
+      public Color Color
+      {
+         get
+         {
+            return HexMetrics.colors[terrainTypeIndex];
+         }
+      }
       public Vector3 Position
       {
          get
          {
             return transform.localPosition;
-         }
-      }
-      public Color Color
-      {
-         get
-         {
-            return _color;
-         }
-         set
-         {
-            if (_color == value)
-            {
-               return;
-            }
-            _color = value;
-            Refresh();
          }
       }
       public HexGrid.HexDirection IncomingRiver
@@ -281,8 +287,7 @@ namespace HexMap.Map
          }
       }
 
-      public HexGridChunk chunk = default;
-
+      [NonSerialized] public HexGridChunk chunk = default;
       [NonSerialized] public HexCoordinates coordinates = default;
       [NonSerialized] public RectTransform uiRect = default;
 

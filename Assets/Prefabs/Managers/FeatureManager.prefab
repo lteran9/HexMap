@@ -48,8 +48,8 @@ MonoBehaviour:
   _wallTower: {fileID: 163764433967140072, guid: e44fdbb4069d54eed870cd8cf0543edd, type: 3}
   _bridge: {fileID: 8374909445674229589, guid: a5bf6218da4b74bdfb5df2bac7d5c2ec, type: 3}
   _special:
-  - {fileID: 3585614794553674843, guid: cf3b1f89c9cde42ed90d15f24720b80e, type: 3}
-  - {fileID: 2882436967426768557, guid: 3831fa9608352444bbffe81537487ba5, type: 3}
+  - {fileID: 2256977823390126668, guid: cf3b1f89c9cde42ed90d15f24720b80e, type: 3}
+  - {fileID: 4495838290375876336, guid: 3831fa9608352444bbffe81537487ba5, type: 3}
   - {fileID: 6366066049964293287, guid: ff3631b4176f842a5a83ff9688d80940, type: 3}
   urbanCollections:
   - prefabs:

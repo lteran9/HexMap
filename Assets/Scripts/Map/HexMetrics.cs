@@ -43,7 +43,6 @@ namespace HexMap.Map
          new float[] { 0.4f, 0.6f, 0.8f }
       };
 
-
       public static Vector3[] corners = {
          new Vector3(0f, 0f, outerRadius),
          new Vector3(innerRadius, 0f, 0.5f * outerRadius),
@@ -54,6 +53,7 @@ namespace HexMap.Map
          new Vector3(0f, 0f, outerRadius)
       };
 
+      public static Color[] colors = default;
       public static HexHash[] hashGrid = default;
 
       public static void InitializeHashGrid(int seed)
