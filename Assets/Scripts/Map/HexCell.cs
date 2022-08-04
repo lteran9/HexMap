@@ -12,10 +12,12 @@ namespace HexMap.Map
          waterLevel = -1,
          urbanLevel = 0,
          farmLevel = 0,
-         plantLevel = 0;
+         plantLevel = 0,
+         specialIndex = 0;
       bool hasIncomingRiver,
          hasOutgoingRiver,
          walled;
+
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
       [SerializeField] bool[] _roads;
@@ -121,7 +123,30 @@ namespace HexMap.Map
             }
          }
       }
+      public int SpecialIndex
+      {
+         get
+         {
+            return specialIndex;
+         }
+         set
+         {
+            if (specialIndex != value && !HasRiver)
+            {
+               specialIndex = value;
+               RemoveRoads();
+               RefreshSelfOnly();
+            }
+         }
+      }
 
+      public bool IsSpecial
+      {
+         get
+         {
+            return specialIndex > 0;
+         }
+      }
       public bool HasRiver
       {
          get
@@ -371,10 +396,12 @@ namespace HexMap.Map
 
          hasOutgoingRiver = true;
          outgoingRiver = direction;
+         specialIndex = 0;
 
          neighbor.RemoveIncomingRiver();
          neighbor.hasIncomingRiver = true;
          neighbor.incomingRiver = direction.Opposite();
+         neighbor.specialIndex = 0;
 
          SetRoad((int)direction, false);
       }
@@ -404,7 +431,7 @@ namespace HexMap.Map
 
       public void AddRoad(HexGrid.HexDirection direction)
       {
-         if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && GetElevationDifference(direction) <= 1)
+         if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && !IsSpecial && !GetNeighbor(direction).IsSpecial && GetElevationDifference(direction) <= 1)
          {
             SetRoad((int)direction, true);
          }

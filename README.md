@@ -52,7 +52,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Build walls along cell edges
 - Let rivers and roads go through
 - Avoid water and connect with cliffs
-## Chapter 11 [ ]
+## Chapter 11 [X]
 - Add towers to walls
 - Connect raods across rivers via bridges
 - Support large special features

@@ -87,9 +87,16 @@ namespace HexMap.Map
             Triangulate(d, cell);
          }
 
-         if (!cell.IsUnderwater && !cell.HasRiver && !cell.HasRoads)
+         if (!cell.IsUnderwater)
          {
-            _featureManager.AddFeature(cell, cell.Position);
+            if (!cell.HasRiver && !cell.HasRoads)
+            {
+               _featureManager.AddFeature(cell, cell.Position);
+            }
+            if (cell.IsSpecial)
+            {
+               _featureManager.AddSpecialFeature(cell, cell.Position);
+            }
          }
       }
 

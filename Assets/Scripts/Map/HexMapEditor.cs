@@ -17,6 +17,7 @@ namespace HexMap.Map
          activeUrbanLevel,
          activeFarmLevel,
          activePlantLevel,
+         activeSpecialIndex,
          brushSize;
 
       bool applyColor,
@@ -25,7 +26,8 @@ namespace HexMap.Map
          applyWaterLevel = false,
          applyUrbanLevel = false,
          applyFarmLevel = false,
-         applyPlantLevel = false;
+         applyPlantLevel = false,
+         applySpecialIndex = false;
 
       HexCell previousCell;
       Color activeColor;
@@ -119,6 +121,10 @@ namespace HexMap.Map
             if (applyPlantLevel)
             {
                cell.PlantLevel = activePlantLevel;
+            }
+            if (applySpecialIndex)
+            {
+               cell.SpecialIndex = activeSpecialIndex;
             }
 
             if (riverMode == OptionalToggle.No)
@@ -230,6 +236,11 @@ namespace HexMap.Map
          activePlantLevel = (int)level;
       }
 
+      public void SetSpecialIndex(float index)
+      {
+         activeSpecialIndex = (int)index;
+      }
+
       public void SetBrushSize(float size)
       {
          brushSize = (int)size;
@@ -258,6 +269,11 @@ namespace HexMap.Map
       public void SetApplyPlantLevel(bool toggle)
       {
          applyPlantLevel = toggle;
+      }
+
+      public void SetApplySpecialIndex(bool toggle)
+      {
+         applySpecialIndex = toggle;
       }
 
       public void SetRiverMode(int mode)
