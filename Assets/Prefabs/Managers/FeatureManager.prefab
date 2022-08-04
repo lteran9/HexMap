@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8ee675ca5a4469e9acc6b4b7d39fd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _walls: {fileID: 0}
+  _wallTower: {fileID: 163764433967140072, guid: e44fdbb4069d54eed870cd8cf0543edd, type: 3}
+  _bridge: {fileID: 8374909445674229589, guid: a5bf6218da4b74bdfb5df2bac7d5c2ec, type: 3}
   urbanCollections:
   - prefabs:
     - {fileID: 839548926693866862, guid: b9c88de85838645349aacc5b400c9743, type: 3}

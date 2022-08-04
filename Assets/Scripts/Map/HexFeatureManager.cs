@@ -8,6 +8,7 @@ namespace HexMap.Map
       Transform container = default;
 
       [SerializeField] HexMesh _walls = default;
+      [SerializeField] Transform _wallTower = default, _bridge = default;
       [SerializeField] HexFeatureCollection[] urbanCollections = default;
       [SerializeField] HexFeatureCollection[] farmCollections = default;
       [SerializeField] HexFeatureCollection[] plantCollections = default;
@@ -159,7 +160,8 @@ namespace HexMap.Map
 
       void AddWallSegment(
          Vector3 nearLeft, Vector3 farLeft,
-         Vector3 nearRight, Vector3 farRight
+         Vector3 nearRight, Vector3 farRight,
+         bool addTower = false
       )
       {
          nearLeft = HexMetrics.Perturb(nearLeft);
@@ -192,8 +194,17 @@ namespace HexMap.Map
          v3.y = leftTop;
          v4.y = rightTop;
          _walls.AddQuadUnperturbed(v2, v1, v4, v3);
-
          _walls.AddQuadUnperturbed(t1, t2, v3, v4);
+
+         if (addTower)
+         {
+            Transform towerInstance = Instantiate(_wallTower);
+            towerInstance.transform.localPosition = (left + right) * 0.5f;
+            Vector3 rightDirection = right - left;
+            rightDirection.y = 0f;
+            towerInstance.transform.right = rightDirection;
+            towerInstance.SetParent(container, false);
+         }
       }
 
       void AddWallSegment(
@@ -216,7 +227,15 @@ namespace HexMap.Map
          {
             if (hasRighWall)
             {
-               AddWallSegment(pivot, left, pivot, right);
+               bool hasTower = false;
+               if (leftCell.Elevation == rightCell.Elevation)
+               {
+                  HexHash hash = HexMetrics.SampleHashGrid(
+                     (pivot + left + right) * (1f / 3f)
+                  );
+                  hasTower = hash.e < HexMetrics.wallTowerThreshold;
+               }
+               AddWallSegment(pivot, left, pivot, right, hasTower);
             }
             else if (leftCell.Elevation < rightCell.Elevation)
             {
@@ -280,5 +299,23 @@ namespace HexMap.Map
 
 
       #endregion
+
+      #region Bridges
+
+      public void AddBridge(Vector3 roadCenter1, Vector3 roadCenter2)
+      {
+         roadCenter1 = HexMetrics.Perturb(roadCenter1);
+         roadCenter2 = HexMetrics.Perturb(roadCenter2);
+         Transform instance = Instantiate(_bridge);
+         instance.localPosition = (roadCenter1 + roadCenter2) * 0.5f;
+         instance.forward = roadCenter2 - roadCenter1;
+         float length = Vector3.Distance(roadCenter1, roadCenter2);
+         instance.localScale = new Vector3(
+            1f, 1f, length * (1f / HexMetrics.bridgeDesignLength)
+         );
+         instance.SetParent(container, false);
+      }
+
+      #endregion 
    }
 }
