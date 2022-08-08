@@ -87,6 +87,23 @@ namespace HexMap.Map
          HexHash hash = HexMetrics.SampleHashGrid(position);
          instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
          instance.SetParent(container, false);
+
+         if (cell.SpecialIndex == 3)
+         {
+            Transform instanceA = Instantiate(_special[cell.SpecialIndex - 1]);
+            var localPositionA = HexMetrics.Perturb(position);
+            instanceA.localPosition = new Vector3(localPositionA.x + 2, 0, localPositionA.z + 2);
+            HexHash hashA = HexMetrics.SampleHashGrid(position);
+            instanceA.localRotation = Quaternion.Euler(0f, 180f * hash.e, 0f);
+            instanceA.SetParent(container, false);
+
+            Transform instanceB = Instantiate(_special[cell.SpecialIndex - 1]);
+            var localPositionB = HexMetrics.Perturb(position);
+            instanceB.localPosition = localPositionB + new Vector3(-2, 0, 2);
+            HexHash hashB = HexMetrics.SampleHashGrid(position);
+            instanceB.localRotation = Quaternion.Euler(0f, 90f * hash.e, 0f);
+            instanceB.SetParent(container, false);
+         }
       }
 
       Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice)
