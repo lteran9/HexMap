@@ -56,7 +56,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Add towers to walls
 - Connect raods across rivers via bridges
 - Support large special features
-## Chapter 12 [ ]
+## Chapter 12 [X]
 - Keep track of terrain type, instead of color
 - Create a file
 - Write data to a file, then read it
