@@ -1,5 +1,6 @@
 using HexMap.Extensions;
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,15 +39,7 @@ namespace HexMap.Map
             }
 
             elevation = value;
-            Vector3 position = transform.localPosition;
-            position.y = value * HexMetrics.elevationStep;
-            position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
-            transform.localPosition = position;
-
-            Vector3 uiPosition = uiRect.localPosition;
-            uiPosition.z = elevation * -HexMetrics.elevationStep;
-            uiRect.localPosition = uiPosition;
-
+            RefreshPosition();
             ValidateRivers();
 
             for (int i = 0; i < _roads.Length; i++)
@@ -307,6 +300,18 @@ namespace HexMap.Map
          }
       }
 
+      void RefreshPosition()
+      {
+         Vector3 position = transform.localPosition;
+         position.y = elevation * HexMetrics.elevationStep;
+         position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
+         transform.localPosition = position;
+
+         Vector3 uiPosition = uiRect.localPosition;
+         uiPosition.z = elevation * -HexMetrics.elevationStep;
+         uiRect.localPosition = uiPosition;
+      }
+
       void RefreshSelfOnly()
       {
          chunk.Refresh();
@@ -473,6 +478,91 @@ namespace HexMap.Map
       }
 
       #endregion
+
+      #region Perist Data
+
+      public void Save(BinaryWriter writer)
+      {
+         writer.Write((byte)terrainTypeIndex);
+         writer.Write((byte)elevation);
+         writer.Write((byte)waterLevel);
+         writer.Write((byte)urbanLevel);
+         writer.Write((byte)farmLevel);
+         writer.Write((byte)plantLevel);
+         writer.Write((byte)specialIndex);
+         writer.Write(walled);
+
+         if (hasIncomingRiver)
+         {
+            writer.Write((byte)(incomingRiver + 128));
+         }
+         else
+         {
+            writer.Write((byte)0);
+         }
+
+         if (hasOutgoingRiver)
+         {
+            writer.Write((byte)(outgoingRiver + 128));
+         }
+         else
+         {
+            writer.Write((byte)0);
+         }
+
+         int roadFlags = 0;
+         for (int i = 0; i < _roads.Length; i++)
+         {
+            if (_roads[i])
+            {
+               roadFlags |= 1 << i;
+            }
+         }
+         writer.Write((byte)roadFlags);
+      }
+
+      public void Load(BinaryReader reader)
+      {
+         terrainTypeIndex = reader.ReadByte();
+         elevation = reader.ReadByte();
+         RefreshPosition();
+         waterLevel = reader.ReadByte();
+         urbanLevel = reader.ReadByte();
+         farmLevel = reader.ReadByte();
+         plantLevel = reader.ReadByte();
+         specialIndex = reader.ReadByte();
+         walled = reader.ReadBoolean();
+
+         byte riverData = reader.ReadByte();
+         if (riverData >= 128)
+         {
+            hasIncomingRiver = true;
+            incomingRiver = (HexGrid.HexDirection)(riverData - 128);
+         }
+         else
+         {
+            hasIncomingRiver = false;
+         }
+
+         riverData = reader.ReadByte();
+         if (riverData >= 128)
+         {
+            hasOutgoingRiver = true;
+            outgoingRiver = (HexGrid.HexDirection)(riverData - 128);
+         }
+         else
+         {
+            hasOutgoingRiver = false;
+         }
+
+         int roadFlags = reader.ReadByte();
+         for (int i = 0; i < _roads.Length; i++)
+         {
+            _roads[i] = (roadFlags & (1 << i)) != 0;
+         }
+      }
+
+      #endregion 
 
    }
 }

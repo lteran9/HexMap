@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
 
@@ -177,6 +178,27 @@ namespace HexMap.Map
          for (int i = 0; i < m_Chunks.Length; i++)
          {
             m_Chunks[i].ShowUI(visible);
+         }
+      }
+
+      public void Save(BinaryWriter writer)
+      {
+         for (int i = 0; i < m_Cells.Length; i++)
+         {
+            m_Cells[i].Save(writer);
+         }
+      }
+
+      public void Load(BinaryReader reader)
+      {
+         for (int i = 0; i < m_Cells.Length; i++)
+         {
+            m_Cells[i].Load(reader);
+         }
+
+         for (int i = 0; i < m_Chunks.Length; i++)
+         {
+            m_Chunks[i].Refresh();
          }
       }
    }

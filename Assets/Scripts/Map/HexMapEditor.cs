@@ -294,10 +294,10 @@ namespace HexMap.Map
       public void Save()
       {
          string path = Path.Combine(Application.persistentDataPath, "test.map");
-         Debug.Log(path);
          using (var writer = new BinaryWriter(File.Open(path, FileMode.Create)))
          {
-            writer.Write(123);
+            writer.Write(0);
+            _hexGrid.Save(writer);
          }
 
       }
@@ -307,7 +307,15 @@ namespace HexMap.Map
          string path = Path.Combine(Application.persistentDataPath, "test.map");
          using (var reader = new BinaryReader(File.OpenRead(path)))
          {
-            Debug.Log(reader.ReadInt32());
+            int header = reader.ReadInt32();
+            if (header == 0)
+            {
+               _hexGrid.Load(reader);
+            }
+            else
+            {
+               Debug.LogWarning("Unknown map format " + header);
+            }
          }
       }
 
