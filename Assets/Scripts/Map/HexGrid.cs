@@ -178,14 +178,32 @@ namespace HexMap.Map
 
       public void Save(BinaryWriter writer)
       {
+         writer.Write(_cellCountX);
+         writer.Write(_cellCountZ);
+
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Save(writer);
          }
       }
 
-      public void Load(BinaryReader reader)
+      public void Load(BinaryReader reader, int header)
       {
+         int x = 20, z = 15;
+         if (header >= 1)
+         {
+            x = reader.ReadInt32();
+            z = reader.ReadInt32();
+         }
+
+         if (x != _cellCountX || z != _cellCountZ)
+         {
+            if (!CreateMap(x, z))
+            {
+               return;
+            }
+         }
+
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Load(reader);
@@ -197,12 +215,12 @@ namespace HexMap.Map
          }
       }
 
-      public void CreateMap(int x, int z)
+      public bool CreateMap(int x, int z)
       {
          if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
          {
             Debug.LogError("Unsupported map size.");
-            return;
+            return false;
          }
          if (m_Chunks != null)
          {
@@ -219,6 +237,8 @@ namespace HexMap.Map
 
          CreateChunks();
          CreateCells();
+
+         return true;
       }
    }
 }

@@ -12,6 +12,7 @@ namespace HexMap.Gameplay
       void CreateMap(int x, int z)
       {
          _hexGrid.CreateMap(x, z);
+         CameraManager.ValidatePosition();
          Close();
       }
 
