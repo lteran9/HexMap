@@ -33,11 +33,13 @@ namespace HexMap.Gameplay
       public void Open()
       {
          gameObject.SetActive(true);
+         CameraManager.Locked = true;
       }
 
       public void Close()
       {
          gameObject.SetActive(false);
+         CameraManager.Locked = false;
       }
    }
 }

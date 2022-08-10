@@ -6,6 +6,16 @@ namespace HexMap.Gameplay
 {
    public class CameraManager : MonoBehaviour
    {
+      static CameraManager instance;
+
+      public static bool Locked
+      {
+         set
+         {
+            instance.enabled = !value;
+         }
+      }
+
       [SerializeField] float _StickMinZoom = -250;
       [SerializeField] float _StickMaxZoom = -45;
 
@@ -29,6 +39,8 @@ namespace HexMap.Gameplay
             _InputReader.MoveEvent += MoveCamera;
             _InputReader.RotateEvent += RotateCamera;
          }
+
+         instance = this;
       }
 
       void OnDisable()
