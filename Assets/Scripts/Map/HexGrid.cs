@@ -8,15 +8,15 @@ namespace HexMap.Map
    public class HexGrid : MonoBehaviour
    {
       [SerializeField] int _seed = 0;
-      [SerializeField] int _chunkCountX = 4;
-      [SerializeField] int _chunkCountZ = 3;
+      [SerializeField] int _cellCountX = 20;
+      [SerializeField] int _cellCountZ = 15;
       [SerializeField] Texture2D _noiseSource = default;
       [SerializeField] HexGridChunk _chunkPrefab = default;
       [SerializeField] HexCell _cellPrefab = default;
       [SerializeField] TextMeshProUGUI _cellLabelPrefab = default;
       [SerializeField] Color[] _colors;
 
-      int cellCountX, cellCountZ;
+      int chunkCountX, chunkCountZ;
 
       HexCell[] m_Cells = default;
       HexGridChunk[] m_Chunks = default;
@@ -36,12 +36,7 @@ namespace HexMap.Map
          HexMetrics.noiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
          HexMetrics.colors = _colors;
-
-         cellCountX = _chunkCountX * HexMetrics.chunkSizeX;
-         cellCountZ = _chunkCountZ * HexMetrics.chunkSizeZ;
-
-         CreateChunks();
-         CreateCells();
+         CreateMap(_cellCountX, _cellCountZ);
       }
 
       void OnEnable()
@@ -56,11 +51,11 @@ namespace HexMap.Map
 
       void CreateChunks()
       {
-         m_Chunks = new HexGridChunk[_chunkCountX * _chunkCountZ];
+         m_Chunks = new HexGridChunk[chunkCountX * chunkCountZ];
 
-         for (int z = 0, i = 0; z < _chunkCountZ; z++)
+         for (int z = 0, i = 0; z < chunkCountZ; z++)
          {
-            for (int x = 0; x < _chunkCountX; x++)
+            for (int x = 0; x < chunkCountX; x++)
             {
                HexGridChunk chunk = m_Chunks[i++] = Instantiate(_chunkPrefab);
                chunk.transform.SetParent(transform);
@@ -70,11 +65,11 @@ namespace HexMap.Map
 
       void CreateCells()
       {
-         m_Cells = new HexCell[cellCountZ * cellCountX];
+         m_Cells = new HexCell[_cellCountZ * _cellCountX];
 
-         for (int z = 0, i = 0; z < cellCountZ; z++)
+         for (int z = 0, i = 0; z < _cellCountZ; z++)
          {
-            for (int x = 0; x < cellCountX; x++)
+            for (int x = 0; x < _cellCountX; x++)
             {
                CreateCell(x, z, i++);
             }
@@ -103,18 +98,18 @@ namespace HexMap.Map
          {
             if ((z & 1) == 0)
             {
-               cell.SetNeighbor(HexDirection.SE, m_Cells[i - cellCountX]);
+               cell.SetNeighbor(HexDirection.SE, m_Cells[i - _cellCountX]);
                if (x > 0)
                {
-                  cell.SetNeighbor(HexDirection.SW, m_Cells[i - cellCountX - 1]);
+                  cell.SetNeighbor(HexDirection.SW, m_Cells[i - _cellCountX - 1]);
                }
             }
             else
             {
-               cell.SetNeighbor(HexDirection.SW, m_Cells[i - cellCountX]);
-               if (x < cellCountX - 1)
+               cell.SetNeighbor(HexDirection.SW, m_Cells[i - _cellCountX]);
+               if (x < _cellCountX - 1)
                {
-                  cell.SetNeighbor(HexDirection.SE, m_Cells[i - cellCountX + 1]);
+                  cell.SetNeighbor(HexDirection.SE, m_Cells[i - _cellCountX + 1]);
                }
             }
          }
@@ -133,7 +128,7 @@ namespace HexMap.Map
       {
          int chunkX = x / HexMetrics.chunkSizeX;
          int chunkZ = z / HexMetrics.chunkSizeZ;
-         HexGridChunk chunk = m_Chunks[chunkX + chunkZ * _chunkCountX];
+         HexGridChunk chunk = m_Chunks[chunkX + chunkZ * chunkCountX];
 
          int localX = x - chunkX * HexMetrics.chunkSizeX;
          int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
@@ -144,33 +139,33 @@ namespace HexMap.Map
       {
          position = transform.InverseTransformPoint(position);
          HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
+         int index = coordinates.X + coordinates.Z * _cellCountX + coordinates.Z / 2;
          return m_Cells[index];
       }
 
       public HexCell GetCell(HexCoordinates coordinates)
       {
          int z = coordinates.Z;
-         if (z < 0 || z >= cellCountZ)
+         if (z < 0 || z >= _cellCountZ)
          {
             return null;
          }
          int x = coordinates.X + z / 2;
-         if (x < 0 || x >= cellCountX)
+         if (x < 0 || x >= _cellCountX)
          {
             return null;
          }
-         return m_Cells[x + z * cellCountX];
+         return m_Cells[x + z * _cellCountX];
       }
 
-      public int GetChunkX()
+      public int GetCellCountX()
       {
-         return _chunkCountX;
+         return _cellCountX;
       }
 
-      public int GetChunkZ()
+      public int GetCellCountZ()
       {
-         return _chunkCountZ;
+         return _cellCountZ;
       }
 
       public void ShowUI(bool visible)
@@ -200,6 +195,30 @@ namespace HexMap.Map
          {
             m_Chunks[i].Refresh();
          }
+      }
+
+      public void CreateMap(int x, int z)
+      {
+         if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
+         {
+            Debug.LogError("Unsupported map size.");
+            return;
+         }
+         if (m_Chunks != null)
+         {
+            for (int i = 0; i < m_Chunks.Length; i++)
+            {
+               Destroy(m_Chunks[i].gameObject);
+            }
+         }
+
+         _cellCountX = x;
+         _cellCountZ = z;
+         chunkCountX = _cellCountX / HexMetrics.chunkSizeX;
+         chunkCountZ = _cellCountZ / HexMetrics.chunkSizeZ;
+
+         CreateChunks();
+         CreateCells();
       }
    }
 }
