@@ -1,8 +1,5 @@
 using HexMap.Input;
 using HexMap.Extensions;
-using HexMap.Gameplay;
-using System;
-using System.IO;
 using UnityEngine;
 
 namespace HexMap.Map
@@ -286,39 +283,6 @@ namespace HexMap.Map
             }
          }
          isDrag = false;
-      }
-
-      #endregion
-
-      #region Data Storage
-
-      public void Save()
-      {
-         string path = Path.Combine(Application.persistentDataPath, "test.map");
-         using (var writer = new BinaryWriter(File.Open(path, FileMode.Create)))
-         {
-            writer.Write(0);
-            _hexGrid.Save(writer);
-         }
-
-      }
-
-      public void Load()
-      {
-         string path = Path.Combine(Application.persistentDataPath, "test.map");
-         using (var reader = new BinaryReader(File.OpenRead(path)))
-         {
-            int header = reader.ReadInt32();
-            if (header <= 1)
-            {
-               _hexGrid.Load(reader, header);
-               CameraManager.ValidatePosition();
-            }
-            else
-            {
-               Debug.LogWarning("Unknown map format " + header);
-            }
-         }
       }
 
       #endregion

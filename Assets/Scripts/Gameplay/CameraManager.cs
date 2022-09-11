@@ -15,6 +15,7 @@ namespace HexMap.Gameplay
             instance.enabled = !value;
          }
       }
+
       public static void ValidatePosition()
       {
          instance.AdjustPosition(0f, 0f);
