@@ -11,8 +11,8 @@ namespace HexMap.Map
 
       [NonSerialized] List<int> Triangles = default;
       [NonSerialized] List<Color> Colors = default;
-      [NonSerialized] List<Vector2> UVs, UV2s = default;
-      [NonSerialized] List<Vector3> Vertices = default;
+      [NonSerialized] List<Vector2> UVs = default, UV2s = default;
+      [NonSerialized] List<Vector3> Vertices = default, terrainTypes = default;
 
       #endregion
 
@@ -20,7 +20,11 @@ namespace HexMap.Map
       MeshRenderer meshRenderer = default;
       MeshCollider meshCollider = default;
 
-      public bool useCollider, useColors, useUVCoordinates, useUV2Coordinates;
+      public bool useCollider,
+         useColors,
+         useUVCoordinates,
+         useUV2Coordinates,
+         useTerrainTypes;
 
       void Awake()
       {
