@@ -9,13 +9,11 @@ public class SaveLoadMenu : MonoBehaviour
 {
    bool saveMode = default;
 
-
    [SerializeField] TMP_InputField _fileName = default;
    [SerializeField] TextMeshProUGUI _menuLabel = default, _actionButtonLabel = default;
    [SerializeField] HexGrid _hexGrid = default;
    [SerializeField] RectTransform _listContent = default;
    [SerializeField] SaveLoadItem _itemPrefab = default;
-
 
    public void Open(bool saveMode)
    {
@@ -61,6 +59,21 @@ public class SaveLoadMenu : MonoBehaviour
    public void SelectItem(string name)
    {
       _fileName.text = name;
+   }
+
+   public void Delete()
+   {
+      string path = GetSelectedPath();
+      if (path == null)
+      {
+         return;
+      }
+      if (File.Exists(path))
+      {
+         File.Delete(path);
+      }
+      _fileName.text = "";
+      FillList();
    }
 
    void FillList()

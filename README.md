@@ -62,7 +62,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Write data to a file, then read it
 - Serialize cell data
 - Reduce file size
-## Chapter 13 [ ]
+## Chapter 13 [X]
 - Create new maps in play mode
 - Support multiple map sizes
 - Add map size to save data
