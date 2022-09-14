@@ -53,6 +53,10 @@ namespace HexMap.Map
          {
             UV2s = ListPool<Vector2>.Get();
          }
+         if (useTerrainTypes)
+         {
+            terrainTypes = ListPool<Vector3>.Get();
+         }
          Triangles = ListPool<int>.Get();
       }
 
@@ -74,6 +78,11 @@ namespace HexMap.Map
          {
             hexMesh.SetUVs(1, UV2s);
             ListPool<Vector2>.Add(UV2s);
+         }
+         if (useTerrainTypes)
+         {
+            hexMesh.SetUVs(2, terrainTypes);
+            ListPool<Vector3>.Add(terrainTypes);
          }
          hexMesh.SetTriangles(Triangles, 0);
          ListPool<int>.Add(Triangles);
@@ -135,6 +144,13 @@ namespace HexMap.Map
          UV2s.Add(uv1);
          UV2s.Add(uv2);
          UV2s.Add(uv3);
+      }
+
+      public void AddTriangleTerrainTypes(Vector3 types)
+      {
+         terrainTypes.Add(types);
+         terrainTypes.Add(types);
+         terrainTypes.Add(types);
       }
 
       #endregion 
@@ -225,6 +241,14 @@ namespace HexMap.Map
          Triangles.Add(vertexIndex + 1);
          Triangles.Add(vertexIndex + 2);
          Triangles.Add(vertexIndex + 3);
+      }
+
+      public void AddQuadTerrainTypes(Vector3 types)
+      {
+         terrainTypes.Add(types);
+         terrainTypes.Add(types);
+         terrainTypes.Add(types);
+         terrainTypes.Add(types);
       }
 
       #endregion
