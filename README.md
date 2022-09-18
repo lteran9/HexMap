@@ -68,8 +68,14 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Add map size to save data
 - SAve and load arbitrary maps
 - Show a list of maps
-## Chapter 14 [ ]
+## Chapter 14 [X]
 - Use vertex colors to design a splat map
 - Create a texture array set
 - Add terrain indices to meshes
 - Blend between terrain textures
+## Chapter 15 [ ]
+- Show grid lines
+- Toggle between edit and navigation mode
+- Calculate distance between cells
+- Find a way around obstacles
+- Deal with varying movement costs
