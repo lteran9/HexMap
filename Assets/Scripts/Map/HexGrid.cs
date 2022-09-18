@@ -14,7 +14,6 @@ namespace HexMap.Map
       [SerializeField] HexGridChunk _chunkPrefab = default;
       [SerializeField] HexCell _cellPrefab = default;
       [SerializeField] TextMeshProUGUI _cellLabelPrefab = default;
-      [SerializeField] Color[] _colors;
 
       int chunkCountX, chunkCountZ;
 
@@ -35,7 +34,6 @@ namespace HexMap.Map
       {
          HexMetrics.noiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
-         HexMetrics.colors = _colors;
          CreateMap(_cellCountX, _cellCountZ);
       }
 
@@ -45,7 +43,6 @@ namespace HexMap.Map
          {
             HexMetrics.noiseSource = _noiseSource;
             HexMetrics.InitializeHashGrid(_seed);
-            HexMetrics.colors = _colors;
          }
       }
 

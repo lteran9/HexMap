@@ -53,7 +53,6 @@ namespace HexMap.Map
          new Vector3(0f, 0f, outerRadius)
       };
 
-      public static Color[] colors = default;
       public static HexHash[] hashGrid = default;
 
       public static void InitializeHashGrid(int seed)

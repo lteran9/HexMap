@@ -57,7 +57,6 @@ namespace HexMap.Map
          cell.uiRect.SetParent(gridCanvas.transform, false);
       }
 
-
       #region Triangulate 
 
       public void Triangulate(HexCell[] cells)
@@ -321,7 +320,7 @@ namespace HexMap.Map
          types.z = rightCell.TerrainTypeIndex;
 
          _terrain.AddTriangle(begin, v3, v4);
-         _terrain.AddTriangleColor(beginCell.Color, c3, c4);
+         _terrain.AddTriangleColor(color1, c3, c4);
          _terrain.AddTriangleTerrainTypes(types);
 
          for (int i = 2; i < HexMetrics.terraceSteps; i++)

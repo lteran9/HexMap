@@ -244,13 +244,6 @@ namespace HexMap.Map
          }
       }
 
-      public Color Color
-      {
-         get
-         {
-            return HexMetrics.colors[terrainTypeIndex];
-         }
-      }
       public Vector3 Position
       {
          get
