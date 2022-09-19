@@ -8,6 +8,7 @@ namespace HexMap.Map
    {
       [SerializeField] HexGrid _hexGrid = default;
       [SerializeField] InputReader _inputReader = default;
+      [SerializeField] Material _terrainMaterial = default;
 
       int activeElevation,
          activeWaterLevel,
@@ -270,6 +271,14 @@ namespace HexMap.Map
       public void SetTerrainTypeIndex(int index)
       {
          activeTerrainTypeIndex = index;
+      }
+
+      public void ShowGrid(bool visible)
+      {
+         if (_terrainMaterial != null)
+         {
+            _terrainMaterial.SetFloat("_GridOn", visible ? 1f : 0f);
+         }
       }
 
       void ValidateDrag(HexCell currentCell)
