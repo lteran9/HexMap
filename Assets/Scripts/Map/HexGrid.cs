@@ -113,7 +113,7 @@ namespace HexMap.Map
 
          TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(_cellLabelPrefab);
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-         label.text = cell.coordinates.ToStringOnSeparateLines();
+         //label.text = cell.coordinates.ToStringOnSeparateLines();
 
          cell.uiRect = label.rectTransform;
          cell.Elevation = 0;
@@ -209,6 +209,14 @@ namespace HexMap.Map
          for (int i = 0; i < m_Chunks.Length; i++)
          {
             m_Chunks[i].Refresh();
+         }
+      }
+
+      public void FindDistancesTo(HexCell cell)
+      {
+         for (int i = 0; i < m_Cells.Length; i++)
+         {
+            m_Cells[i].Distance = cell.coordinates.DistanceTo(m_Cells[i].coordinates);
          }
       }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HexMap.Map
 {
@@ -15,7 +16,8 @@ namespace HexMap.Map
          farmLevel = 0,
          plantLevel = 0,
          specialIndex = 0,
-         terrainTypeIndex;
+         terrainTypeIndex,
+         distance;
       bool hasIncomingRiver,
          hasOutgoingRiver,
          walled;
@@ -145,6 +147,18 @@ namespace HexMap.Map
                terrainTypeIndex = value;
                Refresh();
             }
+         }
+      }
+      public int Distance
+      {
+         get
+         {
+            return distance;
+         }
+         set
+         {
+            distance = value;
+            UpdateDistanceLabel();
          }
       }
 
@@ -310,15 +324,21 @@ namespace HexMap.Map
          chunk.Refresh();
       }
 
-      public HexCell GetNeighbor(HexGrid.HexDirection direction)
+      void UpdateDistanceLabel()
       {
-         return _neighbors[(int)direction];
+         Text label = uiRect.GetComponent<Text>();
+         label.text = distance.ToString();
       }
 
       public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell)
       {
          _neighbors[(int)direction] = cell;
          cell._neighbors[(int)direction.Opposite()] = this;
+      }
+
+      public HexCell GetNeighbor(HexGrid.HexDirection direction)
+      {
+         return _neighbors[(int)direction];
       }
 
       public HexGrid.HexEdgeType GetEdgeType(HexGrid.HexDirection direction)

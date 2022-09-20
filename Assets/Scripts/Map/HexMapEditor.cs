@@ -25,7 +25,8 @@ namespace HexMap.Map
          applyUrbanLevel = false,
          applyFarmLevel = false,
          applyPlantLevel = false,
-         applySpecialIndex = false;
+         applySpecialIndex = false,
+         editMode = false;
 
       HexCell previousCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
@@ -40,7 +41,7 @@ namespace HexMap.Map
 
       void Awake()
       {
-         //
+         ShowGrid(false);
       }
 
       void OnEnable()
@@ -82,7 +83,15 @@ namespace HexMap.Map
             {
                isDrag = false;
             }
-            EditCells(currentCell);
+
+            if (editMode)
+            {
+               EditCells(currentCell);
+            }
+            else
+            {
+               _hexGrid.FindDistancesTo(currentCell);
+            }
             previousCell = currentCell;
          }
          else
@@ -273,6 +282,12 @@ namespace HexMap.Map
          activeTerrainTypeIndex = index;
       }
 
+      public void SetEditMode(bool toggle)
+      {
+         editMode = toggle;
+         _hexGrid.ShowUI(!toggle);
+      }
+
       public void ShowGrid(bool visible)
       {
          if (_terrainMaterial != null)
@@ -295,11 +310,6 @@ namespace HexMap.Map
       }
 
       #endregion
-
-      public void ShowUI(bool visible)
-      {
-         _hexGrid.ShowUI(visible);
-      }
 
       public void ResetMap()
       {
