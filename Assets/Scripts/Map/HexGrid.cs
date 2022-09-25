@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace HexMap.Map
 {
@@ -132,6 +134,66 @@ namespace HexMap.Map
          chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
       }
 
+      IEnumerator Search(HexCell cell)
+      {
+         for (int i = 0; i < m_Cells.Length; i++)
+         {
+            m_Cells[i].Distance = int.MaxValue;
+         }
+
+         WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+         List<HexCell> frontier = new List<HexCell>();
+         cell.Distance = 0;
+         frontier.Add(cell);
+         while (frontier.Count > 0)
+         {
+            yield return delay;
+            HexCell current = frontier[0];
+            frontier.RemoveAt(0);
+            for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
+            {
+               HexCell neighbor = current.GetNeighbor(dir);
+               if (neighbor == null)
+               {
+                  continue;
+               }
+               if (neighbor.IsUnderwater)
+               {
+                  continue;
+               }
+               HexEdgeType edgeType = current.GetEdgeType(neighbor);
+               if (edgeType == HexEdgeType.Cliff)
+               {
+                  continue;
+               }
+               int distance = current.Distance;
+               if (current.HasRoadThroughEdge(dir))
+               {
+                  distance += 1;
+               }
+               else if (current.Walled != neighbor.Walled)
+               {
+                  continue;
+               }
+               else
+               {
+                  distance += edgeType == HexEdgeType.Flat ? 5 : 10;
+                  distance += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+               }
+               if (neighbor.Distance == int.MaxValue)
+               {
+                  neighbor.Distance = distance;
+                  frontier.Add(neighbor);
+               }
+               else if (distance < neighbor.Distance)
+               {
+                  neighbor.Distance = distance;
+               }
+               frontier.Sort((x, y) => x.Distance.CompareTo(y.Distance));
+            }
+         }
+      }
+
       public HexCell GetCell(Vector3 position)
       {
          position = transform.InverseTransformPoint(position);
@@ -186,6 +248,7 @@ namespace HexMap.Map
 
       public void Load(BinaryReader reader, int header)
       {
+         StopAllCoroutines();
          int x = 20, z = 15;
          if (header >= 1)
          {
@@ -214,10 +277,8 @@ namespace HexMap.Map
 
       public void FindDistancesTo(HexCell cell)
       {
-         for (int i = 0; i < m_Cells.Length; i++)
-         {
-            m_Cells[i].Distance = cell.coordinates.DistanceTo(m_Cells[i].coordinates);
-         }
+         StopAllCoroutines();
+         StartCoroutine(Search(cell));
       }
 
       public bool CreateMap(int x, int z)

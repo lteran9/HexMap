@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -326,8 +327,8 @@ namespace HexMap.Map
 
       void UpdateDistanceLabel()
       {
-         Text label = uiRect.GetComponent<Text>();
-         label.text = distance.ToString();
+         TMP_Text label = uiRect.GetComponent<TMP_Text>();
+         label.text = distance == int.MaxValue ? string.Empty : distance.ToString();
       }
 
       public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell)
