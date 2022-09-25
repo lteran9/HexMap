@@ -73,7 +73,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Create a texture array set
 - Add terrain indices to meshes
 - Blend between terrain textures
-## Chapter 15 [ ]
+## Chapter 15 [X]
 - Show grid lines
 - Toggle between edit and navigation mode
 - Calculate distance between cells
