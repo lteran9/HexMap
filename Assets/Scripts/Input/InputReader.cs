@@ -11,6 +11,8 @@ namespace HexMap.Input
    {
       public event UnityAction MouseDrag = delegate { };
       public event UnityAction MenuMouseClick = delegate { };
+      public event UnityAction LeftShiftStarted = delegate { };
+      public event UnityAction LeftShiftStopped = delegate { };
       public event UnityAction<float> ZoomCamera = delegate { };
       public event UnityAction<float> RotateEvent = delegate { };
       public event UnityAction<Vector2> MoveEvent = delegate { };
@@ -63,6 +65,21 @@ namespace HexMap.Input
       public void OnCameraRotate(InputAction.CallbackContext context)
       {
          RotateEvent.Invoke(context.ReadValue<float>());
+      }
+
+      public void OnSearch(InputAction.CallbackContext context)
+      {
+         switch (context.phase)
+         {
+            case InputActionPhase.Performed:
+               LeftShiftStarted.Invoke();
+               break;
+            case InputActionPhase.Canceled:
+               LeftShiftStopped.Invoke();
+               break;
+            default:
+               break;
+         }
       }
    }
 }

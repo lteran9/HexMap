@@ -134,22 +134,31 @@ namespace HexMap.Map
          chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
       }
 
-      IEnumerator Search(HexCell cell)
+      IEnumerator Search(HexCell fromCell, HexCell toCell)
       {
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Distance = int.MaxValue;
+            m_Cells[i].DisableHighlight();
          }
+         fromCell.EnableHighlight(Color.blue);
+         toCell.EnableHighlight(Color.red);
 
          WaitForSeconds delay = new WaitForSeconds(1 / 60f);
          List<HexCell> frontier = new List<HexCell>();
-         cell.Distance = 0;
-         frontier.Add(cell);
+         fromCell.Distance = 0;
+         frontier.Add(fromCell);
          while (frontier.Count > 0)
          {
             yield return delay;
             HexCell current = frontier[0];
             frontier.RemoveAt(0);
+
+            if (current == toCell)
+            {
+               break;
+            }
+
             for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
             {
                HexCell neighbor = current.GetNeighbor(dir);
@@ -275,10 +284,10 @@ namespace HexMap.Map
          }
       }
 
-      public void FindDistancesTo(HexCell cell)
+      public void FindPath(HexCell fromCell, HexCell toCell)
       {
          StopAllCoroutines();
-         StartCoroutine(Search(cell));
+         StartCoroutine(Search(fromCell, toCell));
       }
 
       public bool CreateMap(int x, int z)

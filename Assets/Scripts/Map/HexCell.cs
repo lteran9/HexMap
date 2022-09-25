@@ -331,6 +331,21 @@ namespace HexMap.Map
          label.text = distance == int.MaxValue ? string.Empty : distance.ToString();
       }
 
+      public void EnableHighlight(Color color)
+      {
+         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+         highlight.color = color;
+         highlight.enabled = true;
+      }
+
+      public void DisableHighlight()
+      {
+         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+         highlight.enabled = false;
+      }
+
+      #region Neighbors
+
       public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell)
       {
          _neighbors[(int)direction] = cell;
@@ -355,6 +370,8 @@ namespace HexMap.Map
             elevation, otherCell.elevation
          );
       }
+
+      #endregion
 
       #region Rivers
 
@@ -577,6 +594,5 @@ namespace HexMap.Map
       }
 
       #endregion 
-
    }
 }

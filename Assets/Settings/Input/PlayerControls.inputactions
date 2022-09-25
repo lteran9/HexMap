@@ -11,7 +11,8 @@
                     "id": "4e8c77ca-b176-4f33-825c-71634bfa3b9f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "MouseDrag",
@@ -19,7 +20,8 @@
                     "id": "b3f1cd0e-1bf1-46b9-a318-598c02247ac1",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "MouseDrag"
+                    "interactions": "MouseDrag",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Zoom",
@@ -27,7 +29,8 @@
                     "id": "da81db53-241c-4a41-98b6-4928f756a5e0",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "CameraMove",
@@ -35,7 +38,8 @@
                     "id": "d3ec747f-0054-4233-b23d-72a0def7fff6",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "CameraRotate",
@@ -43,7 +47,17 @@
                     "id": "2c17cea8-7f84-4d5a-a375-26fd5b3acfa3",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Search",
+                    "type": "Button",
+                    "id": "c45d5d6c-c1b5-44f7-955b-80b588c00013",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -200,6 +214,17 @@
                     "action": "MouseDrag",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "8d75dcd5-e0b2-4708-8be5-f566f68fc157",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Search",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

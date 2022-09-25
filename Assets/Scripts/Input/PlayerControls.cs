@@ -73,6 +73,15 @@ namespace HexMap.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Search"",
+                    ""type"": ""Button"",
+                    ""id"": ""c45d5d6c-c1b5-44f7-955b-80b588c00013"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -229,6 +238,17 @@ namespace HexMap.Input
                     ""action"": ""MouseDrag"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d75dcd5-e0b2-4708-8be5-f566f68fc157"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Search"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -259,6 +279,7 @@ namespace HexMap.Input
             m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
             m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
             m_Player_CameraRotate = m_Player.FindAction("CameraRotate", throwIfNotFound: true);
+            m_Player_Search = m_Player.FindAction("Search", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -323,6 +344,7 @@ namespace HexMap.Input
         private readonly InputAction m_Player_Zoom;
         private readonly InputAction m_Player_CameraMove;
         private readonly InputAction m_Player_CameraRotate;
+        private readonly InputAction m_Player_Search;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -332,6 +354,7 @@ namespace HexMap.Input
             public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
             public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
             public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
+            public InputAction @Search => m_Wrapper.m_Player_Search;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -356,6 +379,9 @@ namespace HexMap.Input
                     @CameraRotate.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
                     @CameraRotate.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
                     @CameraRotate.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
+                    @Search.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSearch;
+                    @Search.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSearch;
+                    @Search.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSearch;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -375,6 +401,9 @@ namespace HexMap.Input
                     @CameraRotate.started += instance.OnCameraRotate;
                     @CameraRotate.performed += instance.OnCameraRotate;
                     @CameraRotate.canceled += instance.OnCameraRotate;
+                    @Search.started += instance.OnSearch;
+                    @Search.performed += instance.OnSearch;
+                    @Search.canceled += instance.OnSearch;
                 }
             }
         }
@@ -395,6 +424,7 @@ namespace HexMap.Input
             void OnZoom(InputAction.CallbackContext context);
             void OnCameraMove(InputAction.CallbackContext context);
             void OnCameraRotate(InputAction.CallbackContext context);
+            void OnSearch(InputAction.CallbackContext context);
         }
     }
 }

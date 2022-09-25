@@ -26,9 +26,10 @@ namespace HexMap.Map
          applyFarmLevel = false,
          applyPlantLevel = false,
          applySpecialIndex = false,
-         editMode = false;
+         editMode = false,
+         leftShiftActive;
 
-      HexCell previousCell;
+      HexCell previousCell, searchFromCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
@@ -48,12 +49,16 @@ namespace HexMap.Map
       {
          _inputReader.MenuMouseClick += OnClick;
          _inputReader.MouseDrag += OnClick;
+         _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
+         _inputReader.LeftShiftStopped += LeftShiftReleased;
       }
 
       void OnDisable()
       {
          _inputReader.MenuMouseClick -= OnClick;
          _inputReader.MouseDrag -= OnClick;
+         _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
+         _inputReader.LeftShiftStopped -= LeftShiftReleased;
       }
 
       void OnClick()
@@ -88,9 +93,18 @@ namespace HexMap.Map
             {
                EditCells(currentCell);
             }
-            else
+            else if (leftShiftActive)
             {
-               _hexGrid.FindDistancesTo(currentCell);
+               if (searchFromCell)
+               {
+                  searchFromCell.DisableHighlight();
+               }
+               searchFromCell = currentCell;
+               searchFromCell.EnableHighlight(Color.blue);
+            }
+            else if (searchFromCell && searchFromCell != currentCell)
+            {
+               _hexGrid.FindPath(searchFromCell, currentCell);
             }
             previousCell = currentCell;
          }
@@ -310,6 +324,16 @@ namespace HexMap.Map
       }
 
       #endregion
+
+      void LeftShiftBeingHeld()
+      {
+         leftShiftActive = true;
+      }
+
+      void LeftShiftReleased()
+      {
+         leftShiftActive = false;
+      }
 
       public void ResetMap()
       {
