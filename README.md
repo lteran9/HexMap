@@ -79,7 +79,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Calculate distance between cells
 - Find a way around obstacles
 - Deal with varying movement costs
-## Chapter 16 [ ]
+## Chapter 16 [X]
 - Highlight cells
 - Pick a search destination
 - Find the shortest path

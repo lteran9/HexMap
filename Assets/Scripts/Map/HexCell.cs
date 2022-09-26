@@ -162,6 +162,13 @@ namespace HexMap.Map
             UpdateDistanceLabel();
          }
       }
+      public int SearchPriority
+      {
+         get
+         {
+            return Distance + SearchHeuristic;
+         }
+      }
 
       public bool IsSpecial
       {
@@ -266,6 +273,7 @@ namespace HexMap.Map
             return transform.localPosition;
          }
       }
+      public HexCell NextWithSamePriority { get; set; }
       public HexGrid.HexDirection IncomingRiver
       {
          get
@@ -288,21 +296,23 @@ namespace HexMap.Map
          }
       }
 
-      [NonSerialized] public HexGridChunk chunk = default;
-      [NonSerialized] public HexCoordinates coordinates = default;
-      [NonSerialized] public RectTransform uiRect = default;
+      [NonSerialized] public int SearchHeuristic = default;
+      [NonSerialized] public HexGridChunk Chunk = default;
+      [NonSerialized] public HexCoordinates Coordinates = default;
+      [NonSerialized] public RectTransform UIRect = default;
+      [NonSerialized] public HexCell PathFrom = default;
 
       void Refresh()
       {
-         if (chunk)
+         if (Chunk)
          {
-            chunk.Refresh();
+            Chunk.Refresh();
             for (int i = 0; i < _neighbors.Length; i++)
             {
                HexCell neighbor = _neighbors[i];
-               if (neighbor != null && neighbor.chunk != chunk)
+               if (neighbor != null && neighbor.Chunk != Chunk)
                {
-                  neighbor.chunk.Refresh();
+                  neighbor.Chunk.Refresh();
                }
             }
          }
@@ -315,32 +325,32 @@ namespace HexMap.Map
          position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
          transform.localPosition = position;
 
-         Vector3 uiPosition = uiRect.localPosition;
+         Vector3 uiPosition = UIRect.localPosition;
          uiPosition.z = elevation * -HexMetrics.elevationStep;
-         uiRect.localPosition = uiPosition;
+         UIRect.localPosition = uiPosition;
       }
 
       void RefreshSelfOnly()
       {
-         chunk.Refresh();
+         Chunk.Refresh();
       }
 
       void UpdateDistanceLabel()
       {
-         TMP_Text label = uiRect.GetComponent<TMP_Text>();
+         TMP_Text label = UIRect.GetComponent<TMP_Text>();
          label.text = distance == int.MaxValue ? string.Empty : distance.ToString();
       }
 
       public void EnableHighlight(Color color)
       {
-         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+         Image highlight = UIRect.GetChild(0).GetComponent<Image>();
          highlight.color = color;
          highlight.enabled = true;
       }
 
       public void DisableHighlight()
       {
-         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+         Image highlight = UIRect.GetChild(0).GetComponent<Image>();
          highlight.enabled = false;
       }
 
