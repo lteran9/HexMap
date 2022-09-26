@@ -29,7 +29,7 @@ namespace HexMap.Map
          editMode = false,
          leftShiftActive;
 
-      HexCell previousCell, searchFromCell;
+      HexCell previousCell, searchFromCell, searchToCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
@@ -93,7 +93,7 @@ namespace HexMap.Map
             {
                EditCells(currentCell);
             }
-            else if (leftShiftActive)
+            else if (leftShiftActive && searchToCell != currentCell)
             {
                if (searchFromCell)
                {
@@ -101,9 +101,14 @@ namespace HexMap.Map
                }
                searchFromCell = currentCell;
                searchFromCell.EnableHighlight(Color.blue);
+               if (searchToCell)
+               {
+                  _hexGrid.FindPath(searchFromCell, searchToCell);
+               }
             }
             else if (searchFromCell && searchFromCell != currentCell)
             {
+               searchToCell = currentCell;
                _hexGrid.FindPath(searchFromCell, currentCell);
             }
             previousCell = currentCell;
@@ -189,8 +194,8 @@ namespace HexMap.Map
 
       void EditCells(HexCell center)
       {
-         int centerX = center.coordinates.X;
-         int centerZ = center.coordinates.Z;
+         int centerX = center.Coordinates.X;
+         int centerZ = center.Coordinates.Z;
 
          for (int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++)
          {

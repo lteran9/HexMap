@@ -21,6 +21,7 @@ namespace HexMap.Map
 
       HexCell[] m_Cells = default;
       HexGridChunk[] m_Chunks = default;
+      HexCellPriorityQueue searchFrontier = default;
 
       public enum HexDirection
       {
@@ -86,7 +87,7 @@ namespace HexMap.Map
          HexCell cell = m_Cells[i] = Instantiate<HexCell>(_cellPrefab);
          cell.transform.localPosition = position;
          cell.name = $"Cell #{i}";
-         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+         cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
 
          if (x > 0)
          {
@@ -117,7 +118,7 @@ namespace HexMap.Map
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
          //label.text = cell.coordinates.ToStringOnSeparateLines();
 
-         cell.uiRect = label.rectTransform;
+         cell.UIRect = label.rectTransform;
          cell.Elevation = 0;
 
          AddCellToChunk(x, z, cell);
@@ -136,6 +137,14 @@ namespace HexMap.Map
 
       IEnumerator Search(HexCell fromCell, HexCell toCell)
       {
+         if (searchFrontier == null)
+         {
+            searchFrontier = new HexCellPriorityQueue();
+         }
+         else
+         {
+            searchFrontier.Clear();
+         }
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Distance = int.MaxValue;
@@ -145,17 +154,21 @@ namespace HexMap.Map
          toCell.EnableHighlight(Color.red);
 
          WaitForSeconds delay = new WaitForSeconds(1 / 60f);
-         List<HexCell> frontier = new List<HexCell>();
          fromCell.Distance = 0;
-         frontier.Add(fromCell);
-         while (frontier.Count > 0)
+         searchFrontier.Enqueue(fromCell);
+         while (searchFrontier.Count > 0)
          {
             yield return delay;
-            HexCell current = frontier[0];
-            frontier.RemoveAt(0);
+            HexCell current = searchFrontier.Dequeue();
 
             if (current == toCell)
             {
+               current = current.PathFrom;
+               while (current != fromCell)
+               {
+                  current.EnableHighlight(Color.white);
+                  current = current.PathFrom;
+               }
                break;
             }
 
@@ -192,13 +205,17 @@ namespace HexMap.Map
                if (neighbor.Distance == int.MaxValue)
                {
                   neighbor.Distance = distance;
-                  frontier.Add(neighbor);
+                  neighbor.PathFrom = current;
+                  neighbor.SearchHeuristic = neighbor.Coordinates.DistanceTo(toCell.Coordinates);
+                  searchFrontier.Enqueue(neighbor);
                }
                else if (distance < neighbor.Distance)
                {
+                  int oldPriority = neighbor.SearchPriority;
                   neighbor.Distance = distance;
+                  neighbor.PathFrom = current;
+                  searchFrontier.Change(neighbor, oldPriority);
                }
-               frontier.Sort((x, y) => x.Distance.CompareTo(y.Distance));
             }
          }
       }
