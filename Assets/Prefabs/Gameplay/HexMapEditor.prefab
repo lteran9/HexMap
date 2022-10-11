@@ -6311,7 +6311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61cb23c0235d44f3e9a6880c9919b8ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hexGrid: {fileID: 0}
+  _hexGrid: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+  _unitPrefab: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
 --- !u!114 &4404635364659270188

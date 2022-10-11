@@ -1,5 +1,6 @@
 using HexMap.Input;
 using HexMap.Extensions;
+using HexMap.Units;
 using UnityEngine;
 
 namespace HexMap.Map
@@ -7,6 +8,7 @@ namespace HexMap.Map
    public class HexMapEditor : MonoBehaviour
    {
       [SerializeField] HexGrid _hexGrid = default;
+      [SerializeField] HexUnit _unitPrefab = default;
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
 
@@ -75,11 +77,9 @@ namespace HexMap.Map
 
       void HandleInput()
       {
-         Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-         Ray inputRay = Camera.main.ScreenPointToRay(position);
-         if (Physics.Raycast(inputRay, out RaycastHit hit))
+         HexCell currentCell = GetCellUnderCursor();
+         if (currentCell != null)
          {
-            HexCell currentCell = _hexGrid.GetCell(hit.point);
             if (previousCell && previousCell != currentCell)
             {
                ValidateDrag(currentCell);
@@ -346,9 +346,16 @@ namespace HexMap.Map
          leftShiftActive = false;
       }
 
-      public void ResetMap()
+      HexCell GetCellUnderCursor()
       {
-         // TODO
+         Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
+         Ray inputRay = Camera.main.ScreenPointToRay(position);
+         if (Physics.Raycast(inputRay, out RaycastHit hit))
+         {
+            return _hexGrid.GetCell(hit.point);
+         }
+
+         return null;
       }
    }
 }
