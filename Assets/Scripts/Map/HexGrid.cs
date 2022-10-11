@@ -135,7 +135,7 @@ namespace HexMap.Map
          chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
       }
 
-      IEnumerator Search(HexCell fromCell, HexCell toCell)
+      void Search(HexCell fromCell, HexCell toCell, int speed)
       {
          if (searchFrontier == null)
          {
@@ -145,32 +145,36 @@ namespace HexMap.Map
          {
             searchFrontier.Clear();
          }
+
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Distance = int.MaxValue;
+            m_Cells[i].SetLabel(null);
             m_Cells[i].DisableHighlight();
          }
-         fromCell.EnableHighlight(Color.blue);
-         toCell.EnableHighlight(Color.red);
 
-         WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+         fromCell.EnableHighlight(Color.blue);
+
          fromCell.Distance = 0;
          searchFrontier.Enqueue(fromCell);
          while (searchFrontier.Count > 0)
          {
-            yield return delay;
             HexCell current = searchFrontier.Dequeue();
 
             if (current == toCell)
             {
-               current = current.PathFrom;
                while (current != fromCell)
                {
+                  int turn = current.Distance / speed;
+                  current.SetLabel(turn.ToString());
                   current.EnableHighlight(Color.white);
                   current = current.PathFrom;
                }
+               toCell.EnableHighlight(Color.red);
                break;
             }
+
+            int currentTurn = current.Distance / speed;
 
             for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
             {
@@ -188,10 +192,10 @@ namespace HexMap.Map
                {
                   continue;
                }
-               int distance = current.Distance;
+               int moveCost;
                if (current.HasRoadThroughEdge(dir))
                {
-                  distance += 1;
+                  moveCost = 1;
                }
                else if (current.Walled != neighbor.Walled)
                {
@@ -199,12 +203,21 @@ namespace HexMap.Map
                }
                else
                {
-                  distance += edgeType == HexEdgeType.Flat ? 5 : 10;
-                  distance += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+                  moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+                  moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
                }
+
+               int distance = current.Distance + moveCost;
+               int turn = distance / speed;
+               if (turn > currentTurn)
+               {
+                  distance = turn * speed + moveCost;
+               }
+
                if (neighbor.Distance == int.MaxValue)
                {
                   neighbor.Distance = distance;
+                  //neighbor.SetLabel(turn.ToString());
                   neighbor.PathFrom = current;
                   neighbor.SearchHeuristic = neighbor.Coordinates.DistanceTo(toCell.Coordinates);
                   searchFrontier.Enqueue(neighbor);
@@ -213,6 +226,7 @@ namespace HexMap.Map
                {
                   int oldPriority = neighbor.SearchPriority;
                   neighbor.Distance = distance;
+                  //neighbor.SetLabel(turn.ToString());
                   neighbor.PathFrom = current;
                   searchFrontier.Change(neighbor, oldPriority);
                }
@@ -274,7 +288,6 @@ namespace HexMap.Map
 
       public void Load(BinaryReader reader, int header)
       {
-         StopAllCoroutines();
          int x = 20, z = 15;
          if (header >= 1)
          {
@@ -301,10 +314,9 @@ namespace HexMap.Map
          }
       }
 
-      public void FindPath(HexCell fromCell, HexCell toCell)
+      public void FindPath(HexCell fromCell, HexCell toCell, int speed)
       {
-         StopAllCoroutines();
-         StartCoroutine(Search(fromCell, toCell));
+         Search(fromCell, toCell, speed);
       }
 
       public bool CreateMap(int x, int z)

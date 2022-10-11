@@ -159,7 +159,6 @@ namespace HexMap.Map
          set
          {
             distance = value;
-            UpdateDistanceLabel();
          }
       }
       public int SearchPriority
@@ -335,12 +334,6 @@ namespace HexMap.Map
          Chunk.Refresh();
       }
 
-      void UpdateDistanceLabel()
-      {
-         TMP_Text label = UIRect.GetComponent<TMP_Text>();
-         label.text = distance == int.MaxValue ? string.Empty : distance.ToString();
-      }
-
       public void EnableHighlight(Color color)
       {
          Image highlight = UIRect.GetChild(0).GetComponent<Image>();
@@ -352,6 +345,12 @@ namespace HexMap.Map
       {
          Image highlight = UIRect.GetChild(0).GetComponent<Image>();
          highlight.enabled = false;
+      }
+
+      public void SetLabel(string text)
+      {
+         TMP_Text label = UIRect.GetComponent<TMP_Text>();
+         label.text = text;
       }
 
       #region Neighbors
