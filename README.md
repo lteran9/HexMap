@@ -89,3 +89,8 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Immediately show paths
 - Search more efficiently
 - Only visualize the path
+## Chapter 18 [ ]
+- Place units on the map
+- Save and load units
+- Find paths for units
+- Move units around
