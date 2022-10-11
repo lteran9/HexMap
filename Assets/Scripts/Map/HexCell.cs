@@ -168,6 +168,7 @@ namespace HexMap.Map
             return Distance + SearchHeuristic;
          }
       }
+      public int SearchPhase { get; set; }
 
       public bool IsSpecial
       {

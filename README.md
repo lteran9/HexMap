@@ -84,7 +84,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Pick a search destination
 - Find the shortest path
 - Create a priority queue
-## Chapter 17 [ ]
+## Chapter 17 [X]
 - Find paths for turn-based movement
 - Immediately show paths
 - Search more efficiently
