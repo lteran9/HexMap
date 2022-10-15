@@ -8,7 +8,6 @@ namespace HexMap.Map
    public class HexMapEditor : MonoBehaviour
    {
       [SerializeField] HexGrid _hexGrid = default;
-      [SerializeField] HexUnit _unitPrefab = default;
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
 
@@ -53,7 +52,7 @@ namespace HexMap.Map
          _inputReader.MouseDrag += OnClick;
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped += LeftShiftReleased;
-         _inputReader.PlaceUnit += CreateUnit;
+         _inputReader.PlaceUnit += HandleUnitInput;
       }
 
       void OnDisable()
@@ -62,7 +61,7 @@ namespace HexMap.Map
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped -= LeftShiftReleased;
-         _inputReader.PlaceUnit -= CreateUnit;
+         _inputReader.PlaceUnit -= HandleUnitInput;
       }
 
       void OnClick()
@@ -348,6 +347,18 @@ namespace HexMap.Map
          leftShiftActive = false;
       }
 
+      void HandleUnitInput()
+      {
+         if (leftShiftActive)
+         {
+            DestroyUnit();
+         }
+         else
+         {
+            CreateUnit();
+         }
+      }
+
       void CreateUnit()
       {
          HexCell cell = GetCellUnderCursor();
@@ -355,10 +366,9 @@ namespace HexMap.Map
          {
             if (!cell.Unit)
             {
-               Debug.Log(cell.Coordinates.ToString());
-               HexUnit unit = Instantiate(_unitPrefab);
-               unit.transform.SetParent(_hexGrid.transform, false);
-               unit.Location = cell;
+               _hexGrid.AddUnit(
+                  Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+               );
             }
             else
             {
@@ -372,7 +382,7 @@ namespace HexMap.Map
          HexCell cell = GetCellUnderCursor();
          if (cell && cell.Unit)
          {
-            Destroy(cell.Unit.gameObject);
+            _hexGrid.RemoveUnit(cell.Unit);
          }
       }
 

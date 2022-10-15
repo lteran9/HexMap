@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace HexMap.Map
@@ -45,6 +44,14 @@ namespace HexMap.Map
          return new HexCoordinates(iX, iZ);
       }
 
+      public static HexCoordinates Load(BinaryReader reader)
+      {
+         HexCoordinates c;
+         c.x = reader.ReadInt32();
+         c.z = reader.ReadInt32();
+         return c;
+      }
+
       #endregion
 
       [SerializeField] private int x, z;
@@ -83,5 +90,10 @@ namespace HexMap.Map
             (Z < other.Z ? other.Z - Z : Z - other.Z)) / 2;
       }
 
+      public void Save(BinaryWriter writer)
+      {
+         writer.Write(x);
+         writer.Write(z);
+      }
    }
 }

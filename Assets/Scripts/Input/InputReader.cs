@@ -14,6 +14,7 @@ namespace HexMap.Input
       public event UnityAction LeftShiftStarted = delegate { };
       public event UnityAction LeftShiftStopped = delegate { };
       public event UnityAction PlaceUnit = delegate { };
+      public event UnityAction DestroyUnit = delegate { };
       public event UnityAction<float> ZoomCamera = delegate { };
       public event UnityAction<float> RotateEvent = delegate { };
       public event UnityAction<Vector2> MoveEvent = delegate { };

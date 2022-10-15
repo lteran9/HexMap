@@ -1,3 +1,4 @@
+using HexMap.Units;
 using System;
 using System.IO;
 using TMPro;
@@ -30,6 +31,10 @@ namespace HexMap.Map
       HexGridChunk[] m_Chunks = default;
       HexCellPriorityQueue searchFrontier = default;
 
+      List<HexUnit> units = new List<HexUnit>();
+
+      public HexUnit unitPrefab;
+
       public enum HexDirection
       {
          NE, E, SE, SW, W, NW
@@ -44,6 +49,7 @@ namespace HexMap.Map
       {
          HexMetrics.noiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
+         HexUnit.unitPrefab = unitPrefab;
          CreateMap(_cellCountX, _cellCountZ);
       }
 
@@ -53,6 +59,7 @@ namespace HexMap.Map
          {
             HexMetrics.noiseSource = _noiseSource;
             HexMetrics.InitializeHashGrid(_seed);
+            HexUnit.unitPrefab = unitPrefab;
          }
       }
 
@@ -162,6 +169,15 @@ namespace HexMap.Map
             currentPathTo.DisableHighlight();
          }
          currentPathFrom = currentPathTo = null;
+      }
+
+      void ClearUnits()
+      {
+         for (int i = 0; i < units.Count; i++)
+         {
+            units[i].Die();
+         }
+         units.Clear();
       }
 
       void ShowPath(int speed)
@@ -319,11 +335,18 @@ namespace HexMap.Map
          {
             m_Cells[i].Save(writer);
          }
+
+         writer.Write(units.Count);
+         for (int i = 0; i < units.Count; i++)
+         {
+            units[i].Save(writer);
+         }
       }
 
       public void Load(BinaryReader reader, int header)
       {
          ClearPath();
+         ClearUnits();
          int x = 20, z = 15;
          if (header >= 1)
          {
@@ -348,6 +371,15 @@ namespace HexMap.Map
          {
             m_Chunks[i].Refresh();
          }
+
+         if (header >= 2)
+         {
+            int unitCount = reader.ReadInt32();
+            for (int i = 0; i < unitCount; i++)
+            {
+               HexUnit.Load(reader, this);
+            }
+         }
       }
 
       public void FindPath(HexCell fromCell, HexCell toCell, int speed)
@@ -359,6 +391,20 @@ namespace HexMap.Map
          ShowPath(speed);
       }
 
+      public void AddUnit(HexUnit unit, HexCell location, float orientation)
+      {
+         units.Add(unit);
+         unit.transform.SetParent(transform, false);
+         unit.Location = location;
+         unit.Orientation = orientation;
+      }
+
+      public void RemoveUnit(HexUnit unit)
+      {
+         units.Remove(unit);
+         unit.Die();
+      }
+
       public bool CreateMap(int x, int z)
       {
          if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
@@ -367,6 +413,7 @@ namespace HexMap.Map
             return false;
          }
          ClearPath();
+         ClearUnits();
          if (m_Chunks != null)
          {
             for (int i = 0; i < m_Chunks.Length; i++)

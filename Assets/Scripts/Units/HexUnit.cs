@@ -1,12 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using HexMap.Map;
+using System.IO;
+using UnityEngine;
 
 namespace HexMap.Units
 {
    public class HexUnit : MonoBehaviour
    {
+      #region Static Methods
+
+      public static HexUnit unitPrefab;
+
+      public static void Load(BinaryReader reader, HexGrid grid)
+      {
+         HexCoordinates coordinates = HexCoordinates.Load(reader);
+         float orientation = reader.ReadSingle();
+         grid.AddUnit(
+            Instantiate(unitPrefab), grid.GetCell(coordinates), orientation
+         );
+      }
+
+      #endregion 
+      public float Orientation
+      {
+         get
+         {
+            return orientation;
+         }
+         set
+         {
+            orientation = value;
+            transform.localRotation = Quaternion.Euler(0f, value, 0f);
+         }
+      }
+
       public HexCell Location
       {
          get
@@ -21,18 +47,6 @@ namespace HexMap.Units
          }
       }
 
-      public float Orientation
-      {
-         get
-         {
-            return orientation;
-         }
-         set
-         {
-            orientation = value;
-            transform.localRotation = Quaternion.Euler(0f, value, 0f);
-         }
-      }
 
       float orientation = default;
       HexCell location = default;
@@ -40,6 +54,18 @@ namespace HexMap.Units
       public void ValidateLocation()
       {
          transform.localPosition = location.Position;
+      }
+
+      public void Die()
+      {
+         location.Unit = null;
+         Destroy(gameObject);
+      }
+
+      public void Save(BinaryWriter writer)
+      {
+         location.Coordinates.Save(writer);
+         writer.Write(orientation);
       }
    }
 }
