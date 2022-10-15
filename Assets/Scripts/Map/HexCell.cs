@@ -1,8 +1,7 @@
 using HexMap.Extensions;
+using HexMap.Units;
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -274,6 +273,7 @@ namespace HexMap.Map
          }
       }
       public HexCell NextWithSamePriority { get; set; }
+      public HexUnit Unit { get; set; }
       public HexGrid.HexDirection IncomingRiver
       {
          get
@@ -315,6 +315,10 @@ namespace HexMap.Map
                   neighbor.Chunk.Refresh();
                }
             }
+            if (Unit)
+            {
+               Unit.ValidateLocation();
+            }
          }
       }
 
@@ -333,6 +337,10 @@ namespace HexMap.Map
       void RefreshSelfOnly()
       {
          Chunk.Refresh();
+         if (Unit)
+         {
+            Unit.ValidateLocation();
+         }
       }
 
       public void EnableHighlight(Color color)

@@ -53,6 +53,7 @@ namespace HexMap.Map
          _inputReader.MouseDrag += OnClick;
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped += LeftShiftReleased;
+         _inputReader.PlaceUnit += CreateUnit;
       }
 
       void OnDisable()
@@ -61,6 +62,7 @@ namespace HexMap.Map
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped -= LeftShiftReleased;
+         _inputReader.PlaceUnit -= CreateUnit;
       }
 
       void OnClick()
@@ -344,6 +346,34 @@ namespace HexMap.Map
       void LeftShiftReleased()
       {
          leftShiftActive = false;
+      }
+
+      void CreateUnit()
+      {
+         HexCell cell = GetCellUnderCursor();
+         if (cell)
+         {
+            if (!cell.Unit)
+            {
+               Debug.Log(cell.Coordinates.ToString());
+               HexUnit unit = Instantiate(_unitPrefab);
+               unit.transform.SetParent(_hexGrid.transform, false);
+               unit.Location = cell;
+            }
+            else
+            {
+               Debug.Log("Unit already placed at location: " + cell.Coordinates.ToString());
+            }
+         }
+      }
+
+      void DestroyUnit()
+      {
+         HexCell cell = GetCellUnderCursor();
+         if (cell && cell.Unit)
+         {
+            Destroy(cell.Unit.gameObject);
+         }
       }
 
       HexCell GetCellUnderCursor()

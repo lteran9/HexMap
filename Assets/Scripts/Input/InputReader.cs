@@ -13,6 +13,7 @@ namespace HexMap.Input
       public event UnityAction MenuMouseClick = delegate { };
       public event UnityAction LeftShiftStarted = delegate { };
       public event UnityAction LeftShiftStopped = delegate { };
+      public event UnityAction PlaceUnit = delegate { };
       public event UnityAction<float> ZoomCamera = delegate { };
       public event UnityAction<float> RotateEvent = delegate { };
       public event UnityAction<Vector2> MoveEvent = delegate { };
@@ -79,6 +80,14 @@ namespace HexMap.Input
                break;
             default:
                break;
+         }
+      }
+
+      public void OnPlaceUnit(InputAction.CallbackContext context)
+      {
+         if (context.phase == InputActionPhase.Performed)
+         {
+            PlaceUnit.Invoke();
          }
       }
    }
