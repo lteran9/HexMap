@@ -27,10 +27,9 @@ namespace HexMap.Map
          applyFarmLevel = false,
          applyPlantLevel = false,
          applySpecialIndex = false,
-         editMode = false,
          leftShiftActive;
 
-      HexCell previousCell, searchFromCell, searchToCell;
+      HexCell previousCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
@@ -44,11 +43,12 @@ namespace HexMap.Map
       void Awake()
       {
          ShowGrid(false);
+         SetEditMode(false);
       }
 
       void OnEnable()
       {
-         _inputReader.MenuMouseClick += OnClick;
+         _inputReader.MouseClick += OnClick;
          _inputReader.MouseDrag += OnClick;
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped += LeftShiftReleased;
@@ -57,7 +57,7 @@ namespace HexMap.Map
 
       void OnDisable()
       {
-         _inputReader.MenuMouseClick -= OnClick;
+         _inputReader.MouseClick -= OnClick;
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped -= LeftShiftReleased;
@@ -90,34 +90,8 @@ namespace HexMap.Map
                isDrag = false;
             }
 
-            if (editMode)
-            {
-               EditCells(currentCell);
-            }
-            else if (leftShiftActive && searchToCell != currentCell)
-            {
-               if (searchFromCell != currentCell)
-               {
-                  if (searchFromCell)
-                  {
-                     searchFromCell.DisableHighlight();
-                  }
-                  searchFromCell = currentCell;
-                  searchFromCell.EnableHighlight(Color.blue);
-                  if (searchToCell)
-                  {
-                     _hexGrid.FindPath(searchFromCell, searchToCell, 24);
-                  }
-               }
-            }
-            else if (searchFromCell && searchFromCell != currentCell)
-            {
-               if (searchToCell != currentCell)
-               {
-                  searchToCell = currentCell;
-                  _hexGrid.FindPath(searchFromCell, currentCell, 24);
-               }
-            }
+            EditCells(currentCell);
+
             previousCell = currentCell;
          }
          else
@@ -310,8 +284,7 @@ namespace HexMap.Map
 
       public void SetEditMode(bool toggle)
       {
-         editMode = toggle;
-         _hexGrid.ShowUI(!toggle);
+         enabled = toggle;
       }
 
       public void ShowGrid(bool visible)
@@ -390,12 +363,7 @@ namespace HexMap.Map
       {
          Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
          Ray inputRay = Camera.main.ScreenPointToRay(position);
-         if (Physics.Raycast(inputRay, out RaycastHit hit))
-         {
-            return _hexGrid.GetCell(hit.point);
-         }
-
-         return null;
+         return _hexGrid.GetCell(inputRay);
       }
    }
 }

@@ -10,7 +10,7 @@ namespace HexMap.Input
    public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
    {
       public event UnityAction MouseDrag = delegate { };
-      public event UnityAction MenuMouseClick = delegate { };
+      public event UnityAction MouseClick = delegate { };
       public event UnityAction LeftShiftStarted = delegate { };
       public event UnityAction LeftShiftStopped = delegate { };
       public event UnityAction PlaceUnit = delegate { };
@@ -43,7 +43,7 @@ namespace HexMap.Input
       {
          if (context.phase == InputActionPhase.Performed)
          {
-            MenuMouseClick.Invoke();
+            MouseClick.Invoke();
          }
       }
 

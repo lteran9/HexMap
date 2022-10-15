@@ -149,28 +149,6 @@ namespace HexMap.Map
          chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
       }
 
-      void ClearPath()
-      {
-         if (currentPathExists)
-         {
-            HexCell current = currentPathTo;
-            while (current != currentPathFrom)
-            {
-               current.SetLabel(null);
-               current.DisableHighlight();
-               current = current.PathFrom;
-            }
-            current.DisableHighlight();
-            currentPathExists = false;
-         }
-         else if (currentPathFrom)
-         {
-            currentPathFrom.DisableHighlight();
-            currentPathTo.DisableHighlight();
-         }
-         currentPathFrom = currentPathTo = null;
-      }
-
       void ClearUnits()
       {
          for (int i = 0; i < units.Count; i++)
@@ -405,6 +383,28 @@ namespace HexMap.Map
          unit.Die();
       }
 
+      public void ClearPath()
+      {
+         if (currentPathExists)
+         {
+            HexCell current = currentPathTo;
+            while (current != currentPathFrom)
+            {
+               current.SetLabel(null);
+               current.DisableHighlight();
+               current = current.PathFrom;
+            }
+            current.DisableHighlight();
+            currentPathExists = false;
+         }
+         else if (currentPathFrom)
+         {
+            currentPathFrom.DisableHighlight();
+            currentPathTo.DisableHighlight();
+         }
+         currentPathFrom = currentPathTo = null;
+      }
+
       public bool CreateMap(int x, int z)
       {
          if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
@@ -431,6 +431,16 @@ namespace HexMap.Map
          CreateCells();
 
          return true;
+      }
+
+      public HexCell GetCell(Ray ray)
+      {
+         RaycastHit hit;
+         if (Physics.Raycast(ray, out hit))
+         {
+            return GetCell(hit.point);
+         }
+         return null;
       }
    }
 }
