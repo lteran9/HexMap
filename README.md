@@ -94,3 +94,8 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Save and load units
 - Find paths for units
 - Move units around
+## Chapter 19 [ ]
+- Make units travel between cells
+- Visualize travelled paths
+- Move units along curves
+- Have units look where they are going
