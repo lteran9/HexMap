@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "966f50a0-75fe-4dae-813a-e6f9ff60f02f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MouseDrag",
                     "type": "PassThrough",
                     "id": "b3f1cd0e-1bf1-46b9-a318-598c02247ac1",
@@ -87,7 +96,7 @@
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Default",
                     "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -230,7 +239,7 @@
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Default",
                     "action": "Search",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -241,8 +250,19 @@
                     "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Default",
                     "action": "PlaceUnit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8aa4bf02-71a6-4e28-84ab-5503d6c98f54",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

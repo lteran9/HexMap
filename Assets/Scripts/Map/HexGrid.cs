@@ -33,6 +33,14 @@ namespace HexMap.Map
 
       List<HexUnit> units = new List<HexUnit>();
 
+      public bool HasPath
+      {
+         get
+         {
+            return currentPathExists;
+         }
+      }
+
       public HexUnit unitPrefab;
 
       public enum HexDirection
@@ -209,7 +217,7 @@ namespace HexMap.Map
                {
                   continue;
                }
-               if (neighbor.IsUnderwater)
+               if (neighbor.IsUnderwater || neighbor.Unit)
                {
                   continue;
                }

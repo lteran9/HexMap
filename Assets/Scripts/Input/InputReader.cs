@@ -11,6 +11,7 @@ namespace HexMap.Input
    {
       public event UnityAction MouseDrag = delegate { };
       public event UnityAction MouseClick = delegate { };
+      public event UnityAction RightMouseClick = delegate { };
       public event UnityAction LeftShiftStarted = delegate { };
       public event UnityAction LeftShiftStopped = delegate { };
       public event UnityAction PlaceUnit = delegate { };
@@ -44,6 +45,14 @@ namespace HexMap.Input
          if (context.phase == InputActionPhase.Performed)
          {
             MouseClick.Invoke();
+         }
+      }
+
+      public void OnRightClick(InputAction.CallbackContext context)
+      {
+         if (context.phase == InputActionPhase.Performed)
+         {
+            RightMouseClick.Invoke();
          }
       }
 

@@ -19,7 +19,8 @@ namespace HexMap.Units
          );
       }
 
-      #endregion 
+      #endregion
+
       public float Orientation
       {
          get
@@ -41,12 +42,15 @@ namespace HexMap.Units
          }
          set
          {
+            if (location)
+            {
+               location.Unit = null;
+            }
             location = value;
             value.Unit = this;
             transform.localPosition = value.Position;
          }
       }
-
 
       float orientation = default;
       HexCell location = default;
@@ -66,6 +70,11 @@ namespace HexMap.Units
       {
          location.Coordinates.Save(writer);
          writer.Write(orientation);
+      }
+
+      public bool IsValidDestination(HexCell cell)
+      {
+         return !cell.IsUnderwater && !cell.Unit;
       }
    }
 }
