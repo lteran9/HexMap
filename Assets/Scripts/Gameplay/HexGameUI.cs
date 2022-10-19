@@ -19,11 +19,13 @@ namespace HexMap.Gameplay
       public void OnEnable()
       {
          _inputReader.MouseClick += DoSelection;
+         _inputReader.RightMouseClick += DoMove;
       }
 
       public void OnDisable()
       {
          _inputReader.MouseClick -= DoSelection;
+         _inputReader.RightMouseClick -= DoMove;
       }
 
       bool UpdateCurrentCell()
@@ -39,11 +41,29 @@ namespace HexMap.Gameplay
          return false;
       }
 
+      void DoMove()
+      {
+         if (selectedUnit)
+         {
+            if (_grid.HasPath)
+            {
+               selectedUnit.Location = currentCell;
+               _grid.ClearPath();
+            }
+         }
+      }
+
       void DoSelection()
       {
+         _grid.ClearPath();
          UpdateCurrentCell();
          if (currentCell && currentCell.Unit)
          {
+            if (selectedUnit)
+            {
+               selectedUnit.Location.DisableHighlight();
+            }
+            currentCell.EnableHighlight(Color.blue);
             selectedUnit = currentCell.Unit;
          }
 
@@ -55,7 +75,7 @@ namespace HexMap.Gameplay
 
       void DoPathfinding()
       {
-         if (currentCell)
+         if (currentCell && selectedUnit.IsValidDestination(currentCell))
          {
             _grid.FindPath(selectedUnit.Location, currentCell, 24);
          }
@@ -69,6 +89,7 @@ namespace HexMap.Gameplay
       {
          enabled = !toggle;
          _grid.ShowUI(!toggle);
+         _grid.ClearPath();
       }
    }
 }

@@ -39,6 +39,15 @@ namespace HexMap.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""966f50a0-75fe-4dae-813a-e6f9ff60f02f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""MouseDrag"",
                     ""type"": ""PassThrough"",
                     ""id"": ""b3f1cd0e-1bf1-46b9-a318-598c02247ac1"",
@@ -111,7 +120,7 @@ namespace HexMap.Input
                     ""path"": ""<Mouse>/scroll/y"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Default"",
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -254,7 +263,7 @@ namespace HexMap.Input
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Default"",
                     ""action"": ""Search"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -265,8 +274,19 @@ namespace HexMap.Input
                     ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Default"",
                     ""action"": ""PlaceUnit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8aa4bf02-71a6-4e28-84ab-5503d6c98f54"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default"",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -295,6 +315,7 @@ namespace HexMap.Input
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+            m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
             m_Player_MouseDrag = m_Player.FindAction("MouseDrag", throwIfNotFound: true);
             m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
             m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
@@ -361,6 +382,7 @@ namespace HexMap.Input
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Click;
+        private readonly InputAction m_Player_RightClick;
         private readonly InputAction m_Player_MouseDrag;
         private readonly InputAction m_Player_Zoom;
         private readonly InputAction m_Player_CameraMove;
@@ -372,6 +394,7 @@ namespace HexMap.Input
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Click => m_Wrapper.m_Player_Click;
+            public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
             public InputAction @MouseDrag => m_Wrapper.m_Player_MouseDrag;
             public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
             public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
@@ -390,6 +413,9 @@ namespace HexMap.Input
                     @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                     @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                    @RightClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                    @RightClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                    @RightClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                     @MouseDrag.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
                     @MouseDrag.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
                     @MouseDrag.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDrag;
@@ -415,6 +441,9 @@ namespace HexMap.Input
                     @Click.started += instance.OnClick;
                     @Click.performed += instance.OnClick;
                     @Click.canceled += instance.OnClick;
+                    @RightClick.started += instance.OnRightClick;
+                    @RightClick.performed += instance.OnRightClick;
+                    @RightClick.canceled += instance.OnRightClick;
                     @MouseDrag.started += instance.OnMouseDrag;
                     @MouseDrag.performed += instance.OnMouseDrag;
                     @MouseDrag.canceled += instance.OnMouseDrag;
@@ -449,6 +478,7 @@ namespace HexMap.Input
         public interface IPlayerActions
         {
             void OnClick(InputAction.CallbackContext context);
+            void OnRightClick(InputAction.CallbackContext context);
             void OnMouseDrag(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
             void OnCameraMove(InputAction.CallbackContext context);

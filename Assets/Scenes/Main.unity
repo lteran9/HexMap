@@ -5073,6 +5073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1f81aab8f664a95856f53ea41e9a71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _grid: {fileID: 1809051975}
 --- !u!1 &1906278836
 GameObject:

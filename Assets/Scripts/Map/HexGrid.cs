@@ -33,6 +33,14 @@ namespace HexMap.Map
 
       List<HexUnit> units = new List<HexUnit>();
 
+      public bool HasPath
+      {
+         get
+         {
+            return currentPathExists;
+         }
+      }
+
       public HexUnit unitPrefab;
 
       public enum HexDirection
