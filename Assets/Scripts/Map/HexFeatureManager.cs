@@ -252,12 +252,12 @@ namespace HexMap.Map
 
          bool hasLeftWall = !leftCell.IsUnderwater &&
             pivotCell.GetEdgeType(leftCell) != HexGrid.HexEdgeType.Cliff;
-         bool hasRighWall = !rightCell.IsUnderwater &&
+         bool hasRightWall = !rightCell.IsUnderwater &&
             pivotCell.GetEdgeType(rightCell) != HexGrid.HexEdgeType.Cliff;
 
          if (hasLeftWall)
          {
-            if (hasRighWall)
+            if (hasRightWall)
             {
                bool hasTower = false;
                if (leftCell.Elevation == rightCell.Elevation)
@@ -278,7 +278,7 @@ namespace HexMap.Map
                AddWallCap(pivot, left);
             }
          }
-         else if (hasRighWall)
+         else if (hasRightWall)
          {
             if (rightCell.Elevation < leftCell.Elevation)
             {

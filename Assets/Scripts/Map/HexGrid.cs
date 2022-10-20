@@ -1,9 +1,8 @@
+using HexMap.Misc;
 using HexMap.Units;
-using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace HexMap.Map
@@ -208,7 +207,7 @@ namespace HexMap.Map
                return true;
             }
 
-            int currentTurn = current.Distance / speed;
+            int currentTurn = (current.Distance - 1) / speed;
 
             for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
             {
@@ -242,7 +241,7 @@ namespace HexMap.Map
                }
 
                int distance = current.Distance + moveCost;
-               int turn = distance / speed;
+               int turn = (distance - 1) / speed;
                if (turn > currentTurn)
                {
                   distance = turn * speed + moveCost;
@@ -449,6 +448,23 @@ namespace HexMap.Map
             return GetCell(hit.point);
          }
          return null;
+      }
+
+      public List<HexCell> GetPath()
+      {
+         if (!currentPathExists)
+         {
+            return null;
+         }
+
+         List<HexCell> path = ListPool<HexCell>.Get();
+         for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+         {
+            path.Add(c);
+         }
+         path.Add(currentPathFrom);
+         path.Reverse();
+         return path;
       }
    }
 }

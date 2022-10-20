@@ -1,4 +1,6 @@
+using HexMap.Misc;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +11,19 @@ namespace HexMap.Map
    {
       #region Buffers
 
-      [NonSerialized] List<int> Triangles = default;
-      [NonSerialized] List<Color> Colors = default;
-      [NonSerialized] List<Vector2> UVs = default, UV2s = default;
-      [NonSerialized] List<Vector3> Vertices = default, TerrainTypes = default;
+      [NonSerialized]
+      List<int> Triangles = default;
+
+      [NonSerialized]
+      List<Color> Colors = default;
+
+      [NonSerialized]
+      List<Vector2> UVs = default,
+         UV2s = default;
+
+      [NonSerialized]
+      List<Vector3> Vertices = default,
+         TerrainTypes = default;
 
       #endregion
 
@@ -64,6 +75,7 @@ namespace HexMap.Map
       {
          hexMesh.SetVertices(Vertices);
          ListPool<Vector3>.Add(Vertices);
+
          if (useColors)
          {
             hexMesh.SetColors(Colors);

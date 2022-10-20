@@ -47,7 +47,7 @@ namespace HexMap.Gameplay
          {
             if (_grid.HasPath)
             {
-               selectedUnit.Location = currentCell;
+               selectedUnit.Travel(_grid.GetPath());
                _grid.ClearPath();
             }
          }

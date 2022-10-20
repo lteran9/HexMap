@@ -18,6 +18,8 @@ namespace HexMap.Map
          specialIndex = 0,
          terrainTypeIndex,
          distance;
+
+      [SerializeField]
       bool hasIncomingRiver,
          hasOutgoingRiver,
          walled;
