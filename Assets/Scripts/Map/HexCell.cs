@@ -29,6 +29,7 @@ namespace HexMap.Map
       [SerializeField] bool[] _roads;
       [SerializeField] HexCell[] _neighbors = default;
 
+      public int Index { get; set; }
       public int Elevation
       {
          get
@@ -147,7 +148,7 @@ namespace HexMap.Map
             if (terrainTypeIndex != value)
             {
                terrainTypeIndex = value;
-               Refresh();
+               ShaderData.RefreshTerrain(this);
             }
          }
       }
@@ -297,6 +298,7 @@ namespace HexMap.Map
             return hasIncomingRiver ? incomingRiver : outgoingRiver;
          }
       }
+      public HexCellShaderData ShaderData { get; set; }
 
       [NonSerialized] public int SearchHeuristic = default;
       [NonSerialized] public HexGridChunk Chunk = default;
@@ -575,6 +577,7 @@ namespace HexMap.Map
       public void Load(BinaryReader reader)
       {
          terrainTypeIndex = reader.ReadByte();
+         ShaderData.RefreshTerrain(this);
          elevation = reader.ReadByte();
          RefreshPosition();
          waterLevel = reader.ReadByte();

@@ -29,6 +29,7 @@ namespace HexMap.Map
       HexCell[] m_Cells = default;
       HexGridChunk[] m_Chunks = default;
       HexCellPriorityQueue searchFrontier = default;
+      HexCellShaderData cellShaderData = default;
 
       List<HexUnit> units = new List<HexUnit>();
 
@@ -57,6 +58,7 @@ namespace HexMap.Map
          HexMetrics.noiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
          HexUnit.unitPrefab = unitPrefab;
+         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
          CreateMap(_cellCountX, _cellCountZ);
       }
 
@@ -109,6 +111,8 @@ namespace HexMap.Map
          cell.transform.localPosition = position;
          cell.name = $"Cell #{i}";
          cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+         cell.Index = i;
+         cell.ShaderData = cellShaderData;
 
          if (x > 0)
          {
@@ -433,6 +437,7 @@ namespace HexMap.Map
          _cellCountZ = z;
          chunkCountX = _cellCountX / HexMetrics.chunkSizeX;
          chunkCountZ = _cellCountZ / HexMetrics.chunkSizeZ;
+         cellShaderData.Initialize(_cellCountX, _cellCountZ);
 
          CreateChunks();
          CreateCells();
