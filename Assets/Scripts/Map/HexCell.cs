@@ -17,7 +17,8 @@ namespace HexMap.Map
          plantLevel = 0,
          specialIndex = 0,
          terrainTypeIndex,
-         distance;
+         distance,
+         visibility;
 
       [SerializeField]
       bool hasIncomingRiver,
@@ -245,6 +246,13 @@ namespace HexMap.Map
             }
          }
       }
+      public bool IsVisible
+      {
+         get
+         {
+            return visibility > 0;
+         }
+      }
 
       public float StreamBedY
       {
@@ -364,6 +372,25 @@ namespace HexMap.Map
       {
          TMP_Text label = UIRect.GetComponent<TMP_Text>();
          label.text = text;
+      }
+
+      public void IncreaseVisibility()
+      {
+         visibility += 1;
+         if (visibility >= 1)
+         {
+            ShaderData.RefreshVisibility(this);
+         }
+      }
+
+      public void DecreaseVisibility()
+      {
+         visibility -= 1;
+         if (visibility <= 0)
+         {
+            ShaderData.RefreshVisibility(this);
+            visibility = 0;
+         }
       }
 
       #region Neighbors

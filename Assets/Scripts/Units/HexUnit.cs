@@ -24,6 +24,8 @@ namespace HexMap.Units
 
       #endregion
 
+      const int visionRange = 2;
+
       const float travelSpeed = 4f;
       const float rotationSpeed = 180f;
 
@@ -50,13 +52,16 @@ namespace HexMap.Units
          {
             if (location)
             {
+               Grid.DecreaseVisibility(location, visionRange);
                location.Unit = null;
             }
             location = value;
             value.Unit = this;
+            Grid.IncreaseVisibility(location, visionRange);
             transform.localPosition = value.Position;
          }
       }
+      public HexGrid Grid { get; set; }
 
       float orientation = default;
 
@@ -143,6 +148,10 @@ namespace HexMap.Units
 
       public void Die()
       {
+         if (location)
+         {
+            Grid.DecreaseVisibility(location, visionRange);
+         }
          location.Unit = null;
          Destroy(gameObject);
       }
