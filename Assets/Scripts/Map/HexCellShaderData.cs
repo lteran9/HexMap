@@ -23,11 +23,11 @@ namespace HexMap.Map
             );
             cellTexture.filterMode = FilterMode.Point;
             cellTexture.wrapMode = TextureWrapMode.Clamp;
-            Shader.SetGlobalTexture("_HexCellData", cellTexture);
+            Shader.SetGlobalTexture("_HexCellData2", cellTexture);
          }
 
          Shader.SetGlobalVector(
-            "_HexCellData_TexelSize",
+            "_HexCellData_TexelSize2",
             new Vector4(1f / x, 1f / z, x, z)
          );
 
