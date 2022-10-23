@@ -173,6 +173,9 @@ namespace HexMap.Map
          if (hasRiver)
          {
             e2.v3.y = neighbor.StreamBedY;
+            Vector3 indices;
+            indices.x = indices.z = cell.Index;
+            indices.y = neighbor.Index;
 
             if (!cell.IsUnderwater)
             {
@@ -180,14 +183,16 @@ namespace HexMap.Map
                {
                   TriangulateRiverQuad(e1.v2, e1.v4, e2.v2, e2.v4,
                      cell.RiverSurfaceY, neighbor.RiverSurfaceY, 0.8f,
-                     cell.HasIncomingRiver && cell.IncomingRiver == direction);
+                     cell.HasIncomingRiver && cell.IncomingRiver == direction,
+                     indices);
                }
                else if (cell.Elevation > neighbor.WaterLevel)
                {
                   TriangulateWaterfallInWater(
                      e1.v2, e1.v4, e2.v2, e2.v4,
                      cell.RiverSurfaceY, neighbor.RiverSurfaceY,
-                     neighbor.WaterSurfaceY
+                     neighbor.WaterSurfaceY,
+                     indices
                   );
                }
             }
@@ -196,7 +201,7 @@ namespace HexMap.Map
                TriangulateWaterfallInWater(
                   e2.v4, e2.v2, e1.v4, e1.v2,
                   neighbor.RiverSurfaceY, cell.RiverSurfaceY,
-                  cell.WaterSurfaceY
+                  cell.WaterSurfaceY, indices
                );
             }
          }
@@ -582,8 +587,8 @@ namespace HexMap.Map
          if (!cell.IsUnderwater)
          {
             bool reversed = cell.IncomingRiver == direction;
-            TriangulateRiverQuad(centerL, centerR, middle.v2, middle.v4, cell.RiverSurfaceY, 0.4f, reversed);
-            TriangulateRiverQuad(middle.v2, middle.v4, eVertices.v2, eVertices.v4, cell.RiverSurfaceY, 0.6f, reversed);
+            TriangulateRiverQuad(centerL, centerR, middle.v2, middle.v4, cell.RiverSurfaceY, 0.4f, reversed, indices);
+            TriangulateRiverQuad(middle.v2, middle.v4, eVertices.v2, eVertices.v4, cell.RiverSurfaceY, 0.6f, reversed, indices);
          }
       }
 
@@ -606,7 +611,9 @@ namespace HexMap.Map
          if (!cell.IsUnderwater)
          {
             bool reversed = cell.HasIncomingRiver;
-            TriangulateRiverQuad(middle.v2, middle.v4, eVertices.v2, eVertices.v4, cell.RiverSurfaceY, 0.6f, reversed);
+            Vector3 indices;
+            indices.x = indices.y = indices.z = cell.Index;
+            TriangulateRiverQuad(middle.v2, middle.v4, eVertices.v2, eVertices.v4, cell.RiverSurfaceY, 0.6f, reversed, indices);
 
             center.y = middle.v2.y = middle.v4.y = cell.RiverSurfaceY;
             _rivers.AddTriangle(center, middle.v2, middle.v4);
@@ -622,6 +629,7 @@ namespace HexMap.Map
                   new Vector2(0.5f, 0.4f), new Vector2(0f, 0.6f), new Vector2(1f, 0.6f)
                );
             }
+            _rivers.AddTriangleCellData(indices, weights1);
          }
       }
 
@@ -667,26 +675,16 @@ namespace HexMap.Map
       }
 
       void TriangulateRiverQuad(
-         Vector3 v1,
-         Vector3 v2,
-         Vector3 v3,
-         Vector3 v4,
-         float y,
-         float v,
-         bool reversed)
+         Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
+         float y, float v, bool reversed, Vector3 indices)
       {
-         TriangulateRiverQuad(v1, v2, v3, v4, y, y, v, reversed);
+         TriangulateRiverQuad(v1, v2, v3, v4, y, y, v, reversed, indices);
       }
 
       void TriangulateRiverQuad(
-         Vector3 v1,
-         Vector3 v2,
-         Vector3 v3,
-         Vector3 v4,
-         float y1,
-         float y2,
-         float v,
-         bool reversed)
+         Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
+         float y1, float y2, float v,
+         bool reversed, Vector3 indices)
       {
          v1.y = v2.y = y1;
          v3.y = v4.y = y2;
@@ -699,6 +697,7 @@ namespace HexMap.Map
          {
             _rivers.AddQuadUV(0f, 1f, v, v + 0.2f);
          }
+         _rivers.AddQuadCellData(indices, weights1, weights2);
       }
 
       #endregion
@@ -1016,7 +1015,7 @@ namespace HexMap.Map
 
       void TriangulateWaterfallInWater(
          Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
-         float y1, float y2, float waterY
+         float y1, float y2, float waterY, Vector3 indices
       )
       {
          v1.y = v2.y = y1;
@@ -1030,6 +1029,7 @@ namespace HexMap.Map
          v4 = Vector3.Lerp(v4, v2, t);
          _rivers.AddQuadUnperturbed(v1, v2, v3, v4);
          _rivers.AddQuadUV(0f, 1f, 0.8f, 1f);
+         _rivers.AddQuadCellData(indices, weights1, weights2);
       }
 
       #endregion
