@@ -83,6 +83,7 @@ namespace HexMap.Map
 
       void Triangulate(HexCell cell)
       {
+         Debug.Log(nameof(Triangulate) + " called");
          for (var d = HexGrid.HexDirection.NE; d <= HexGrid.HexDirection.NW; d++)
          {
             Triangulate(d, cell);
@@ -570,7 +571,7 @@ namespace HexMap.Map
 
          middle.v3.y = center.y = eVertices.v3.y;
 
-         TriangulateEdgeStrip(middle, weights1, cell.TerrainTypeIndex, eVertices, weights1, cell.Index);
+         TriangulateEdgeStrip(middle, weights1, cell.Index, eVertices, weights1, cell.Index);
 
          _terrain.AddTriangle(centerL, middle.v1, middle.v2);
          _terrain.AddQuad(centerL, center, middle.v2, middle.v3);
@@ -587,8 +588,12 @@ namespace HexMap.Map
          if (!cell.IsUnderwater)
          {
             bool reversed = cell.IncomingRiver == direction;
-            TriangulateRiverQuad(centerL, centerR, middle.v2, middle.v4, cell.RiverSurfaceY, 0.4f, reversed, indices);
-            TriangulateRiverQuad(middle.v2, middle.v4, eVertices.v2, eVertices.v4, cell.RiverSurfaceY, 0.6f, reversed, indices);
+            TriangulateRiverQuad(
+               centerL, centerR, middle.v2, middle.v4,
+               cell.RiverSurfaceY, 0.4f, reversed, indices);
+            TriangulateRiverQuad(
+               middle.v2, middle.v4, eVertices.v2, eVertices.v4,
+               cell.RiverSurfaceY, 0.6f, reversed, indices);
          }
       }
 
@@ -605,7 +610,7 @@ namespace HexMap.Map
 
          middle.v3.y = eVertices.v3.y;
 
-         TriangulateEdgeStrip(middle, weights1, cell.TerrainTypeIndex, eVertices, weights1, cell.Index);
+         TriangulateEdgeStrip(middle, weights1, cell.Index, eVertices, weights1, cell.Index);
          TriangulateEdgeFan(center, middle, cell.Index);
 
          if (!cell.IsUnderwater)
@@ -665,7 +670,7 @@ namespace HexMap.Map
             Vector3.Lerp(center, eVertices.v5, 0.5f)
          );
 
-         TriangulateEdgeStrip(mVertices, weights1, cell.TerrainTypeIndex, eVertices, weights1, cell.Index);
+         TriangulateEdgeStrip(mVertices, weights1, cell.Index, eVertices, weights1, cell.Index);
          TriangulateEdgeFan(center, mVertices, cell.Index);
 
          if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
