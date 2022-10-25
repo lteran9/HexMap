@@ -104,3 +104,8 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Change terrain types without triangulating
 - Keep track of visibility
 - Darken everything that is not visible
+## Chapter 21 [ ]
+- See everything while editing
+- Keep track of unexplored cells
+- Hide what's yet unknown
+- Have units avoid unexplored regions
