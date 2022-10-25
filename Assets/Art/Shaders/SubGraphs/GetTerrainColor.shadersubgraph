@@ -856,6 +856,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "056b8c8831344f23be9d617a846c9b4e",
+    "m_Id": 645270176,
+    "m_DisplayName": "_CellDataCoordinates",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_CellDataCoordinates",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "068b778e3c9a42319dcd41ee6d1d4f9d",
     "m_Id": 4,
@@ -1034,6 +1055,9 @@
             "m_Id": "7a8156508a724f2d80e01756f6074391"
         },
         {
+            "m_Id": "056b8c8831344f23be9d617a846c9b4e"
+        },
+        {
             "m_Id": "a6dd47e9ed4b47e49f6a9c84e27274c3"
         },
         {
@@ -1054,12 +1078,14 @@
     "m_PropertyGuids": [
         "63c9b6c0-0e15-4d90-8ca6-47cc294704ec",
         "45f92c63-0e79-45a4-ba69-7f2c22248386",
-        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7"
+        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7",
+        "c945aa0b-7dfa-4631-a3cd-7a45f21078ec"
     ],
     "m_PropertyIds": [
         236607856,
         -1432260734,
-        2132000850
+        2132000850,
+        645270176
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -1314,6 +1340,27 @@
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "1815d6cae65a4066a0965548bfd242b5",
+    "m_Id": 645270176,
+    "m_DisplayName": "_CellDataCoordinates",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_CellDataCoordinates",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
     "m_Labels": []
 }
 
@@ -1685,6 +1732,27 @@
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "3bf7be11e23448fa93f4a95553aa57ff",
+    "m_Id": 645270176,
+    "m_DisplayName": "_CellDataCoordinates",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_CellDataCoordinates",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
     "m_Labels": []
 }
 
@@ -3847,6 +3915,9 @@
             "m_Id": "50d2da48c4cb4119b101158d9b69b6ec"
         },
         {
+            "m_Id": "1815d6cae65a4066a0965548bfd242b5"
+        },
+        {
             "m_Id": "c8df0febb5764a2f8bcd3e9d01d4d8cf"
         },
         {
@@ -3867,12 +3938,14 @@
     "m_PropertyGuids": [
         "63c9b6c0-0e15-4d90-8ca6-47cc294704ec",
         "45f92c63-0e79-45a4-ba69-7f2c22248386",
-        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7"
+        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7",
+        "c945aa0b-7dfa-4631-a3cd-7a45f21078ec"
     ],
     "m_PropertyIds": [
         236607856,
         -1432260734,
-        2132000850
+        2132000850,
+        645270176
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -4191,6 +4264,9 @@
             "m_Id": "da6b1347f2cc455fbf4bb7e2032e8391"
         },
         {
+            "m_Id": "3bf7be11e23448fa93f4a95553aa57ff"
+        },
+        {
             "m_Id": "5267996fd9964f5e9a6d880b271b0a07"
         },
         {
@@ -4211,12 +4287,14 @@
     "m_PropertyGuids": [
         "63c9b6c0-0e15-4d90-8ca6-47cc294704ec",
         "45f92c63-0e79-45a4-ba69-7f2c22248386",
-        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7"
+        "4d3afcc4-2f75-430d-8f4e-f2d66c5dd6a7",
+        "c945aa0b-7dfa-4631-a3cd-7a45f21078ec"
     ],
     "m_PropertyIds": [
         236607856,
         -1432260734,
-        2132000850
+        2132000850,
+        645270176
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
