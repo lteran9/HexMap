@@ -99,7 +99,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Visualize travelled paths
 - Move units along curves
 - Have units look where they are going
-## Chapter 20 [ ]
+## Chapter 20 [X]
 - Store cell data in texture 
 - Change terrain types without triangulating
 - Keep track of visibility
