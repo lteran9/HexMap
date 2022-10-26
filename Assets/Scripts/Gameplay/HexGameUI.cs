@@ -90,6 +90,14 @@ namespace HexMap.Gameplay
          enabled = !toggle;
          _grid.ShowUI(!toggle);
          _grid.ClearPath();
+         if (toggle)
+         {
+            Shader.EnableKeyword("_HEX_MAP_EDIT_MODE_ON");
+         }
+         else
+         {
+            Shader.DisableKeyword("_HEX_MAP_EDIT_MODE_ON");
+         }
       }
    }
 }
