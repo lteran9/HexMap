@@ -253,6 +253,7 @@ namespace HexMap.Map
             return visibility > 0;
          }
       }
+      public bool IsExplored { get; private set; }
 
       public float StreamBedY
       {
@@ -379,6 +380,7 @@ namespace HexMap.Map
          visibility += 1;
          if (visibility >= 1)
          {
+            IsExplored = true;
             ShaderData.RefreshVisibility(this);
          }
       }
