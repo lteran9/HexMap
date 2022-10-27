@@ -196,6 +196,7 @@ Material:
     m_Colors:
     - Color_17da99551e6644db9375eb49bd0912be: {r: 1, g: 1, b: 1, a: 0}
     - Color_d7a559631e1749588a1295aba672a0ee: {r: 1, g: 1, b: 1, a: 0}
+    - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.39556906, g: 0.7830189, b: 0.08495018, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

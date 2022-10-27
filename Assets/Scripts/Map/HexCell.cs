@@ -601,9 +601,10 @@ namespace HexMap.Map
             }
          }
          writer.Write((byte)roadFlags);
+         writer.Write(IsExplored);
       }
 
-      public void Load(BinaryReader reader)
+      public void Load(BinaryReader reader, int header)
       {
          terrainTypeIndex = reader.ReadByte();
          ShaderData.RefreshTerrain(this);
@@ -643,6 +644,9 @@ namespace HexMap.Map
          {
             _roads[i] = (roadFlags & (1 << i)) != 0;
          }
+
+         IsExplored = header >= 0 ? reader.ReadBoolean() : false;
+         ShaderData.RefreshVisibility(this);
       }
 
       #endregion 

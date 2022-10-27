@@ -7,6 +7,11 @@ using UnityEngine;
 
 public class SaveLoadMenu : MonoBehaviour
 {
+   #region Static 
+   const int mapFileVersion = 0;
+
+   #endregion
+
    bool saveMode = default;
 
    [SerializeField] TMP_InputField _fileName = default;
@@ -46,6 +51,7 @@ public class SaveLoadMenu : MonoBehaviour
       {
          return;
       }
+
       if (saveMode)
       {
          Save(path);
@@ -100,7 +106,7 @@ public class SaveLoadMenu : MonoBehaviour
    {
       using (var writer = new BinaryWriter(File.Open(path, FileMode.Create)))
       {
-         writer.Write(2);
+         writer.Write(mapFileVersion);
          _hexGrid.Save(writer);
       }
 
@@ -117,7 +123,7 @@ public class SaveLoadMenu : MonoBehaviour
       using (var reader = new BinaryReader(File.OpenRead(path)))
       {
          int header = reader.ReadInt32();
-         if (header <= 2)
+         if (header <= mapFileVersion)
          {
             _hexGrid.Load(reader, header);
             CameraManager.ValidatePosition();

@@ -394,11 +394,10 @@ namespace HexMap.Map
          ClearPath();
          ClearUnits();
          int x = 20, z = 15;
-         if (header >= 1)
-         {
-            x = reader.ReadInt32();
-            z = reader.ReadInt32();
-         }
+
+         x = reader.ReadInt32();
+         z = reader.ReadInt32();
+
 
          if (x != _cellCountX || z != _cellCountZ)
          {
@@ -410,7 +409,7 @@ namespace HexMap.Map
 
          for (int i = 0; i < m_Cells.Length; i++)
          {
-            m_Cells[i].Load(reader);
+            m_Cells[i].Load(reader, header);
          }
 
          for (int i = 0; i < m_Chunks.Length; i++)
@@ -418,13 +417,10 @@ namespace HexMap.Map
             m_Chunks[i].Refresh();
          }
 
-         if (header >= 2)
+         int unitCount = reader.ReadInt32();
+         for (int i = 0; i < unitCount; i++)
          {
-            int unitCount = reader.ReadInt32();
-            for (int i = 0; i < unitCount; i++)
-            {
-               HexUnit.Load(reader, this);
-            }
+            HexUnit.Load(reader, this);
          }
       }
 
