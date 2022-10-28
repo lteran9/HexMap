@@ -186,7 +186,7 @@ namespace HexMap.Map
          }
       }
 
-      bool Search(HexCell fromCell, HexCell toCell, int speed)
+      bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
       {
          searchFrontierPhase += 2;
          if (searchFrontier == null)
@@ -211,7 +211,7 @@ namespace HexMap.Map
                return true;
             }
 
-            int currentTurn = (current.Distance - 1) / speed;
+            int currentTurn = (current.Distance - 1) / unit.Speed;
 
             for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
             {
@@ -220,35 +220,22 @@ namespace HexMap.Map
                {
                   continue;
                }
-               if (neighbor.IsUnderwater || neighbor.Unit)
+
+               if (!unit.IsValidDestination(neighbor))
                {
                   continue;
                }
-               HexEdgeType edgeType = current.GetEdgeType(neighbor);
-               if (edgeType == HexEdgeType.Cliff)
+               int moveCost = unit.GetMoveCost(current, neighbor, dir);
+               if (moveCost < 0)
                {
                   continue;
-               }
-               int moveCost;
-               if (current.HasRoadThroughEdge(dir))
-               {
-                  moveCost = 1;
-               }
-               else if (current.Walled != neighbor.Walled)
-               {
-                  continue;
-               }
-               else
-               {
-                  moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
-                  moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
                }
 
                int distance = current.Distance + moveCost;
-               int turn = (distance - 1) / speed;
+               int turn = (distance - 1) / unit.Speed;
                if (turn > currentTurn)
                {
-                  distance = turn * speed + moveCost;
+                  distance = turn * unit.Speed + moveCost;
                }
 
                if (neighbor.SearchPhase < searchFrontierPhase)
@@ -424,13 +411,13 @@ namespace HexMap.Map
          }
       }
 
-      public void FindPath(HexCell fromCell, HexCell toCell, int speed)
+      public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
       {
          ClearPath();
          currentPathFrom = fromCell;
          currentPathTo = toCell;
-         currentPathExists = Search(fromCell, toCell, speed);
-         ShowPath(speed);
+         currentPathExists = Search(fromCell, toCell, unit);
+         ShowPath(unit.Speed);
       }
 
       public void IncreaseVisibility(HexCell fromCell, int range)

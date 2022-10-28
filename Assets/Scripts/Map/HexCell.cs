@@ -645,7 +645,7 @@ namespace HexMap.Map
             _roads[i] = (roadFlags & (1 << i)) != 0;
          }
 
-         IsExplored = header >= 0 ? reader.ReadBoolean() : false;
+         IsExplored = reader.ReadBoolean();
          ShaderData.RefreshVisibility(this);
       }
 

@@ -77,7 +77,7 @@ namespace HexMap.Gameplay
       {
          if (currentCell && selectedUnit.IsValidDestination(currentCell))
          {
-            _grid.FindPath(selectedUnit.Location, currentCell, 24);
+            _grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
          }
          else
          {
