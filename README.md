@@ -109,7 +109,7 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Keep track of unexplored cells
 - Hide what's yet unknown
 - Have units avoid unexplored regions
-## Chapter 22 [ ]
+## Chapter 22 [X]
 - Smoothly adjust visibility
 - Use elevation to determine sight
 - Hide the edge of the map
