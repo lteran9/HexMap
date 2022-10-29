@@ -22,18 +22,30 @@ namespace HexMap.Units
          );
       }
 
-      const int visionRange = 2;
-
       const float travelSpeed = 4f;
       const float rotationSpeed = 180f;
 
       #endregion
+
+      float orientation = default;
+
+      HexCell location = default,
+         currentTravelLocation = null;
+
+      List<HexCell> pathToTravel = default;
 
       public int Speed
       {
          get
          {
             return 24;
+         }
+      }
+      public int VisionRange
+      {
+         get
+         {
+            return 2;
          }
       }
 
@@ -60,23 +72,16 @@ namespace HexMap.Units
          {
             if (location)
             {
-               Grid.DecreaseVisibility(location, visionRange);
+               Grid.DecreaseVisibility(location, VisionRange);
                location.Unit = null;
             }
             location = value;
             value.Unit = this;
-            Grid.IncreaseVisibility(location, visionRange);
+            Grid.IncreaseVisibility(location, VisionRange);
             transform.localPosition = value.Position;
          }
       }
       public HexGrid Grid { get; set; }
-
-      float orientation = default;
-
-      HexCell location = default,
-         currentTravelLocation = null;
-
-      List<HexCell> pathToTravel = default;
 
       void OnEnable()
       {
@@ -85,8 +90,8 @@ namespace HexMap.Units
             transform.localPosition = location.Position;
             if (currentTravelLocation)
             {
-               Grid.IncreaseVisibility(location, visionRange);
-               Grid.DecreaseVisibility(currentTravelLocation, visionRange);
+               Grid.IncreaseVisibility(location, VisionRange);
+               Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
                currentTravelLocation = null;
             }
          }
@@ -98,7 +103,7 @@ namespace HexMap.Units
          yield return LookAt(pathToTravel[1].Position);
          Grid.DecreaseVisibility(
             currentTravelLocation ?? pathToTravel[0],
-            visionRange
+            VisionRange
          );
 
          float t = Time.deltaTime * travelSpeed;
@@ -108,7 +113,7 @@ namespace HexMap.Units
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], visionRange);
+            Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
                transform.localPosition = Bezier.GetPoint(a, b, c, t);
@@ -117,7 +122,7 @@ namespace HexMap.Units
                transform.localRotation = Quaternion.LookRotation(d);
                yield return null;
             }
-            Grid.DecreaseVisibility(pathToTravel[i], visionRange);
+            Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
             t -= 1;
          }
          currentTravelLocation = null;
@@ -125,7 +130,7 @@ namespace HexMap.Units
          a = c;
          b = location.Position;
          c = b;
-         Grid.IncreaseVisibility(location, visionRange);
+         Grid.IncreaseVisibility(location, VisionRange);
          for (; t < 1f; t += Time.deltaTime * travelSpeed)
          {
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
@@ -173,7 +178,7 @@ namespace HexMap.Units
       {
          if (location)
          {
-            Grid.DecreaseVisibility(location, visionRange);
+            Grid.DecreaseVisibility(location, VisionRange);
          }
          location.Unit = null;
          Destroy(gameObject);
