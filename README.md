@@ -113,3 +113,9 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Smoothly adjust visibility
 - Use elevation to determine sight
 - Hide the edge of the map
+## Chapter 23 [ ]
+- Fill new maps with generated landscapes 
+- Raise chunks of land above water, and sink some
+- Control how much land appears, how high, and how erratic it is
+- Support multiple configuration options to create varied maps
+- Make it possible to generate the same map again
