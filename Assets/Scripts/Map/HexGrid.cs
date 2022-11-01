@@ -347,6 +347,16 @@ namespace HexMap.Map
          return m_Cells[x + z * _cellCountX];
       }
 
+      public HexCell GetCell(int xOffset, int zOffset)
+      {
+         return m_Cells[xOffset + zOffset * _cellCountX];
+      }
+
+      public HexCell GetCell(int cellIndex)
+      {
+         return m_Cells[cellIndex];
+      }
+
       public int GetCellCountX()
       {
          return _cellCountX;

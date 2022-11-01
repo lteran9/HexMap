@@ -43,6 +43,7 @@ namespace HexMap.Map
       void Awake()
       {
          ShowGrid(false);
+         Shader.EnableKeyword("_HEX_MAP_EDIT_MODE");
          SetEditMode(false);
       }
 
