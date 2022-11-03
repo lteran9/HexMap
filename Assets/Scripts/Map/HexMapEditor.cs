@@ -1,7 +1,9 @@
 using HexMap.Input;
 using HexMap.Extensions;
+using HexMap.UI;
 using HexMap.Units;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HexMap.Map
 {
@@ -29,6 +31,7 @@ namespace HexMap.Map
          applySpecialIndex = false,
          leftShiftActive;
 
+      UIHandler uiHandler = default;
       HexCell previousCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
@@ -45,6 +48,23 @@ namespace HexMap.Map
          ShowGrid(false);
          Shader.EnableKeyword("_HEX_MAP_EDIT_MODE");
          SetEditMode(false);
+
+         var uiDocument = GetComponentInChildren<UIDocument>();
+         if (uiDocument)
+         {
+            var root = uiDocument.rootVisualElement;
+            uiHandler = new UIHandler(root);
+            uiHandler.FeatureToggleChanged += SetTerrainTypeIndex;
+
+            uiHandler.ElevationSlider += SetElevation;
+            uiHandler.ElevationToggle += SetApplyElevation;
+            uiHandler.WaterSlider += SetWaterLevel;
+            uiHandler.WaterToggle += SetApplyWaterLevel;
+            uiHandler.RiverModeChanged += SetRiverMode;
+            uiHandler.RoadModeChanged += SetRoadMode;
+            uiHandler.BrushSizeSlider += SetBrushSize;
+         }
+
       }
 
       void OnEnable()
@@ -198,9 +218,19 @@ namespace HexMap.Map
 
       #region UI
 
+      public void SetElevation(int elevation)
+      {
+         activeElevation = elevation;
+      }
+
       public void SetElevation(float elevation)
       {
          activeElevation = (int)elevation;
+      }
+
+      public void SetWaterLevel(int level)
+      {
+         activeWaterLevel = level;
       }
 
       public void SetWaterLevel(float level)
@@ -226,6 +256,11 @@ namespace HexMap.Map
       public void SetSpecialIndex(float index)
       {
          activeSpecialIndex = (int)index;
+      }
+
+      public void SetBrushSize(int size)
+      {
+         brushSize = size;
       }
 
       public void SetBrushSize(float size)
