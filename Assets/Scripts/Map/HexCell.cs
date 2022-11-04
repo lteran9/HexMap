@@ -23,7 +23,8 @@ namespace HexMap.Map
       [SerializeField]
       bool hasIncomingRiver,
          hasOutgoingRiver,
-         walled;
+         walled,
+         explored;
 
       HexGrid.HexDirection incomingRiver, outgoingRiver;
 
@@ -42,6 +43,13 @@ namespace HexMap.Map
             if (elevation == value)
             {
                return;
+            }
+
+            int originalViewElevation = ViewElevation;
+            elevation = value;
+            if (ViewElevation != originalViewElevation)
+            {
+               ShaderData.ViewElevationChanged();
             }
 
             elevation = value;
@@ -72,7 +80,13 @@ namespace HexMap.Map
                return;
             }
 
+            int originalViewElevation = ViewElevation;
             waterLevel = value;
+            if (ViewElevation != originalViewElevation)
+            {
+               ShaderData.ViewElevationChanged();
+            }
+
             ValidateRivers();
             Refresh();
          }
@@ -171,6 +185,13 @@ namespace HexMap.Map
             return Distance + SearchHeuristic;
          }
       }
+      public int ViewElevation
+      {
+         get
+         {
+            return elevation >= waterLevel ? elevation : waterLevel;
+         }
+      }
       public int SearchPhase { get; set; }
 
       public bool IsSpecial
@@ -250,10 +271,21 @@ namespace HexMap.Map
       {
          get
          {
-            return visibility > 0;
+            return visibility > 0 && Explorable;
          }
       }
-      public bool IsExplored { get; private set; }
+      public bool IsExplored
+      {
+         get
+         {
+            return explored && Explorable;
+         }
+         set
+         {
+            explored = value;
+         }
+      }
+      public bool Explorable { get; set; }
 
       public float StreamBedY
       {
@@ -375,6 +407,8 @@ namespace HexMap.Map
          label.text = text;
       }
 
+      #region Visibility
+
       public void IncreaseVisibility()
       {
          visibility += 1;
@@ -394,6 +428,17 @@ namespace HexMap.Map
             visibility = 0;
          }
       }
+
+      public void ResetVisibility()
+      {
+         if (visibility > 0)
+         {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+         }
+      }
+
+      #endregion
 
       #region Neighbors
 

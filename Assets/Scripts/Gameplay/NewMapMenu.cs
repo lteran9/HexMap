@@ -7,11 +7,21 @@ namespace HexMap.Gameplay
 {
    public class NewMapMenu : MonoBehaviour
    {
+      bool generateMaps = true;
+
       [SerializeField] HexGrid _hexGrid = default;
+      [SerializeField] HexMapGenerator _mapGenerator = default;
 
       void CreateMap(int x, int z)
       {
-         _hexGrid.CreateMap(x, z);
+         if (generateMaps)
+         {
+            _mapGenerator.GenerateMap(x, z);
+         }
+         else
+         {
+            _hexGrid.CreateMap(x, z);
+         }
          CameraManager.ValidatePosition();
          Close();
       }
@@ -41,6 +51,11 @@ namespace HexMap.Gameplay
       {
          gameObject.SetActive(false);
          CameraManager.Locked = false;
+      }
+
+      public void ToggleMapGeneration(bool toggle)
+      {
+         generateMaps = toggle;
       }
    }
 }

@@ -59,6 +59,7 @@ namespace HexMap.Map
          HexMetrics.InitializeHashGrid(_seed);
          HexUnit.unitPrefab = unitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+         cellShaderData.Grid = this;
          CreateMap(_cellCountX, _cellCountZ);
       }
 
@@ -69,6 +70,7 @@ namespace HexMap.Map
             HexMetrics.noiseSource = _noiseSource;
             HexMetrics.InitializeHashGrid(_seed);
             HexUnit.unitPrefab = unitPrefab;
+            ResetVisibility();
          }
       }
 
@@ -113,6 +115,8 @@ namespace HexMap.Map
          cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
          cell.Index = i;
          cell.ShaderData = cellShaderData;
+
+         cell.Explorable = x > 0 && z > 0 && x < _cellCountX - 1 && z < _cellCountZ - 1;
 
          if (x > 0)
          {
@@ -275,9 +279,11 @@ namespace HexMap.Map
             searchFrontier.Clear();
          }
 
+         range += fromCell.ViewElevation;
          fromCell.SearchPhase = searchFrontierPhase;
          fromCell.Distance = 0;
          searchFrontier.Enqueue(fromCell);
+         HexCoordinates fromCoordinates = fromCell.Coordinates;
          while (searchFrontier.Count > 0)
          {
             HexCell current = searchFrontier.Dequeue();
@@ -287,13 +293,14 @@ namespace HexMap.Map
             for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++)
             {
                HexCell neighbor = current.GetNeighbor(dir);
-               if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+               if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase || !neighbor.Explorable)
                {
                   continue;
                }
 
                int distance = current.Distance + 1;
-               if (distance > range)
+               if (distance + neighbor.ViewElevation > range ||
+                   distance > fromCoordinates.DistanceTo(neighbor.Coordinates))
                {
                   continue;
                }
@@ -317,7 +324,6 @@ namespace HexMap.Map
          return visibleCells;
       }
 
-
       public HexCell GetCell(Vector3 position)
       {
          position = transform.InverseTransformPoint(position);
@@ -339,6 +345,16 @@ namespace HexMap.Map
             return null;
          }
          return m_Cells[x + z * _cellCountX];
+      }
+
+      public HexCell GetCell(int xOffset, int zOffset)
+      {
+         return m_Cells[xOffset + zOffset * _cellCountX];
+      }
+
+      public HexCell GetCell(int cellIndex)
+      {
+         return m_Cells[cellIndex];
       }
 
       public int GetCellCountX()
@@ -394,6 +410,9 @@ namespace HexMap.Map
             }
          }
 
+         bool originalImmediateMode = cellShaderData.ImmediateMode;
+         cellShaderData.ImmediateMode = true;
+
          for (int i = 0; i < m_Cells.Length; i++)
          {
             m_Cells[i].Load(reader, header);
@@ -409,6 +428,8 @@ namespace HexMap.Map
          {
             HexUnit.Load(reader, this);
          }
+
+         cellShaderData.ImmediateMode = originalImmediateMode;
       }
 
       public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
@@ -475,6 +496,19 @@ namespace HexMap.Map
             currentPathTo.DisableHighlight();
          }
          currentPathFrom = currentPathTo = null;
+      }
+
+      public void ResetVisibility()
+      {
+         for (int i = 0; i < m_Cells.Length; i++)
+         {
+            m_Cells[i].ResetVisibility();
+         }
+         for (int i = 0; i < units.Count; i++)
+         {
+            HexUnit unit = units[i];
+            IncreaseVisibility(unit.Location, unit.VisionRange);
+         }
       }
 
       public bool CreateMap(int x, int z)

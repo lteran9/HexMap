@@ -1,0 +1,102 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Art/UI/Main.uss?fileID=7433441132597879392&amp;guid=f5434c49bc8f24a85941ac5051901bff&amp;type=3#Main" />
+    <ui:VisualElement name="Container" style="flex-direction: row; height: 100%; width: 100%; justify-content: space-between; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 1.5%; padding-right: 1.5%; padding-top: 1.5%; padding-bottom: 1.5%;">
+        <ui:VisualElement name="LeftSideMenu" style="opacity: 1; width: 15%; height: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; -unity-font: none;">
+            <ui:VisualElement name="RootContainer" class="menu-root-container">
+                <ui:VisualElement name="TextureTypes" class="menu-option-container" style="background-color: rgba(0, 0, 0, 0.5);">
+                    <ui:VisualElement name="None" class="pb-1">
+                        <ui:Toggle label="---" name="Toggle_None" value="true" class="menu-option-toggle" style="flex-direction: row-reverse;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Sand" class="pb-1">
+                        <ui:Toggle label="Sand" value="false" name="Toggle_Sand" class="menu-option-toggle" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Grass" class="pb-1">
+                        <ui:Toggle label="Grass" name="Toggle_Grass" class="menu-option-toggle" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Mud" class="pb-1">
+                        <ui:Toggle label="Mud" name="Toggle_Mud" class="menu-option-toggle" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Stone" class="pb-1">
+                        <ui:Toggle label="Stone" name="Toggle_Stone" class="menu-option-toggle" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Snow" class="pb-1">
+                        <ui:Toggle label="Snow" name="Toggle_Snow" class="menu-option-toggle" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Elevation" class="menu-option-container">
+                    <ui:Toggle label="Elevation" name="Toggle_Elevation" class="menu-option-toggle pb-1" style="flex-direction: row-reverse;" />
+                    <ui:SliderInt picking-mode="Ignore" value="0" high-value="7" name="SliderInt_Elevation" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; font-size: 21px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Water" class="menu-option-container">
+                    <ui:Toggle label="Water" name="Toggle_Water" class="menu-option-toggle pb-1" style="flex-direction: row-reverse;" />
+                    <ui:SliderInt picking-mode="Ignore" value="0" high-value="7" name="SliderInt_Water" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; font-size: 21px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Title" class="menu-option-container">
+                    <ui:Label text="River" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="River" class="menu-option-container" style="flex-direction: row; background-color: rgba(84, 84, 84, 0.75);">
+                    <ui:Toggle label="---" name="Toggle_RiverNone" value="true" class="menu-option-select" />
+                    <ui:Toggle label="Yes" name="Toggle_RiverYes" class="menu-option-select" />
+                    <ui:Toggle label="No" name="Toggle_RiverNo" class="menu-option-select" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Title" class="menu-option-container">
+                    <ui:Label text="Road" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Road" class="menu-option-container" style="flex-direction: row; background-color: rgba(85, 85, 85, 0.75);">
+                    <ui:Toggle label="---" name="Toggle_RoadNone" value="true" class="menu-option-select" />
+                    <ui:Toggle label="Yes" name="Toggle_RoadYes" class="menu-option-select" />
+                    <ui:Toggle label="No" name="Toggle_RoadNo" class="menu-option-select" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Title" class="menu-option-container">
+                    <ui:Label text="Brush Size" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="BrushSize">
+                    <ui:SliderInt picking-mode="Ignore" value="0" high-value="4" name="SliderInt_BrushSize" low-value="0" style="margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="RightSideMenu" style="opacity: 1; width: 15%; height: auto; background-color: rgba(255, 255, 255, 0); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; max-height: none;">
+            <ui:VisualElement name="RootContainer" class="menu-root-container">
+                <ui:VisualElement name="Features" class="menu-option-container">
+                    <ui:VisualElement name="Urban" class="pb-1">
+                        <ui:Toggle label="Urban" name="Toggle_Urban" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                        <ui:SliderInt picking-mode="Ignore" value="0" high-value="3" name="SliderInt_Urban" style="margin-top: 5px; margin-bottom: 5px; margin-left: 5px; margin-right: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Farm" class="pb-1">
+                        <ui:Toggle label="Farm" name="Toggle_Farm" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                        <ui:SliderInt picking-mode="Ignore" value="0" high-value="3" name="SliderInt_Farm" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Plant" class="pb-1">
+                        <ui:Toggle label="Plant" value="false" name="Toggle_Plant" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                        <ui:SliderInt picking-mode="Ignore" value="0" high-value="3" name="SliderInt_Plant" style="margin-top: 5px; margin-bottom: 5px; margin-right: 5px; margin-left: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Special" style="margin-bottom: 0;">
+                        <ui:Toggle label="Special" name="Toggle_Special" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                        <ui:SliderInt picking-mode="Ignore" value="0" high-value="3" name="SliderInt_Special" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 0;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Title" class="menu-option-container">
+                    <ui:Label text="Walled" display-tooltip-when-elided="false" enable-rich-text="false" style="font-size: 18px; -unity-text-align: middle-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Walled" class="menu-option-container" style="flex-direction: row; background-color: rgba(85, 85, 85, 0.75);">
+                    <ui:Toggle label="---" value="true" name="Toggle_WallNone" class="menu-option-select" />
+                    <ui:Toggle label="Yes" name="Toggle_WallYes" class="menu-option-select" />
+                    <ui:Toggle label="No" name="Toggle_WallNo" class="menu-option-select" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Buttons" class="menu-option-container" style="flex-direction: row; flex-shrink: 1; flex-grow: 0; flex-basis: auto; flex-wrap: nowrap; align-items: center; justify-content: space-between;">
+                    <ui:Button text="Save" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Save" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 48%; -unity-font-style: bold;" />
+                    <ui:Button text="Load" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Load" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 48%; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Buttons" class="menu-option-container">
+                    <ui:Button text="New Game" display-tooltip-when-elided="false" enable-rich-text="false" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Grid" class="menu-option-container">
+                    <ui:Toggle label="Grid" name="Toggle_Grid" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Edit" class="menu-option-container">
+                    <ui:Toggle label="Edit Mode" name="Toggle_EditMode" value="true" class="menu-option-toggle" style="margin-bottom: 5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
