@@ -1,92 +1,102 @@
 .unity-button {
-   color: rgb(0, 0, 0);
-   background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
 }
 
 .menu-option-container {
-   padding: 5px;
-   border-radius: 5px;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .menu-option-toggle {
-   flex-direction: row-reverse;
-   align-items: center;
-   justify-content: flex-end;
-   -unity-text-align: upper-left;
-   font-size: 5px;
-   flex-basis: auto;
-   margin-left: 5px;
-   margin-right: 5px;
-   margin-top: 0;
-   margin-bottom: 0;
-   flex-wrap: nowrap;
-   flex-shrink: 0;
-   flex-grow: 0;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    -unity-text-align: upper-left;
+    font-size: 5px;
+    flex-basis: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    flex-grow: 1;
 }
 
 .menu-option-toggle Label {
-   flex-grow: 1;
-   font-size: 18px;
-   margin: 0;
-   padding: 0;
-   min-width: 0;
-   color: rgb(211, 211, 211);
-   -unity-font-style: bold;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    color: rgb(211, 211, 211);
+    -unity-font-style: bold;
+    -unity-font: none;
+    flex-shrink: 0;
+    flex-grow: 1;
 }
 
 .menu-option-toggle VisualElement {
-   flex-grow: 0;
-   flex-shrink: 0;
-   margin-right: 5%;
-   min-width: 20%;
+    min-width: 20px;
+    min-height: 20px;
+    width: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    flex-grow: 0;
+    max-height: 20px;
+    margin-right: 5px;
 }
 
 .menu-option-select {
-   flex-shrink: 0;
-   width: 33.33%;
-   margin-left: 0;
-   margin-right: 0;
-   margin-top: 0;
-   margin-bottom: 0;
-   flex-direction: column-reverse;
-   align-items: center;
-   padding: 5px;
+    flex-shrink: 0;
+    width: 33.33%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 5px;
+    justify-content: center;
 }
 
 .menu-option-select Label {
-   flex-grow: 0;
-   flex-shrink: 0;
-   min-width: 0;
-   font-size: 18px;
-   margin: 0;
-   padding: 0;
-   color: rgb(211, 211, 211);
-   -unity-font-style: bold;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 0;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    color: rgb(211, 211, 211);
+    -unity-font-style: bold;
 }
 
 .menu-option-select VisualElement {
-   flex-grow: 1;
-   flex-shrink: 0;
-   margin-bottom: 2px;
-   min-width: 15px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+    min-width: 20px;
+    max-height: 20px;
+    min-height: 20px;
+    justify-content: center;
 }
 
 #unity-checkmark {
-   flex-grow: 0;
+    flex-grow: 0;
 }
 
 .pb-1 {
-   margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .menu-root-container {
-   padding-left: 5px;
-   padding-right: 5px;
-   padding-top: 5px;
-   padding-bottom: 5px;
-   background-color: rgba(170, 170, 170, 0.5);
-   border-top-left-radius: 10px;
-   border-bottom-left-radius: 10px;
-   border-top-right-radius: 10px;
-   border-bottom-right-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: rgba(170, 170, 170, 0.5);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }

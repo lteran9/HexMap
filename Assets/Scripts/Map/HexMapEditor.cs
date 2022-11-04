@@ -2,6 +2,7 @@ using HexMap.Input;
 using HexMap.Extensions;
 using HexMap.UI;
 using HexMap.Units;
+using HexMap.Gameplay;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,6 +13,8 @@ namespace HexMap.Map
       [SerializeField] HexGrid _hexGrid = default;
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
+      [SerializeField] HexGameUI _gameUI = default;
+      [SerializeField] UIDocument _saveLoadMenu = default;
 
       int activeElevation,
          activeWaterLevel,
@@ -47,7 +50,6 @@ namespace HexMap.Map
       {
          ShowGrid(false);
          Shader.EnableKeyword("_HEX_MAP_EDIT_MODE");
-         SetEditMode(false);
 
          var uiDocument = GetComponentInChildren<UIDocument>();
          if (uiDocument)
@@ -63,6 +65,23 @@ namespace HexMap.Map
             uiHandler.RiverModeChanged += SetRiverMode;
             uiHandler.RoadModeChanged += SetRoadMode;
             uiHandler.BrushSizeSlider += SetBrushSize;
+
+            uiHandler.UrbanToggle += SetApplyUrbanLevel;
+            uiHandler.FarmToggle += SetApplyFarmLevel;
+            uiHandler.PlantToggle += SetApplyPlantLevel;
+            uiHandler.SpecialToggle += SetApplySpecialIndex;
+
+            uiHandler.UrbanSlider += SetUrbanLevel;
+            uiHandler.FarmSlider += SetFarmLevel;
+            uiHandler.PlantSlider += SetPlantLevel;
+            uiHandler.SpecialSlider += SetSpecialIndex;
+
+            uiHandler.WallModeChanged += SetWalledMode;
+
+            uiHandler.EditModeToggle += SetEditMode;
+
+            uiHandler.SaveEvent += OpenSaveLoadMenu;
+            uiHandler.LoadEvent += OpenSaveLoadMenu;
          }
 
       }
@@ -218,6 +237,11 @@ namespace HexMap.Map
 
       #region UI
 
+      public void OpenSaveLoadMenu()
+      {
+         _saveLoadMenu.gameObject.SetActive(true);
+      }
+
       public void SetElevation(int elevation)
       {
          activeElevation = elevation;
@@ -238,9 +262,20 @@ namespace HexMap.Map
          activeWaterLevel = (int)level;
       }
 
+      public void SetUrbanLevel(int level)
+      {
+         activeUrbanLevel = level;
+      }
+
+
       public void SetUrbanLevel(float level)
       {
          activeUrbanLevel = (int)level;
+      }
+
+      public void SetFarmLevel(int level)
+      {
+         activeFarmLevel = level;
       }
 
       public void SetFarmLevel(float level)
@@ -248,9 +283,19 @@ namespace HexMap.Map
          activeFarmLevel = (int)level;
       }
 
+      public void SetPlantLevel(int level)
+      {
+         activePlantLevel = level;
+      }
+
       public void SetPlantLevel(float level)
       {
          activePlantLevel = (int)level;
+      }
+
+      public void SetSpecialIndex(int index)
+      {
+         activeSpecialIndex = index;
       }
 
       public void SetSpecialIndex(float index)
@@ -321,6 +366,8 @@ namespace HexMap.Map
       public void SetEditMode(bool toggle)
       {
          enabled = toggle;
+
+         _gameUI.SetEditMode(toggle);
       }
 
       public void ShowGrid(bool visible)

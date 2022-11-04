@@ -15,7 +15,6 @@ namespace HexMap.UI
 
       Toggle_Elevation,
       Toggle_Water,
-      Toggle_Walled,
 
       Toggle_RiverYes,
       Toggle_RiverNo,
@@ -23,9 +22,24 @@ namespace HexMap.UI
       Toggle_RoadYes,
       Toggle_RoadNo,
       Toggle_RoadNone,
+      Toggle_WallNone,
+      Toggle_WallYes,
+      Toggle_WallNo,
+      Toggle_Urban,
+      Toggle_Farm,
+      Toggle_Plant,
+      Toggle_Special,
+      Toggle_EditMode,
 
       SliderInt_Elevation,
       SliderInt_Water,
-      SliderInt_BrushSize
+      SliderInt_BrushSize,
+      SliderInt_Urban,
+      SliderInt_Plant,
+      SliderInt_Farm,
+      SliderInt_Special,
+
+      Button_Save,
+      Button_Load
    }
 }
