@@ -92,6 +92,7 @@ namespace HexMap.Gameplay
          _grid.ClearPath();
          if (toggle)
          {
+            Debug.Log(nameof(SetEditMode));
             Shader.EnableKeyword("_HEX_MAP_EDIT_MODE_ON");
          }
          else

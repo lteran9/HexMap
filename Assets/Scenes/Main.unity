@@ -181,7 +181,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 107187}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae5ca1356e8c24cf0add2e554d7d57c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 154f55b98023b4e89ad179c471b504c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _hexGrid: {fileID: 1809051975}
@@ -194,6 +194,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 22107320}
+  - component: {fileID: 22107322}
   - component: {fileID: 22107321}
   m_Layer: 0
   m_Name: MapEdit
@@ -218,6 +219,18 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &22107321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22107319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0deaaa6494d5542dd8387454ea167a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &22107322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3927,6 +3940,7 @@ MonoBehaviour:
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
   _gameUI: {fileID: 1888352579}
+  _mapEditorMenu: {fileID: 22107322}
   _saveLoadMenu: {fileID: 107189}
 --- !u!1 &1338864015
 GameObject:

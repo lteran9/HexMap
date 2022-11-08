@@ -14,6 +14,8 @@ namespace HexMap.Map
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
       [SerializeField] HexGameUI _gameUI = default;
+      [Header("UI")]
+      [SerializeField] UIDocument _mapEditorMenu = default;
       [SerializeField] UIDocument _saveLoadMenu = default;
 
       int activeElevation,
@@ -34,7 +36,6 @@ namespace HexMap.Map
          applySpecialIndex = false,
          leftShiftActive;
 
-      UIHandler uiHandler = default;
       HexCell previousCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
@@ -50,40 +51,6 @@ namespace HexMap.Map
       {
          ShowGrid(false);
          Shader.EnableKeyword("_HEX_MAP_EDIT_MODE");
-
-         var uiDocument = GetComponentInChildren<UIDocument>();
-         if (uiDocument)
-         {
-            var root = uiDocument.rootVisualElement;
-            uiHandler = new UIHandler(root);
-            uiHandler.FeatureToggleChanged += SetTerrainTypeIndex;
-
-            uiHandler.ElevationSlider += SetElevation;
-            uiHandler.ElevationToggle += SetApplyElevation;
-            uiHandler.WaterSlider += SetWaterLevel;
-            uiHandler.WaterToggle += SetApplyWaterLevel;
-            uiHandler.RiverModeChanged += SetRiverMode;
-            uiHandler.RoadModeChanged += SetRoadMode;
-            uiHandler.BrushSizeSlider += SetBrushSize;
-
-            uiHandler.UrbanToggle += SetApplyUrbanLevel;
-            uiHandler.FarmToggle += SetApplyFarmLevel;
-            uiHandler.PlantToggle += SetApplyPlantLevel;
-            uiHandler.SpecialToggle += SetApplySpecialIndex;
-
-            uiHandler.UrbanSlider += SetUrbanLevel;
-            uiHandler.FarmSlider += SetFarmLevel;
-            uiHandler.PlantSlider += SetPlantLevel;
-            uiHandler.SpecialSlider += SetSpecialIndex;
-
-            uiHandler.WallModeChanged += SetWalledMode;
-
-            uiHandler.EditModeToggle += SetEditMode;
-
-            uiHandler.SaveEvent += OpenSaveLoadMenu;
-            uiHandler.LoadEvent += OpenSaveLoadMenu;
-         }
-
       }
 
       void OnEnable()
@@ -93,6 +60,9 @@ namespace HexMap.Map
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped += LeftShiftReleased;
          _inputReader.PlaceUnit += HandleUnitInput;
+
+         RegisterCallbacks_MapEdit(true);
+         RegisterCallbacks_SaveLoadMenu(true);
       }
 
       void OnDisable()
@@ -102,42 +72,9 @@ namespace HexMap.Map
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped -= LeftShiftReleased;
          _inputReader.PlaceUnit -= HandleUnitInput;
-      }
 
-      void OnClick()
-      {
-         // if (EventSystem.current.IsPointerOverGameObject() == false)
-         // {
-         HandleInput();
-         // }
-         // else
-         // {
-         //    previousCell = null;
-         // }
-      }
-
-      void HandleInput()
-      {
-         HexCell currentCell = GetCellUnderCursor();
-         if (currentCell != null)
-         {
-            if (previousCell && previousCell != currentCell)
-            {
-               ValidateDrag(currentCell);
-            }
-            else
-            {
-               isDrag = false;
-            }
-
-            EditCells(currentCell);
-
-            previousCell = currentCell;
-         }
-         else
-         {
-            previousCell = null;
-         }
+         RegisterCallbacks_MapEdit(false);
+         RegisterCallbacks_SaveLoadMenu(false);
       }
 
       void EditCell(HexCell cell)
@@ -239,7 +176,14 @@ namespace HexMap.Map
 
       public void OpenSaveLoadMenu()
       {
+         _mapEditorMenu.gameObject.SetActive(false);
          _saveLoadMenu.gameObject.SetActive(true);
+      }
+
+      public void CloseSaveLoadMenu()
+      {
+         _mapEditorMenu.gameObject.SetActive(true);
+         _saveLoadMenu.gameObject.SetActive(false);
       }
 
       public void SetElevation(int elevation)
@@ -266,7 +210,6 @@ namespace HexMap.Map
       {
          activeUrbanLevel = level;
       }
-
 
       public void SetUrbanLevel(float level)
       {
@@ -393,6 +336,8 @@ namespace HexMap.Map
 
       #endregion
 
+      #region Input
+
       void LeftShiftBeingHeld()
       {
          leftShiftActive = true;
@@ -414,6 +359,128 @@ namespace HexMap.Map
             CreateUnit();
          }
       }
+
+      void OnClick()
+      {
+         // if (EventSystem.current.IsPointerOverGameObject() == false)
+         // {
+         HandleInput();
+         // }
+         // else
+         // {
+         //    previousCell = null;
+         // }
+      }
+
+      void HandleInput()
+      {
+         HexCell currentCell = GetCellUnderCursor();
+         if (currentCell != null)
+         {
+            if (previousCell && previousCell != currentCell)
+            {
+               ValidateDrag(currentCell);
+            }
+            else
+            {
+               isDrag = false;
+            }
+
+            EditCells(currentCell);
+
+            previousCell = currentCell;
+         }
+         else
+         {
+            previousCell = null;
+         }
+      }
+
+      void RegisterCallbacks_MapEdit(bool action)
+      {
+         var uiMapEdit = GetComponentInChildren<UIMapEdit>();
+         if (uiMapEdit != null)
+         {
+            // Register vs Unregister
+            if (action)
+            {
+               uiMapEdit.FeatureToggleChanged += SetTerrainTypeIndex;
+
+               uiMapEdit.ElevationSlider += SetElevation;
+               uiMapEdit.ElevationToggle += SetApplyElevation;
+               uiMapEdit.WaterSlider += SetWaterLevel;
+               uiMapEdit.WaterToggle += SetApplyWaterLevel;
+               uiMapEdit.RiverModeChanged += SetRiverMode;
+               uiMapEdit.RoadModeChanged += SetRoadMode;
+               uiMapEdit.BrushSizeSlider += SetBrushSize;
+
+               uiMapEdit.UrbanToggle += SetApplyUrbanLevel;
+               uiMapEdit.FarmToggle += SetApplyFarmLevel;
+               uiMapEdit.PlantToggle += SetApplyPlantLevel;
+               uiMapEdit.SpecialToggle += SetApplySpecialIndex;
+
+               uiMapEdit.UrbanSlider += SetUrbanLevel;
+               uiMapEdit.FarmSlider += SetFarmLevel;
+               uiMapEdit.PlantSlider += SetPlantLevel;
+               uiMapEdit.SpecialSlider += SetSpecialIndex;
+
+               uiMapEdit.WallModeChanged += SetWalledMode;
+
+               uiMapEdit.EditModeToggle += SetEditMode;
+
+               uiMapEdit.SaveEvent += OpenSaveLoadMenu;
+               uiMapEdit.LoadEvent += OpenSaveLoadMenu;
+            }
+            else
+            {
+               uiMapEdit.FeatureToggleChanged -= SetTerrainTypeIndex;
+
+               uiMapEdit.ElevationSlider -= SetElevation;
+               uiMapEdit.ElevationToggle -= SetApplyElevation;
+               uiMapEdit.WaterSlider -= SetWaterLevel;
+               uiMapEdit.WaterToggle -= SetApplyWaterLevel;
+               uiMapEdit.RiverModeChanged -= SetRiverMode;
+               uiMapEdit.RoadModeChanged -= SetRoadMode;
+               uiMapEdit.BrushSizeSlider -= SetBrushSize;
+
+               uiMapEdit.UrbanToggle -= SetApplyUrbanLevel;
+               uiMapEdit.FarmToggle -= SetApplyFarmLevel;
+               uiMapEdit.PlantToggle -= SetApplyPlantLevel;
+               uiMapEdit.SpecialToggle -= SetApplySpecialIndex;
+
+               uiMapEdit.UrbanSlider -= SetUrbanLevel;
+               uiMapEdit.FarmSlider -= SetFarmLevel;
+               uiMapEdit.PlantSlider -= SetPlantLevel;
+               uiMapEdit.SpecialSlider -= SetSpecialIndex;
+
+               uiMapEdit.WallModeChanged -= SetWalledMode;
+
+               uiMapEdit.EditModeToggle -= SetEditMode;
+
+               uiMapEdit.SaveEvent -= OpenSaveLoadMenu;
+               uiMapEdit.LoadEvent -= OpenSaveLoadMenu;
+            }
+
+         }
+      }
+
+      void RegisterCallbacks_SaveLoadMenu(bool action)
+      {
+         var uiSaveLoadMenu = GetComponentInChildren<UISaveLoadMenu>();
+         if (uiSaveLoadMenu != null)
+         {
+            if (action)
+            {
+               uiSaveLoadMenu.CloseDocument += CloseSaveLoadMenu;
+            }
+            else
+            {
+               uiSaveLoadMenu.CloseDocument -= CloseSaveLoadMenu;
+            }
+         }
+      }
+
+      #endregion
 
       void CreateUnit()
       {

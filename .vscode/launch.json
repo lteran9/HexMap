@@ -5,7 +5,7 @@
    "version": "0.2.0",
    "configurations": [
       {
-         "name": "Unity Editor (Unity) (23776)",
+         "name": "Unity Editor (Unity) (37225)",
          "type": "unity",
          "request": "launch",
          "processId": "~/Documents/Unity/Experimental/HexMap/Library/EditorInstance.json"
