@@ -4,7 +4,6 @@ using HexMap.UI;
 using HexMap.Units;
 using HexMap.Gameplay;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace HexMap.Map
 {
@@ -45,23 +44,6 @@ namespace HexMap.Map
       enum OptionalToggle
       {
          Ignore, Yes, No
-      }
-
-      void Start()
-      {
-         if (_mapEditorMenu != null)
-         {
-            _mapEditorMenu.gameObject.SetActive(true);
-
-            RegisterCallbacks_MapEdit(true);
-            RegisterCallbacks_SaveLoadMenu(true);
-         }
-      }
-
-      void OnDestroy()
-      {
-         RegisterCallbacks_MapEdit(false);
-         RegisterCallbacks_SaveLoadMenu(false);
       }
 
       void Awake()
@@ -404,88 +386,6 @@ namespace HexMap.Map
          else
          {
             previousCell = null;
-         }
-      }
-
-      void RegisterCallbacks_MapEdit(bool action)
-      {
-         if (_mapEditorMenu != null)
-         {
-            // Register vs Unregister
-            if (action)
-            {
-               _mapEditorMenu.FeatureToggleChanged += SetTerrainTypeIndex;
-
-               _mapEditorMenu.ElevationSlider += SetElevation;
-               _mapEditorMenu.ElevationToggle += SetApplyElevation;
-               _mapEditorMenu.WaterSlider += SetWaterLevel;
-               _mapEditorMenu.WaterToggle += SetApplyWaterLevel;
-               _mapEditorMenu.RiverModeChanged += SetRiverMode;
-               _mapEditorMenu.RoadModeChanged += SetRoadMode;
-               _mapEditorMenu.BrushSizeSlider += SetBrushSize;
-
-               _mapEditorMenu.UrbanToggle += SetApplyUrbanLevel;
-               _mapEditorMenu.FarmToggle += SetApplyFarmLevel;
-               _mapEditorMenu.PlantToggle += SetApplyPlantLevel;
-               _mapEditorMenu.SpecialToggle += SetApplySpecialIndex;
-
-               _mapEditorMenu.UrbanSlider += SetUrbanLevel;
-               _mapEditorMenu.FarmSlider += SetFarmLevel;
-               _mapEditorMenu.PlantSlider += SetPlantLevel;
-               _mapEditorMenu.SpecialSlider += SetSpecialIndex;
-
-               _mapEditorMenu.WallModeChanged += SetWalledMode;
-
-               _mapEditorMenu.EditModeToggle += SetEditMode;
-
-               _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
-               _mapEditorMenu.LoadEvent += OpenSaveLoadMenu;
-            }
-            else
-            {
-               _mapEditorMenu.FeatureToggleChanged -= SetTerrainTypeIndex;
-
-               _mapEditorMenu.ElevationSlider -= SetElevation;
-               _mapEditorMenu.ElevationToggle -= SetApplyElevation;
-               _mapEditorMenu.WaterSlider -= SetWaterLevel;
-               _mapEditorMenu.WaterToggle -= SetApplyWaterLevel;
-               _mapEditorMenu.RiverModeChanged -= SetRiverMode;
-               _mapEditorMenu.RoadModeChanged -= SetRoadMode;
-               _mapEditorMenu.BrushSizeSlider -= SetBrushSize;
-
-               _mapEditorMenu.UrbanToggle -= SetApplyUrbanLevel;
-               _mapEditorMenu.FarmToggle -= SetApplyFarmLevel;
-               _mapEditorMenu.PlantToggle -= SetApplyPlantLevel;
-               _mapEditorMenu.SpecialToggle -= SetApplySpecialIndex;
-
-               _mapEditorMenu.UrbanSlider -= SetUrbanLevel;
-               _mapEditorMenu.FarmSlider -= SetFarmLevel;
-               _mapEditorMenu.PlantSlider -= SetPlantLevel;
-               _mapEditorMenu.SpecialSlider -= SetSpecialIndex;
-
-               _mapEditorMenu.WallModeChanged -= SetWalledMode;
-
-               _mapEditorMenu.EditModeToggle -= SetEditMode;
-
-               _mapEditorMenu.SaveEvent -= OpenSaveLoadMenu;
-               _mapEditorMenu.LoadEvent -= OpenSaveLoadMenu;
-            }
-
-         }
-      }
-
-      void RegisterCallbacks_SaveLoadMenu(bool action)
-      {
-         if (_saveLoadMenu != null)
-         {
-            if (action)
-            {
-               _saveLoadMenu.CloseDocument += CloseSaveLoadMenu;
-            }
-            else
-            {
-               _saveLoadMenu.CloseDocument -= CloseSaveLoadMenu;
-            }
          }
       }
 
