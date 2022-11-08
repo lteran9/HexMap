@@ -5,8 +5,14 @@ using UnityEngine.Events;
 
 namespace HexMap.UI
 {
-   public class UIHandler
+   [RequireComponent(typeof(UIDocument))]
+   public class UIMapEdit : MonoBehaviour
    {
+      // Root of all functionality
+      UIDocument _uiDocument = default;
+
+      #region Actions
+
       public event UnityAction SaveEvent = delegate { };
       public event UnityAction LoadEvent = delegate { };
       public event UnityAction NewGameEvent = delegate { };
@@ -32,6 +38,8 @@ namespace HexMap.UI
       public event UnityAction<bool> PlantToggle = delegate { };
       public event UnityAction<bool> SpecialToggle = delegate { };
       public event UnityAction<bool> EditModeToggle = delegate { };
+
+      #endregion
 
       #region Checkbox
 
@@ -77,11 +85,15 @@ namespace HexMap.UI
 
       #endregion
 
-      /**
-       * Register Callbacks on Init
-       */
-      public UIHandler(VisualElement rootVisualElement)
+      public void Awake()
       {
+         _uiDocument = GetComponent<UIDocument>();
+      }
+
+      public void OnEnable()
+      {
+         VisualElement rootVisualElement = _uiDocument?.rootVisualElement;
+
          if (rootVisualElement != null)
          {
             #region LeftSideMenu
@@ -605,6 +617,47 @@ namespace HexMap.UI
       void ToggleEditValue(ChangeEvent<bool> evt)
       {
          EditModeToggle.Invoke(evt.newValue);
+      }
+
+      public enum UIDocumentNames
+      {
+         #region Features
+         Toggle_None,
+         Toggle_Sand,
+         Toggle_Grass,
+         Toggle_Mud,
+         Toggle_Stone,
+         Toggle_Snow,
+         #endregion
+
+         Toggle_Elevation,
+         Toggle_Water,
+
+         Toggle_RiverYes,
+         Toggle_RiverNo,
+         Toggle_RiverNone,
+         Toggle_RoadYes,
+         Toggle_RoadNo,
+         Toggle_RoadNone,
+         Toggle_WallNone,
+         Toggle_WallYes,
+         Toggle_WallNo,
+         Toggle_Urban,
+         Toggle_Farm,
+         Toggle_Plant,
+         Toggle_Special,
+         Toggle_EditMode,
+
+         SliderInt_Elevation,
+         SliderInt_Water,
+         SliderInt_BrushSize,
+         SliderInt_Urban,
+         SliderInt_Plant,
+         SliderInt_Farm,
+         SliderInt_Special,
+
+         Button_Save,
+         Button_Load
       }
    }
 }
