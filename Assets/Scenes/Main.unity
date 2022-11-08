@@ -202,7 +202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &22107320
 Transform:
   m_ObjectHideFlags: 0
@@ -3940,8 +3940,8 @@ MonoBehaviour:
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
   _gameUI: {fileID: 1888352579}
-  _mapEditorMenu: {fileID: 22107322}
-  _saveLoadMenu: {fileID: 107189}
+  _mapEditorMenu: {fileID: 22107321}
+  _saveLoadMenu: {fileID: 107190}
 --- !u!1 &1338864015
 GameObject:
   m_ObjectHideFlags: 0

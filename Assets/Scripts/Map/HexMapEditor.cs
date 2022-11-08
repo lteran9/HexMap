@@ -15,8 +15,8 @@ namespace HexMap.Map
       [SerializeField] Material _terrainMaterial = default;
       [SerializeField] HexGameUI _gameUI = default;
       [Header("UI")]
-      [SerializeField] UIDocument _mapEditorMenu = default;
-      [SerializeField] UIDocument _saveLoadMenu = default;
+      [SerializeField] UIMapEdit _mapEditorMenu = default;
+      [SerializeField] UISaveLoadMenu _saveLoadMenu = default;
 
       int activeElevation,
          activeWaterLevel,
@@ -47,6 +47,23 @@ namespace HexMap.Map
          Ignore, Yes, No
       }
 
+      void Start()
+      {
+         if (_mapEditorMenu != null)
+         {
+            _mapEditorMenu.gameObject.SetActive(true);
+
+            RegisterCallbacks_MapEdit(true);
+            RegisterCallbacks_SaveLoadMenu(true);
+         }
+      }
+
+      void OnDestroy()
+      {
+         RegisterCallbacks_MapEdit(false);
+         RegisterCallbacks_SaveLoadMenu(false);
+      }
+
       void Awake()
       {
          ShowGrid(false);
@@ -60,9 +77,6 @@ namespace HexMap.Map
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped += LeftShiftReleased;
          _inputReader.PlaceUnit += HandleUnitInput;
-
-         RegisterCallbacks_MapEdit(true);
-         RegisterCallbacks_SaveLoadMenu(true);
       }
 
       void OnDisable()
@@ -72,9 +86,6 @@ namespace HexMap.Map
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
          _inputReader.LeftShiftStopped -= LeftShiftReleased;
          _inputReader.PlaceUnit -= HandleUnitInput;
-
-         RegisterCallbacks_MapEdit(false);
-         RegisterCallbacks_SaveLoadMenu(false);
       }
 
       void EditCell(HexCell cell)
@@ -398,67 +409,66 @@ namespace HexMap.Map
 
       void RegisterCallbacks_MapEdit(bool action)
       {
-         var uiMapEdit = GetComponentInChildren<UIMapEdit>();
-         if (uiMapEdit != null)
+         if (_mapEditorMenu != null)
          {
             // Register vs Unregister
             if (action)
             {
-               uiMapEdit.FeatureToggleChanged += SetTerrainTypeIndex;
+               _mapEditorMenu.FeatureToggleChanged += SetTerrainTypeIndex;
 
-               uiMapEdit.ElevationSlider += SetElevation;
-               uiMapEdit.ElevationToggle += SetApplyElevation;
-               uiMapEdit.WaterSlider += SetWaterLevel;
-               uiMapEdit.WaterToggle += SetApplyWaterLevel;
-               uiMapEdit.RiverModeChanged += SetRiverMode;
-               uiMapEdit.RoadModeChanged += SetRoadMode;
-               uiMapEdit.BrushSizeSlider += SetBrushSize;
+               _mapEditorMenu.ElevationSlider += SetElevation;
+               _mapEditorMenu.ElevationToggle += SetApplyElevation;
+               _mapEditorMenu.WaterSlider += SetWaterLevel;
+               _mapEditorMenu.WaterToggle += SetApplyWaterLevel;
+               _mapEditorMenu.RiverModeChanged += SetRiverMode;
+               _mapEditorMenu.RoadModeChanged += SetRoadMode;
+               _mapEditorMenu.BrushSizeSlider += SetBrushSize;
 
-               uiMapEdit.UrbanToggle += SetApplyUrbanLevel;
-               uiMapEdit.FarmToggle += SetApplyFarmLevel;
-               uiMapEdit.PlantToggle += SetApplyPlantLevel;
-               uiMapEdit.SpecialToggle += SetApplySpecialIndex;
+               _mapEditorMenu.UrbanToggle += SetApplyUrbanLevel;
+               _mapEditorMenu.FarmToggle += SetApplyFarmLevel;
+               _mapEditorMenu.PlantToggle += SetApplyPlantLevel;
+               _mapEditorMenu.SpecialToggle += SetApplySpecialIndex;
 
-               uiMapEdit.UrbanSlider += SetUrbanLevel;
-               uiMapEdit.FarmSlider += SetFarmLevel;
-               uiMapEdit.PlantSlider += SetPlantLevel;
-               uiMapEdit.SpecialSlider += SetSpecialIndex;
+               _mapEditorMenu.UrbanSlider += SetUrbanLevel;
+               _mapEditorMenu.FarmSlider += SetFarmLevel;
+               _mapEditorMenu.PlantSlider += SetPlantLevel;
+               _mapEditorMenu.SpecialSlider += SetSpecialIndex;
 
-               uiMapEdit.WallModeChanged += SetWalledMode;
+               _mapEditorMenu.WallModeChanged += SetWalledMode;
 
-               uiMapEdit.EditModeToggle += SetEditMode;
+               _mapEditorMenu.EditModeToggle += SetEditMode;
 
-               uiMapEdit.SaveEvent += OpenSaveLoadMenu;
-               uiMapEdit.LoadEvent += OpenSaveLoadMenu;
+               _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
+               _mapEditorMenu.LoadEvent += OpenSaveLoadMenu;
             }
             else
             {
-               uiMapEdit.FeatureToggleChanged -= SetTerrainTypeIndex;
+               _mapEditorMenu.FeatureToggleChanged -= SetTerrainTypeIndex;
 
-               uiMapEdit.ElevationSlider -= SetElevation;
-               uiMapEdit.ElevationToggle -= SetApplyElevation;
-               uiMapEdit.WaterSlider -= SetWaterLevel;
-               uiMapEdit.WaterToggle -= SetApplyWaterLevel;
-               uiMapEdit.RiverModeChanged -= SetRiverMode;
-               uiMapEdit.RoadModeChanged -= SetRoadMode;
-               uiMapEdit.BrushSizeSlider -= SetBrushSize;
+               _mapEditorMenu.ElevationSlider -= SetElevation;
+               _mapEditorMenu.ElevationToggle -= SetApplyElevation;
+               _mapEditorMenu.WaterSlider -= SetWaterLevel;
+               _mapEditorMenu.WaterToggle -= SetApplyWaterLevel;
+               _mapEditorMenu.RiverModeChanged -= SetRiverMode;
+               _mapEditorMenu.RoadModeChanged -= SetRoadMode;
+               _mapEditorMenu.BrushSizeSlider -= SetBrushSize;
 
-               uiMapEdit.UrbanToggle -= SetApplyUrbanLevel;
-               uiMapEdit.FarmToggle -= SetApplyFarmLevel;
-               uiMapEdit.PlantToggle -= SetApplyPlantLevel;
-               uiMapEdit.SpecialToggle -= SetApplySpecialIndex;
+               _mapEditorMenu.UrbanToggle -= SetApplyUrbanLevel;
+               _mapEditorMenu.FarmToggle -= SetApplyFarmLevel;
+               _mapEditorMenu.PlantToggle -= SetApplyPlantLevel;
+               _mapEditorMenu.SpecialToggle -= SetApplySpecialIndex;
 
-               uiMapEdit.UrbanSlider -= SetUrbanLevel;
-               uiMapEdit.FarmSlider -= SetFarmLevel;
-               uiMapEdit.PlantSlider -= SetPlantLevel;
-               uiMapEdit.SpecialSlider -= SetSpecialIndex;
+               _mapEditorMenu.UrbanSlider -= SetUrbanLevel;
+               _mapEditorMenu.FarmSlider -= SetFarmLevel;
+               _mapEditorMenu.PlantSlider -= SetPlantLevel;
+               _mapEditorMenu.SpecialSlider -= SetSpecialIndex;
 
-               uiMapEdit.WallModeChanged -= SetWalledMode;
+               _mapEditorMenu.WallModeChanged -= SetWalledMode;
 
-               uiMapEdit.EditModeToggle -= SetEditMode;
+               _mapEditorMenu.EditModeToggle -= SetEditMode;
 
-               uiMapEdit.SaveEvent -= OpenSaveLoadMenu;
-               uiMapEdit.LoadEvent -= OpenSaveLoadMenu;
+               _mapEditorMenu.SaveEvent -= OpenSaveLoadMenu;
+               _mapEditorMenu.LoadEvent -= OpenSaveLoadMenu;
             }
 
          }
@@ -466,16 +476,15 @@ namespace HexMap.Map
 
       void RegisterCallbacks_SaveLoadMenu(bool action)
       {
-         var uiSaveLoadMenu = GetComponentInChildren<UISaveLoadMenu>();
-         if (uiSaveLoadMenu != null)
+         if (_saveLoadMenu != null)
          {
             if (action)
             {
-               uiSaveLoadMenu.CloseDocument += CloseSaveLoadMenu;
+               _saveLoadMenu.CloseDocument += CloseSaveLoadMenu;
             }
             else
             {
-               uiSaveLoadMenu.CloseDocument -= CloseSaveLoadMenu;
+               _saveLoadMenu.CloseDocument -= CloseSaveLoadMenu;
             }
          }
       }

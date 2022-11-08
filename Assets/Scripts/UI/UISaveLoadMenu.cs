@@ -12,30 +12,36 @@ namespace HexMap.UI
    [RequireComponent(typeof(UIDocument))]
    public class UISaveLoadMenu : MonoBehaviour
    {
-      #region Static 
-
-      public const int mapFileVersion = 0;
-
-      #endregion
+      const int mapFileVersion = 0;
 
       // Root of all functionality
       UIDocument _uiDocument = default;
+
+      #region Actions
+
+      public event UnityAction CloseDocument = delegate { };
+
+      #endregion
+
+      #region Button
+      Button _save = default;
+      Button _load = default;
+      Button _cancel = default;
+      #endregion
+
+      #region List View
+      ListView _mapNamesList = default;
+      #endregion
+
+      #region Text Field
+      TextField _fileName = default;
+      #endregion
 
       string inputFileName = default;
 
       List<string> pathNames = default;
 
-      Button _save = default;
-      Button _load = default;
-      Button _cancel = default;
-
-      ListView _mapNamesList = default;
-
-      TextField _fileName = default;
-
       [SerializeField] HexGrid _hexGrid = default;
-
-      public event UnityAction CloseDocument = delegate { };
 
       void Awake()
       {
@@ -74,24 +80,12 @@ namespace HexMap.UI
          }
       }
 
-      void OnDisable()
-      {
-         if (_save != null)
-            _save.clicked -= Click_Save;
-         if (_load != null)
-            _load.clicked -= Click_Load;
-         if (_cancel != null)
-            _cancel.clicked -= Click_Cancel;
-         if (_fileName != null)
-            _fileName.UnregisterValueChangedCallback(FileName_TextField_Changed);
-      }
-
       void Click_Save()
       {
          if (!string.IsNullOrEmpty(inputFileName))
          {
             Save(GetSelectedPath());
-            gameObject.SetActive(false);
+            Click_Cancel();
          }
       }
 
@@ -100,13 +94,12 @@ namespace HexMap.UI
          if (!string.IsNullOrEmpty(inputFileName))
          {
             Load(GetSelectedPath());
-            gameObject.SetActive(false);
+            Click_Cancel();
          }
       }
 
       void Click_Cancel()
       {
-         Debug.Log("click cancel");
          CloseDocument.Invoke();
       }
 
@@ -117,6 +110,8 @@ namespace HexMap.UI
             inputFileName = evt.newValue;
          }
       }
+
+      #region List View 
 
       void FillList()
       {
@@ -174,6 +169,7 @@ namespace HexMap.UI
          e.Q<Label>("Label_PathName").text = pathNames[index];
       }
 
+      #endregion
 
       #region Data Storage
 
