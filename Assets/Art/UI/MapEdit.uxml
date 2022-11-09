@@ -32,7 +32,7 @@
                     <ui:SliderInt picking-mode="Ignore" value="0" high-value="7" name="SliderInt_Water" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; font-size: 21px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Title" class="menu-option-container">
-                    <ui:Label text="River" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                    <ui:Label text="River" display-tooltip-when-elided="true" style="font-size: 18px; -unity-text-align: middle-center; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="River" class="menu-option-container" style="flex-direction: row; background-color: rgba(84, 84, 84, 0.75);">
                     <ui:Toggle label="---" name="Toggle_RiverNone" value="true" class="menu-option-select" />
@@ -40,7 +40,7 @@
                     <ui:Toggle label="No" name="Toggle_RiverNo" class="menu-option-select" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Title" class="menu-option-container">
-                    <ui:Label text="Road" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                    <ui:Label text="Road" display-tooltip-when-elided="true" style="font-size: 18px; -unity-text-align: middle-center; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Road" class="menu-option-container" style="flex-direction: row; background-color: rgba(85, 85, 85, 0.75);">
                     <ui:Toggle label="---" name="Toggle_RoadNone" value="true" class="menu-option-select" />
@@ -48,7 +48,7 @@
                     <ui:Toggle label="No" name="Toggle_RoadNo" class="menu-option-select" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Title" class="menu-option-container">
-                    <ui:Label text="Brush Size" display-tooltip-when-elided="true" style="font-size: 12px; -unity-text-align: middle-center;" />
+                    <ui:Label text="Brush Size" display-tooltip-when-elided="true" style="font-size: 18px; -unity-text-align: middle-center; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="BrushSize">
                     <ui:SliderInt picking-mode="Ignore" value="0" high-value="4" name="SliderInt_BrushSize" low-value="0" style="margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px;" />
@@ -76,7 +76,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="Title" class="menu-option-container">
-                    <ui:Label text="Walled" display-tooltip-when-elided="false" enable-rich-text="false" style="font-size: 18px; -unity-text-align: middle-center;" />
+                    <ui:Label text="Walled" display-tooltip-when-elided="false" enable-rich-text="false" style="font-size: 18px; -unity-text-align: middle-center; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Walled" class="menu-option-container" style="flex-direction: row; background-color: rgba(85, 85, 85, 0.75);">
                     <ui:Toggle label="---" value="true" name="Toggle_WallNone" class="menu-option-select" />
@@ -88,7 +88,7 @@
                     <ui:Button text="Load" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Load" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 48%; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Buttons" class="menu-option-container">
-                    <ui:Button text="New Game" display-tooltip-when-elided="false" enable-rich-text="false" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
+                    <ui:Button text="New Game" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_NewMap" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Grid" class="menu-option-container">
                     <ui:Toggle label="Grid" name="Toggle_Grid" class="menu-option-toggle" style="margin-bottom: 5px;" />

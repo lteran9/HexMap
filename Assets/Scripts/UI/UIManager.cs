@@ -113,7 +113,7 @@ namespace HexMap.UI
 
                _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
                _mapEditorMenu.LoadEvent += OpenSaveLoadMenu;
-               _mapEditorMenu.NewGameEvent += OpenNewMapMenu;
+               _mapEditorMenu.NewMapEvent += OpenNewMapMenu;
             }
             else
             {
@@ -143,7 +143,7 @@ namespace HexMap.UI
 
                _mapEditorMenu.SaveEvent -= OpenSaveLoadMenu;
                _mapEditorMenu.LoadEvent -= OpenSaveLoadMenu;
-               _mapEditorMenu.NewGameEvent -= OpenNewMapMenu;
+               _mapEditorMenu.NewMapEvent -= OpenNewMapMenu;
             }
 
          }
