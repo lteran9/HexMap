@@ -2,12 +2,12 @@
     <Style src="project://database/Assets/Art/UI/Main.uss?fileID=7433441132597879392&amp;guid=f5434c49bc8f24a85941ac5051901bff&amp;type=3#Main" />
     <ui:VisualElement name="Container" style="width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: space-around;">
         <ui:VisualElement name="Menu" style="width: 35%; min-height: 200px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 15px; background-color: rgba(255, 255, 255, 0.5); align-items: center;">
-            <ui:Label text="New Map" display-tooltip-when-elided="false" name="Title" enable-rich-text="false" style="-unity-font-style: bold; white-space: nowrap; color: rgb(0, 0, 0); font-size: 32px; -unity-text-align: middle-center;" />
-            <ui:Toggle label="Generate" name="Generate" value="false" class="menu-option-toggle" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; -unity-font-style: normal;" />
-            <ui:Button text="Small" display-tooltip-when-elided="false" enable-rich-text="false" name="Small" class="new-map-button" />
-            <ui:Button text="Medium" display-tooltip-when-elided="false" enable-rich-text="false" name="Medium" class="new-map-button" />
-            <ui:Button text="Large" display-tooltip-when-elided="false" enable-rich-text="false" name="Large" class="new-map-button" />
-            <ui:Button text="Cancel" display-tooltip-when-elided="false" enable-rich-text="false" name="Cancel" class="new-map-button" />
+            <ui:Label text="New Map" display-tooltip-when-elided="false" name="Title" enable-rich-text="false" class="menu-title" />
+            <ui:Toggle label="Generate" name="Toggle_Generate" value="false" class="menu-option-toggle" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; -unity-font-style: normal;" />
+            <ui:Button text="Small" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Small" class="new-map-button" />
+            <ui:Button text="Medium" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Medium" class="new-map-button" />
+            <ui:Button text="Large" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Large" class="new-map-button" />
+            <ui:Button text="Cancel" display-tooltip-when-elided="false" enable-rich-text="false" name="Button_Cancel" class="new-map-button" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

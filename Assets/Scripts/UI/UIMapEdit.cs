@@ -15,7 +15,7 @@ namespace HexMap.UI
 
       public event UnityAction SaveEvent = delegate { };
       public event UnityAction LoadEvent = delegate { };
-      public event UnityAction NewGameEvent = delegate { };
+      public event UnityAction NewMapEvent = delegate { };
 
       public event UnityAction<int> FeatureToggleChanged = delegate { };
       public event UnityAction<int> ElevationSlider = delegate { };
@@ -295,6 +295,16 @@ namespace HexMap.UI
             if (loadButton != null)
             {
                loadButton.clicked += () => { LoadEvent.Invoke(); };
+            }
+
+            #endregion
+
+            #region New Map Button
+
+            var newMapButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_NewMap));
+            if (newMapButton != null)
+            {
+               newMapButton.clicked += () => { NewMapEvent.Invoke(); };
             }
 
             #endregion
@@ -672,7 +682,8 @@ namespace HexMap.UI
          SliderInt_Special,
 
          Button_Save,
-         Button_Load
+         Button_Load,
+         Button_NewMap
       }
    }
 }

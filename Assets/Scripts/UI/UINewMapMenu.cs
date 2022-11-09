@@ -55,31 +55,28 @@ namespace HexMap.UI
             _generate = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Generate));
             if (_generate != null)
             {
-               _generate.RegisterValueChangedCallback(evt =>
-               {
-
-               });
+               _generate.RegisterValueChangedCallback(ToggleMapGeneration);
             }
 
             _smallBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Small));
             if (_smallBtn != null)
             {
-               _smallBtn.clicked += () => { CreateSmallMap(); };
+               _smallBtn.clicked += Click_SmallMap;
             }
 
-            _mediumBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Small));
+            _mediumBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Medium));
             if (_mediumBtn != null)
             {
-               _mediumBtn.clicked += () => { CreateMediumMap(); };
+               _mediumBtn.clicked += Click_MediumMap;
             }
 
-            _largeBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Small));
+            _largeBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Large));
             if (_largeBtn != null)
             {
-               _largeBtn.clicked += () => { CreateLargeMap(); };
+               _largeBtn.clicked += Click_LargeMap;
             }
 
-            _cancelBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Small));
+            _cancelBtn = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Cancel));
             if (_cancelBtn != null)
             {
                _cancelBtn.clicked += () => { CancelButtonEvent.Invoke(); };
@@ -101,24 +98,32 @@ namespace HexMap.UI
          CancelButtonEvent.Invoke();
       }
 
-      void CreateSmallMap()
+      void Click_SmallMap()
       {
+         Debug.Log(nameof(Click_SmallMap));
          CreateMap(20, 15);
       }
 
-      void CreateMediumMap()
+      void Click_MediumMap()
       {
+         Debug.Log(nameof(Click_MediumMap));
          CreateMap(40, 30);
       }
 
-      void CreateLargeMap()
+      void Click_LargeMap()
       {
+         Debug.Log(nameof(Click_LargeMap));
          CreateMap(80, 60);
       }
 
-      void ToggleMapGeneration(bool toggle)
+      void Click_Cancel()
       {
-         generateMaps = toggle;
+         CancelButtonEvent.Invoke();
+      }
+
+      void ToggleMapGeneration(ChangeEvent<bool> toggle)
+      {
+         generateMaps = toggle.newValue;
       }
 
       enum UIDocumentNames
