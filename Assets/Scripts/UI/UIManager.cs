@@ -12,6 +12,7 @@ namespace HexMap.UI
       [Header("Screens")]
       [SerializeField] UIMapEdit _mapEditorMenu = default;
       [SerializeField] UISaveLoadMenu _saveLoadMenu = default;
+      [SerializeField] UINewMapMenu _newMapMenu = default;
 
       void Awake()
       {
@@ -20,7 +21,7 @@ namespace HexMap.UI
 
          if (_hexMapEditor == null)
          {
-            throw new Exception("HexMapEditor is missing!");
+            throw new Exception(string.Format("{0} is missing!", nameof(HexMapEditor)));
          }
       }
 
@@ -28,10 +29,10 @@ namespace HexMap.UI
       {
          if (_mapEditorMenu != null)
          {
-            _mapEditorMenu.gameObject.SetActive(true);
-
+            ShowDefaultMenu();
             RegisterCallbacks_MapEdit(true);
             RegisterCallbacks_SaveLoadMenu(true);
+            RegisterCallbacks_NewMapMenu(true);
          }
          else
          {
@@ -43,9 +44,15 @@ namespace HexMap.UI
       {
          RegisterCallbacks_MapEdit(false);
          RegisterCallbacks_SaveLoadMenu(false);
+         RegisterCallbacks_NewMapMenu(false);
       }
 
       #region UI
+
+      public void ShowDefaultMenu()
+      {
+         _mapEditorMenu.gameObject.SetActive(true);
+      }
 
       public void OpenSaveLoadMenu()
       {
@@ -59,14 +66,26 @@ namespace HexMap.UI
          _saveLoadMenu.gameObject.SetActive(false);
       }
 
+      public void OpenNewMapMenu()
+      {
+         _mapEditorMenu.gameObject.SetActive(false);
+         _newMapMenu.gameObject.SetActive(true);
+      }
+
+      public void CloseNewMapMenu()
+      {
+         _mapEditorMenu.gameObject.SetActive(true);
+         _newMapMenu.gameObject.SetActive(false);
+      }
+
       #region Event Callbacks
 
-      void RegisterCallbacks_MapEdit(bool action)
+      void RegisterCallbacks_MapEdit(bool register)
       {
          if (_mapEditorMenu != null)
          {
             // Register vs Unregister
-            if (action)
+            if (register)
             {
                _mapEditorMenu.FeatureToggleChanged += _hexMapEditor.SetTerrainTypeIndex;
 
@@ -94,6 +113,7 @@ namespace HexMap.UI
 
                _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
                _mapEditorMenu.LoadEvent += OpenSaveLoadMenu;
+               _mapEditorMenu.NewGameEvent += OpenNewMapMenu;
             }
             else
             {
@@ -123,16 +143,17 @@ namespace HexMap.UI
 
                _mapEditorMenu.SaveEvent -= OpenSaveLoadMenu;
                _mapEditorMenu.LoadEvent -= OpenSaveLoadMenu;
+               _mapEditorMenu.NewGameEvent -= OpenNewMapMenu;
             }
 
          }
       }
 
-      void RegisterCallbacks_SaveLoadMenu(bool action)
+      void RegisterCallbacks_SaveLoadMenu(bool register)
       {
          if (_saveLoadMenu != null)
          {
-            if (action)
+            if (register)
             {
                _saveLoadMenu.CloseDocument += CloseSaveLoadMenu;
             }
@@ -143,6 +164,20 @@ namespace HexMap.UI
          }
       }
 
+      void RegisterCallbacks_NewMapMenu(bool register)
+      {
+         if (_newMapMenu != null)
+         {
+            if (register)
+            {
+               _newMapMenu.CancelButtonEvent += CloseNewMapMenu;
+            }
+            else
+            {
+               _newMapMenu.CancelButtonEvent -= CloseNewMapMenu;
+            }
+         }
+      }
 
       #endregion
 

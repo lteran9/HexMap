@@ -41,7 +41,7 @@ namespace HexMap.UI
 
       #endregion
 
-      #region Checkbox
+      #region Toggle
 
       Toggle _none = default;
       Toggle _sand = default;
@@ -634,7 +634,7 @@ namespace HexMap.UI
          EditModeToggle.Invoke(evt.newValue);
       }
 
-      public enum UIDocumentNames
+      enum UIDocumentNames
       {
          #region Features
          Toggle_None,

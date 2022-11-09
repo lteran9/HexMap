@@ -13,9 +13,6 @@ namespace HexMap.Map
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
       [SerializeField] HexGameUI _gameUI = default;
-      [Header("UI")]
-      [SerializeField] UIMapEdit _mapEditorMenu = default;
-      [SerializeField] UISaveLoadMenu _saveLoadMenu = default;
 
       int activeElevation,
          activeWaterLevel,
@@ -33,7 +30,7 @@ namespace HexMap.Map
          applyFarmLevel = false,
          applyPlantLevel = false,
          applySpecialIndex = false,
-         leftShiftActive;
+         leftShiftActive = false;
 
       HexCell previousCell;
       OptionalToggle riverMode = OptionalToggle.Ignore,
@@ -165,19 +162,116 @@ namespace HexMap.Map
          }
       }
 
+      void CreateUnit()
+      {
+         HexCell cell = GetCellUnderCursor();
+         if (cell)
+         {
+            if (!cell.Unit)
+            {
+               _hexGrid.AddUnit(
+                  Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+               );
+            }
+            else
+            {
+               Debug.Log("Unit already placed at location: " + cell.Coordinates.ToString());
+            }
+         }
+      }
+
+      void DestroyUnit()
+      {
+         HexCell cell = GetCellUnderCursor();
+         if (cell && cell.Unit)
+         {
+            _hexGrid.RemoveUnit(cell.Unit);
+         }
+      }
+
+      HexCell GetCellUnderCursor()
+      {
+         Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
+         Ray inputRay = Camera.main.ScreenPointToRay(position);
+         return _hexGrid.GetCell(inputRay);
+      }
+
+      #region Input
+
+      void LeftShiftBeingHeld()
+      {
+         leftShiftActive = true;
+      }
+
+      void LeftShiftReleased()
+      {
+         leftShiftActive = false;
+      }
+
+      void HandleUnitInput()
+      {
+         if (leftShiftActive)
+         {
+            DestroyUnit();
+         }
+         else
+         {
+            CreateUnit();
+         }
+      }
+
+      void OnClick()
+      {
+         // if (EventSystem.current.IsPointerOverGameObject() == false)
+         // {
+         HandleInput();
+         // }
+         // else
+         // {
+         //    previousCell = null;
+         // }
+      }
+
+      void HandleInput()
+      {
+         HexCell currentCell = GetCellUnderCursor();
+         if (currentCell != null)
+         {
+            if (previousCell && previousCell != currentCell)
+            {
+               ValidateDrag(currentCell);
+            }
+            else
+            {
+               isDrag = false;
+            }
+
+            EditCells(currentCell);
+
+            previousCell = currentCell;
+         }
+         else
+         {
+            previousCell = null;
+         }
+      }
+
+      void ValidateDrag(HexCell currentCell)
+      {
+         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
+         {
+            if (previousCell.GetNeighbor(dragDirection) == currentCell)
+            {
+               isDrag = true;
+               return;
+            }
+         }
+         isDrag = false;
+      }
+
+      #endregion
+
       #region UI
-
-      public void OpenSaveLoadMenu()
-      {
-         _mapEditorMenu.gameObject.SetActive(false);
-         _saveLoadMenu.gameObject.SetActive(true);
-      }
-
-      public void CloseSaveLoadMenu()
-      {
-         _mapEditorMenu.gameObject.SetActive(true);
-         _saveLoadMenu.gameObject.SetActive(false);
-      }
 
       public void SetElevation(int elevation)
       {
@@ -314,115 +408,6 @@ namespace HexMap.Map
          }
       }
 
-      void ValidateDrag(HexCell currentCell)
-      {
-         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
-         {
-            if (previousCell.GetNeighbor(dragDirection) == currentCell)
-            {
-               isDrag = true;
-               return;
-            }
-         }
-         isDrag = false;
-      }
-
       #endregion
-
-      #region Input
-
-      void LeftShiftBeingHeld()
-      {
-         leftShiftActive = true;
-      }
-
-      void LeftShiftReleased()
-      {
-         leftShiftActive = false;
-      }
-
-      void HandleUnitInput()
-      {
-         if (leftShiftActive)
-         {
-            DestroyUnit();
-         }
-         else
-         {
-            CreateUnit();
-         }
-      }
-
-      void OnClick()
-      {
-         // if (EventSystem.current.IsPointerOverGameObject() == false)
-         // {
-         HandleInput();
-         // }
-         // else
-         // {
-         //    previousCell = null;
-         // }
-      }
-
-      void HandleInput()
-      {
-         HexCell currentCell = GetCellUnderCursor();
-         if (currentCell != null)
-         {
-            if (previousCell && previousCell != currentCell)
-            {
-               ValidateDrag(currentCell);
-            }
-            else
-            {
-               isDrag = false;
-            }
-
-            EditCells(currentCell);
-
-            previousCell = currentCell;
-         }
-         else
-         {
-            previousCell = null;
-         }
-      }
-
-      #endregion
-
-      void CreateUnit()
-      {
-         HexCell cell = GetCellUnderCursor();
-         if (cell)
-         {
-            if (!cell.Unit)
-            {
-               _hexGrid.AddUnit(
-                  Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
-               );
-            }
-            else
-            {
-               Debug.Log("Unit already placed at location: " + cell.Coordinates.ToString());
-            }
-         }
-      }
-
-      void DestroyUnit()
-      {
-         HexCell cell = GetCellUnderCursor();
-         if (cell && cell.Unit)
-         {
-            _hexGrid.RemoveUnit(cell.Unit);
-         }
-      }
-
-      HexCell GetCellUnderCursor()
-      {
-         Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-         Ray inputRay = Camera.main.ScreenPointToRay(position);
-         return _hexGrid.GetCell(inputRay);
-      }
    }
 }
