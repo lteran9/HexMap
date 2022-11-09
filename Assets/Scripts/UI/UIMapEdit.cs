@@ -41,7 +41,7 @@ namespace HexMap.UI
 
       #endregion
 
-      #region Checkbox
+      #region Toggle
 
       Toggle _none = default;
       Toggle _sand = default;
@@ -85,12 +85,12 @@ namespace HexMap.UI
 
       #endregion
 
-      public void Awake()
+      void Awake()
       {
          _uiDocument = GetComponent<UIDocument>();
       }
 
-      public void OnEnable()
+      void OnEnable()
       {
          VisualElement rootVisualElement = _uiDocument?.rootVisualElement;
 
@@ -283,14 +283,29 @@ namespace HexMap.UI
 
             #endregion
 
-            rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Save)).clicked += () => { SaveEvent.Invoke(); };
-            rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Load)).clicked += () => { LoadEvent.Invoke(); };
+            #region Save/Load Buttons
 
+            var saveButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Save));
+            if (saveButton != null)
+            {
+               saveButton.clicked += () => { SaveEvent.Invoke(); };
+            }
+
+            var loadButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Load));
+            if (loadButton != null)
+            {
+               loadButton.clicked += () => { LoadEvent.Invoke(); };
+            }
+
+            #endregion
+
+            #region Edit Mode
             _editMode = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_EditMode));
             if (_editMode != null)
             {
                _editMode.RegisterValueChangedCallback(ToggleEditValue);
             }
+            #endregion
 
             #endregion
          }
@@ -619,7 +634,7 @@ namespace HexMap.UI
          EditModeToggle.Invoke(evt.newValue);
       }
 
-      public enum UIDocumentNames
+      enum UIDocumentNames
       {
          #region Features
          Toggle_None,
