@@ -4,6 +4,7 @@ using HexMap.UI;
 using HexMap.Units;
 using HexMap.Gameplay;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HexMap.Map
 {
@@ -13,6 +14,7 @@ namespace HexMap.Map
       [SerializeField] InputReader _inputReader = default;
       [SerializeField] Material _terrainMaterial = default;
       [SerializeField] HexGameUI _gameUI = default;
+      [SerializeField] UIManager _uiManager = default;
 
       int activeElevation,
          activeWaterLevel,
@@ -193,6 +195,7 @@ namespace HexMap.Map
       {
          Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
          Ray inputRay = Camera.main.ScreenPointToRay(position);
+
          return _hexGrid.GetCell(inputRay);
       }
 
@@ -222,13 +225,13 @@ namespace HexMap.Map
 
       void OnClick()
       {
+         HandleInput();
          // if (EventSystem.current.IsPointerOverGameObject() == false)
          // {
-         HandleInput();
          // }
          // else
          // {
-         //    previousCell = null;
+         //    
          // }
       }
 

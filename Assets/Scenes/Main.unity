@@ -2029,7 +2029,6 @@ Transform:
   - {fileID: 1379672101}
   - {fileID: 1943341838}
   - {fileID: 508480152}
-  - {fileID: 1435035126}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3868,7 +3867,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1059135465}
-  - component: {fileID: 1059135467}
   - component: {fileID: 1059135468}
   - component: {fileID: 1059135466}
   m_Layer: 0
@@ -3894,7 +3892,7 @@ Transform:
   - {fileID: 107188}
   - {fileID: 1167682646}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1059135466
 MonoBehaviour:
@@ -3926,22 +3924,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 857903456}
---- !u!114 &1059135467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1059135464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61cb23c0235d44f3e9a6880c9919b8ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hexGrid: {fileID: 1809051975}
-  _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
-  _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
-  _gameUI: {fileID: 1888352579}
 --- !u!114 &1059135468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3954,6 +3936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f9ea7b216a8424ab2dcc0b40e3b5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hexMapEditor: {fileID: 2134249176}
   _mapEditorMenu: {fileID: 22107321}
   _saveLoadMenu: {fileID: 107190}
   _newMapMenu: {fileID: 1167682648}
@@ -4813,12 +4796,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1435035123}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1079.1211, y: -562.8105, z: -196.47461}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 806996889}
-  m_RootOrder: 4
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1651849809
 GameObject:
@@ -5677,7 +5660,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1906278836
 GameObject:
@@ -6084,6 +6067,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069907670}
   m_CullTransparentMesh: 1
+--- !u!1 &2134249175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2134249177}
+  - component: {fileID: 2134249176}
+  m_Layer: 0
+  m_Name: HexMapEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2134249176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134249175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cb23c0235d44f3e9a6880c9919b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hexGrid: {fileID: 1809051975}
+  _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
+  _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
+  _gameUI: {fileID: 1888352579}
+  _uiManager: {fileID: 1059135468}
+--- !u!4 &2134249177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134249175}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40.48236, y: 0.18911415, z: 31.905602}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5140604653084560429
 PrefabInstance:
   m_ObjectHideFlags: 0

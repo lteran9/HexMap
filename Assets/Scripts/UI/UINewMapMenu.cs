@@ -6,11 +6,8 @@ using UnityEngine.Events;
 
 namespace HexMap.UI
 {
-   public class UINewMapMenu : MonoBehaviour
+   public class UINewMapMenu : BaseUIWindow
    {
-      // Root of all functionality
-      UIDocument _uiDocument = default;
-
       #region Actions
 
       public event UnityAction CancelButtonEvent = delegate { };

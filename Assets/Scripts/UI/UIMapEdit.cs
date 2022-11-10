@@ -6,11 +6,8 @@ using UnityEngine.Events;
 namespace HexMap.UI
 {
    [RequireComponent(typeof(UIDocument))]
-   public class UIMapEdit : MonoBehaviour
+   public class UIMapEdit : BaseUIWindow
    {
-      // Root of all functionality
-      UIDocument _uiDocument = default;
-
       #region Actions
 
       public event UnityAction SaveEvent = delegate { };
@@ -37,6 +34,7 @@ namespace HexMap.UI
       public event UnityAction<bool> FarmToggle = delegate { };
       public event UnityAction<bool> PlantToggle = delegate { };
       public event UnityAction<bool> SpecialToggle = delegate { };
+      public event UnityAction<bool> GridModeToggle = delegate { };
       public event UnityAction<bool> EditModeToggle = delegate { };
 
       #endregion
@@ -70,6 +68,7 @@ namespace HexMap.UI
       Toggle _wallYes = default;
       Toggle _wallNo = default;
 
+      Toggle _gridMode = default;
       Toggle _editMode = default;
 
       #endregion
@@ -308,6 +307,16 @@ namespace HexMap.UI
             }
 
             #endregion
+
+            #region Grid Toggle
+
+            _gridMode = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Grid));
+            if (_gridMode != null)
+            {
+               _gridMode.RegisterValueChangedCallback(ToggleGridValue);
+            }
+
+            #endregion 
 
             #region Edit Mode
             _editMode = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_EditMode));
@@ -639,11 +648,19 @@ namespace HexMap.UI
 
       #endregion
 
+      void ToggleGridValue(ChangeEvent<bool> evt)
+      {
+         GridModeToggle.Invoke(evt.newValue);
+      }
+
       void ToggleEditValue(ChangeEvent<bool> evt)
       {
          EditModeToggle.Invoke(evt.newValue);
       }
 
+      /// <summary>
+      /// Do not use int values of this enum; subject to change.
+      /// </summary>
       enum UIDocumentNames
       {
          #region Features
@@ -671,6 +688,7 @@ namespace HexMap.UI
          Toggle_Farm,
          Toggle_Plant,
          Toggle_Special,
+         Toggle_Grid,
          Toggle_EditMode,
 
          SliderInt_Elevation,

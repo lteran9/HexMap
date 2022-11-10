@@ -10,12 +10,9 @@ using UnityEngine.Events;
 namespace HexMap.UI
 {
    [RequireComponent(typeof(UIDocument))]
-   public class UISaveLoadMenu : MonoBehaviour
+   public class UISaveLoadMenu : BaseUIWindow
    {
       const int mapFileVersion = 0;
-
-      // Root of all functionality
-      UIDocument _uiDocument = default;
 
       #region Actions
 

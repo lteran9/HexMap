@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HexMap.Map;
 using System;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace HexMap.UI
 {
    public class UIManager : MonoBehaviour
    {
-      HexMapEditor _hexMapEditor = default;
+      [SerializeField] HexMapEditor _hexMapEditor = default;
 
       [Header("Screens")]
       [SerializeField] UIMapEdit _mapEditorMenu = default;
@@ -16,9 +17,6 @@ namespace HexMap.UI
 
       void Awake()
       {
-         // Find HexMapEditor which controls all functionality
-         _hexMapEditor = GetComponent<HexMapEditor>();
-
          if (_hexMapEditor == null)
          {
             throw new Exception(string.Format("{0} is missing!", nameof(HexMapEditor)));
@@ -109,6 +107,7 @@ namespace HexMap.UI
 
                _mapEditorMenu.WallModeChanged += _hexMapEditor.SetWalledMode;
 
+               _mapEditorMenu.GridModeToggle += _hexMapEditor.ShowGrid;
                _mapEditorMenu.EditModeToggle += _hexMapEditor.SetEditMode;
 
                _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
@@ -139,6 +138,7 @@ namespace HexMap.UI
 
                _mapEditorMenu.WallModeChanged -= _hexMapEditor.SetWalledMode;
 
+               _mapEditorMenu.GridModeToggle -= _hexMapEditor.ShowGrid;
                _mapEditorMenu.EditModeToggle -= _hexMapEditor.SetEditMode;
 
                _mapEditorMenu.SaveEvent -= OpenSaveLoadMenu;
