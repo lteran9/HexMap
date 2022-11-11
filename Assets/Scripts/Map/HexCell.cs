@@ -611,7 +611,8 @@ namespace HexMap.Map
       public void Save(BinaryWriter writer)
       {
          writer.Write((byte)terrainTypeIndex);
-         writer.Write((byte)elevation);
+         // Offset for negative numbers
+         writer.Write((byte)(elevation + 127));
          writer.Write((byte)waterLevel);
          writer.Write((byte)urbanLevel);
          writer.Write((byte)farmLevel);
@@ -654,6 +655,8 @@ namespace HexMap.Map
          terrainTypeIndex = reader.ReadByte();
          ShaderData.RefreshTerrain(this);
          elevation = reader.ReadByte();
+         // Offset for potential negative number
+         elevation -= 127;
          RefreshPosition();
          waterLevel = reader.ReadByte();
          urbanLevel = reader.ReadByte();

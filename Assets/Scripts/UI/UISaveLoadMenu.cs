@@ -154,8 +154,37 @@ namespace HexMap.UI
          label.style.marginTop = label.style.marginBottom = label.style.marginLeft = label.style.marginRight = 0f;
          label.style.unityTextAlign = TextAnchor.MiddleLeft;
 
+         var btnDelete = new Button();
+         btnDelete.name = "Button_DeleteMap";
+         btnDelete.text = "X";
+         btnDelete.style.fontSize = 18f;
+         btnDelete.style.flexShrink = 1f;
+         btnDelete.style.flexGrow = 0f;
+         btnDelete.style.paddingBottom = btnDelete.style.paddingLeft = btnDelete.style.paddingRight = btnDelete.style.paddingTop = 0f;
+         btnDelete.style.marginBottom = btnDelete.style.marginLeft = btnDelete.style.marginRight = btnDelete.style.marginTop = 10f;
+         btnDelete.style.borderBottomWidth = btnDelete.style.borderLeftWidth = btnDelete.style.borderRightWidth = btnDelete.style.borderTopWidth = 0f;
+         btnDelete.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0f));
+         btnDelete.clicked += () =>
+            {
+               var path = GetSelectedPath();
+               Delete(path);
+               for (int i = 0; i < pathNames.Count; i++)
+               {
+                  if (path.Contains(pathNames[i]))
+                  {
+                     pathNames.RemoveAt(i);
+                     break;
+                  }
+               }
+
+               _mapNamesList.Rebuild();
+               _fileName.value = string.Empty;
+            };
+
          var container = new VisualElement();
+         container.style.flexDirection = FlexDirection.Row;
          container.Add(label);
+         container.Add(btnDelete);
 
          return container;
       }
@@ -200,6 +229,18 @@ namespace HexMap.UI
             {
                Debug.LogWarning("Unknown map format " + header);
             }
+         }
+      }
+
+      void Delete(string path)
+      {
+         if (!string.IsNullOrEmpty(path))
+         {
+            File.Delete(path);
+         }
+         else
+         {
+            Debug.Log("Given path is NULL.");
          }
       }
 
