@@ -150,7 +150,7 @@ namespace HexMap.Map
          int landBudget = Mathf.RoundToInt(cellCount * _landPercentage * 0.01f);
          while (landBudget > 0)
          {
-            int chunkSize = Random.Range(_chunkSizeMin, _chunkSizeMax + 1);
+            int chunkSize = Random.Range(_chunkSizeMin, _chunkSizeMax - 1) + 1;
             if (Random.value < sinkProbability)
             {
                landBudget = SinkTerrain(chunkSize, landBudget);

@@ -55,6 +55,7 @@ namespace HexMap.Gameplay
 
       void DoSelection()
       {
+         Debug.Log(nameof(DoSelection));
          _grid.ClearPath();
          UpdateCurrentCell();
          if (currentCell && currentCell.Unit)
