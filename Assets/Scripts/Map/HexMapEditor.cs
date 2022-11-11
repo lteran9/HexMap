@@ -22,11 +22,11 @@ namespace HexMap.Map
          activeFarmLevel,
          activePlantLevel,
          activeSpecialIndex,
-         activeTerrainTypeIndex,
+         activeTerrainTypeIndex = -1,
          brushSize;
 
       bool isDrag,
-         applyElevation = true,
+         applyElevation = false,
          applyWaterLevel = false,
          applyUrbanLevel = false,
          applyFarmLevel = false,

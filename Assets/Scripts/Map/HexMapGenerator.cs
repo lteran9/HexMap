@@ -138,6 +138,7 @@ namespace HexMap.Map
                   searchFrontier.Enqueue(neighbor);
                }
             }
+            Debug.Log(nameof(searchFrontier) + " Count: " + searchFrontier.Count);
          }
          searchFrontier.Clear();
 
