@@ -75,7 +75,8 @@ namespace HexMap.Map
                continue;
             }
             current.Elevation = newElevation;
-            if (originalElevation < _waterLevel && current.Elevation == _waterLevel && --budget == 0)
+            budget -= 1; // --budget in if statement was causing infinite loop
+            if (originalElevation < _waterLevel && current.Elevation == _waterLevel && budget == 0)
             {
                break;
             }
@@ -122,7 +123,6 @@ namespace HexMap.Map
             current.Elevation = newElevation;
             if (originalElevation >= _waterLevel && newElevation < _waterLevel)
             {
-               Debug.Log("Budget Increased");
                budget += 1;
             }
             size += 1;
@@ -138,7 +138,6 @@ namespace HexMap.Map
                   searchFrontier.Enqueue(neighbor);
                }
             }
-            Debug.Log(nameof(searchFrontier) + " Count: " + searchFrontier.Count);
          }
          searchFrontier.Clear();
 
