@@ -119,3 +119,8 @@ This repository is a tutorial follow-along project from CatLike Coding. You can 
 - Control how much land appears, how high, and how erratic it is
 - Support multiple configuration options to create varied maps
 - Make it possible to generate the same map again
+## Chapter 24 
+- Add a border of water around the map.
+- Split the map into multiple regions.
+- Apply erosion to grind away cliffs.
+- Move land around to smoothen the terrain.
