@@ -83,7 +83,7 @@ namespace HexMap.Map
 
       void Triangulate(HexCell cell)
       {
-         Debug.Log(nameof(Triangulate) + " called");
+         //Debug.Log(nameof(Triangulate) + " called");
          for (var d = HexGrid.HexDirection.NE; d <= HexGrid.HexDirection.NW; d++)
          {
             Triangulate(d, cell);

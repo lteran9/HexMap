@@ -62,7 +62,6 @@ namespace HexMap.Map
 
       void OnDisable()
       {
-         Debug.Log(nameof(HexMapEditor) + " disabled.");
          _inputReader.MouseClick -= OnClick;
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;

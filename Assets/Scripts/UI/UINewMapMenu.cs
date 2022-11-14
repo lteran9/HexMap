@@ -97,19 +97,16 @@ namespace HexMap.UI
 
       void Click_SmallMap()
       {
-         Debug.Log(nameof(Click_SmallMap));
          CreateMap(20, 15);
       }
 
       void Click_MediumMap()
       {
-         Debug.Log(nameof(Click_MediumMap));
          CreateMap(40, 30);
       }
 
       void Click_LargeMap()
       {
-         Debug.Log(nameof(Click_LargeMap));
          CreateMap(80, 60);
       }
 
