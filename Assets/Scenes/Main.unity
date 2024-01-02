@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1379,6 +1378,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -5918,6 +5918,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 1
@@ -6272,11 +6273,11 @@ PrefabInstance:
       objectReference: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: _cellCountX
-      value: 32
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: _cellCountZ
-      value: 16
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: chunkCountX

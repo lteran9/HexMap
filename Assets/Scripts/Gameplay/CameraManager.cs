@@ -2,23 +2,18 @@ using UnityEngine;
 using HexMap.Input;
 using HexMap.Map;
 
-namespace HexMap.Gameplay
-{
-   public class CameraManager : MonoBehaviour
-   {
-      static CameraManager instance;
+namespace HexMap.Gameplay {
+   public class CameraManager : MonoBehaviour {
+      public static CameraManager Instance { get; private set; }
 
-      public static bool Locked
-      {
-         set
-         {
-            instance.enabled = !value;
+      public static bool Locked {
+         set {
+            Instance.enabled = !value;
          }
       }
 
-      public static void ValidatePosition()
-      {
-         instance.AdjustPosition(0f, 0f);
+      public static void ValidatePosition() {
+         Instance.AdjustPosition(0f, 0f);
       }
 
       [SerializeField] float _StickMinZoom = -250;
@@ -36,49 +31,48 @@ namespace HexMap.Gameplay
          rotateInput = 0;
       Vector2 movementInput;
 
-      void OnEnable()
-      {
-         if (_InputReader != null)
-         {
+      private void Awake() {
+         if (Instance != null) {
+            Destroy(Instance);
+         }
+
+         Instance = this;
+      }
+
+      private void OnEnable() {
+         if (_InputReader != null) {
             _InputReader.ZoomCamera += AdjustZoom;
             _InputReader.MoveEvent += MoveCamera;
             _InputReader.RotateEvent += RotateCamera;
          }
 
-         instance = this;
+         Instance = this;
       }
 
-      void OnDisable()
-      {
-         if (_InputReader != null)
-         {
+      private void OnDisable() {
+         if (_InputReader != null) {
             _InputReader.ZoomCamera -= AdjustZoom;
             _InputReader.MoveEvent -= MoveCamera;
             _InputReader.RotateEvent -= RotateCamera;
          }
       }
 
-      void LateUpdate()
-      {
+      private void LateUpdate() {
          float xDelta = movementInput.x;
          float zDelta = movementInput.y;
-         if (xDelta != 0f || zDelta != 0f)
-         {
+         if (xDelta != 0f || zDelta != 0f) {
             AdjustPosition(xDelta, zDelta);
          }
 
-         if (rotateInput != 0f)
-         {
+         if (rotateInput != 0f) {
             AdjustRotation(rotateInput);
          }
       }
 
       #region Zoom 
 
-      void AdjustZoom(float delta)
-      {
-         if (delta != 0)
-         {
+      private void AdjustZoom(float delta) {
+         if (delta != 0) {
             zoom = Mathf.Clamp01(zoom + delta);
 
             float distance = Mathf.Lerp(_StickMinZoom, _StickMaxZoom, zoom);
@@ -90,13 +84,11 @@ namespace HexMap.Gameplay
 
       #region Movement
 
-      void MoveCamera(Vector2 movement)
-      {
+      private void MoveCamera(Vector2 movement) {
          movementInput = movement;
       }
 
-      void AdjustPosition(float xDelta, float zDelta)
-      {
+      private void AdjustPosition(float xDelta, float zDelta) {
          Vector3 direction =
             transform.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
          float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
@@ -108,8 +100,7 @@ namespace HexMap.Gameplay
          transform.localPosition = position;
       }
 
-      Vector3 ClampPosition(Vector3 position)
-      {
+      private Vector3 ClampPosition(Vector3 position) {
          float xMax = (_HexGrid.GetCellCountX() - 0.5f) * (2f * HexMetrics.innerRadius);
          position.x = Mathf.Clamp(position.x, 0f, xMax);
 
@@ -123,20 +114,15 @@ namespace HexMap.Gameplay
 
       #region Rotate
 
-      void RotateCamera(float movement)
-      {
+      private void RotateCamera(float movement) {
          rotateInput = movement;
       }
 
-      void AdjustRotation(float delta)
-      {
+      private void AdjustRotation(float delta) {
          rotationAngle += delta * rotationSpeed * Time.deltaTime;
-         if (rotationAngle < 0f)
-         {
+         if (rotationAngle < 0f) {
             rotationAngle += 360f;
-         }
-         else if (rotationAngle >= 360f)
-         {
+         } else if (rotationAngle >= 360f) {
             rotationAngle -= 360f;
          }
          transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
