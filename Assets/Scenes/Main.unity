@@ -4844,6 +4844,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &1524298049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6269,6 +6270,14 @@ PrefabInstance:
       propertyPath: unitPrefab
       value: 
       objectReference: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
+    - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: _cellCountX
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: _cellCountZ
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: chunkCountX
       value: 3
