@@ -67,7 +67,6 @@ namespace HexMap.Input {
       }
 
       public void OnCameraMove(InputAction.CallbackContext context) {
-         Debug.Log(nameof(OnCameraMove));
          MoveEvent.Invoke(context.ReadValue<Vector2>());
       }
 

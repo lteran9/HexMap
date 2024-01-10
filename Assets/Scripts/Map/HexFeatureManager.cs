@@ -1,10 +1,8 @@
 using HexMap.Map;
 using UnityEngine;
 
-namespace HexMap.Map
-{
-   public class HexFeatureManager : MonoBehaviour
-   {
+namespace HexMap.Map {
+   public class HexFeatureManager : MonoBehaviour {
       Transform container = default;
 
       [SerializeField] HexMesh _walls = default;
@@ -14,10 +12,8 @@ namespace HexMap.Map
       [SerializeField] HexFeatureCollection[] farmCollections = default;
       [SerializeField] HexFeatureCollection[] plantCollections = default;
 
-      public void Clear()
-      {
-         if (container)
-         {
+      public void Clear() {
+         if (container) {
             Destroy(container.gameObject);
          }
          container = new GameObject("Features Container").transform;
@@ -26,17 +22,14 @@ namespace HexMap.Map
          _walls.Clear();
       }
 
-      public void Apply()
-      {
+      public void Apply() {
          _walls.Apply();
       }
 
       #region Features
 
-      public void AddFeature(HexCell cell, Vector3 position)
-      {
-         if (cell.IsSpecial)
-         {
+      public void AddFeature(HexCell cell, Vector3 position) {
+         if (cell.IsSpecial) {
             return;
          }
 
@@ -44,32 +37,22 @@ namespace HexMap.Map
          Transform prefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.b);
          Transform otherPrefab = PickPrefab(farmCollections, cell.FarmLevel, hash.b, hash.d);
          float usedHash = hash.a;
-         if (prefab)
-         {
-            if (otherPrefab && hash.b < hash.a)
-            {
+         if (prefab) {
+            if (otherPrefab && hash.b < hash.a) {
                prefab = otherPrefab;
                usedHash = hash.b;
             }
-         }
-         else if (otherPrefab)
-         {
+         } else if (otherPrefab) {
             prefab = otherPrefab;
          }
          otherPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.c, hash.d);
-         if (prefab)
-         {
-            if (otherPrefab && hash.c < usedHash)
-            {
+         if (prefab) {
+            if (otherPrefab && hash.c < usedHash) {
                prefab = otherPrefab;
             }
-         }
-         else if (otherPrefab)
-         {
+         } else if (otherPrefab) {
             prefab = otherPrefab;
-         }
-         else
-         {
+         } else {
             return;
          }
 
@@ -80,16 +63,14 @@ namespace HexMap.Map
          instance.SetParent(container, false);
       }
 
-      public void AddSpecialFeature(HexCell cell, Vector3 position)
-      {
+      public void AddSpecialFeature(HexCell cell, Vector3 position) {
          Transform instance = Instantiate(_special[cell.SpecialIndex - 1]);
          instance.localPosition = HexMetrics.Perturb(position);
          HexHash hash = HexMetrics.SampleHashGrid(position);
          instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
          instance.SetParent(container, false);
 
-         if (cell.SpecialIndex == 3)
-         {
+         if (cell.SpecialIndex == 3) {
             Transform instanceA = Instantiate(_special[cell.SpecialIndex - 1]);
             var localPositionA = HexMetrics.Perturb(position);
             instanceA.localPosition = new Vector3(localPositionA.x + 2, 0, localPositionA.z + 2);
@@ -106,15 +87,11 @@ namespace HexMap.Map
          }
       }
 
-      Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice)
-      {
-         if (level > 0)
-         {
+      Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice) {
+         if (level > 0) {
             float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
-            for (int i = 0; i < thresholds.Length; i++)
-            {
-               if (hash < thresholds[i])
-               {
+            for (int i = 0; i < thresholds.Length; i++) {
+               if (hash < thresholds[i]) {
                   return collection[i].Pick(choice);
                }
             }
@@ -130,18 +107,13 @@ namespace HexMap.Map
          EdgeVertices near, HexCell nearCell,
          EdgeVertices far, HexCell farCell,
          bool hasRiver, bool hasRoad
-      )
-      {
-         if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexGrid.HexEdgeType.Cliff)
-         {
+      ) {
+         if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexGrid.HexEdgeType.Cliff) {
             AddWallSegment(near.v1, far.v1, near.v2, far.v2);
-            if (hasRiver || hasRoad)
-            {
+            if (hasRiver || hasRoad) {
                AddWallCap(near.v2, far.v2);
                AddWallCap(far.v4, near.v4);
-            }
-            else
-            {
+            } else {
                AddWallSegment(near.v2, far.v2, near.v3, far.v3);
                AddWallSegment(near.v3, far.v3, near.v4, far.v4);
             }
@@ -153,39 +125,24 @@ namespace HexMap.Map
          Vector3 c1, HexCell cell1,
          Vector3 c2, HexCell cell2,
          Vector3 c3, HexCell cell3
-      )
-      {
-         if (cell1.Walled)
-         {
-            if (cell2.Walled)
-            {
-               if (!cell3.Walled)
-               {
+      ) {
+         if (cell1.Walled) {
+            if (cell2.Walled) {
+               if (!cell3.Walled) {
                   AddWallSegment(c3, cell3, c1, cell1, c2, cell2);
                }
-            }
-            else if (cell3.Walled)
-            {
+            } else if (cell3.Walled) {
                AddWallSegment(c2, cell2, c3, cell3, c1, cell1);
-            }
-            else
-            {
+            } else {
                AddWallSegment(c1, cell1, c2, cell2, c3, cell3);
             }
-         }
-         else if (cell2.Walled)
-         {
-            if (cell3.Walled)
-            {
+         } else if (cell2.Walled) {
+            if (cell3.Walled) {
                AddWallSegment(c1, cell1, c2, cell2, c3, cell3);
-            }
-            else
-            {
+            } else {
                AddWallSegment(c2, cell2, c3, cell3, c1, cell1);
             }
-         }
-         else if (cell3.Walled)
-         {
+         } else if (cell3.Walled) {
             AddWallSegment(c3, cell3, c1, cell1, c2, cell2);
          }
       }
@@ -194,8 +151,7 @@ namespace HexMap.Map
          Vector3 nearLeft, Vector3 farLeft,
          Vector3 nearRight, Vector3 farRight,
          bool addTower = false
-      )
-      {
+      ) {
          nearLeft = HexMetrics.Perturb(nearLeft);
          farLeft = HexMetrics.Perturb(farLeft);
          nearRight = HexMetrics.Perturb(nearRight);
@@ -228,8 +184,7 @@ namespace HexMap.Map
          _walls.AddQuadUnperturbed(v2, v1, v4, v3);
          _walls.AddQuadUnperturbed(t1, t2, v3, v4);
 
-         if (addTower)
-         {
+         if (addTower) {
             Transform towerInstance = Instantiate(_wallTower);
             towerInstance.transform.localPosition = (left + right) * 0.5f;
             Vector3 rightDirection = right - left;
@@ -243,10 +198,8 @@ namespace HexMap.Map
          Vector3 pivot, HexCell pivotCell,
          Vector3 left, HexCell leftCell,
          Vector3 right, HexCell rightCell
-      )
-      {
-         if (pivotCell.IsUnderwater)
-         {
+      ) {
+         if (pivotCell.IsUnderwater) {
             return;
          }
 
@@ -255,44 +208,31 @@ namespace HexMap.Map
          bool hasRightWall = !rightCell.IsUnderwater &&
             pivotCell.GetEdgeType(rightCell) != HexGrid.HexEdgeType.Cliff;
 
-         if (hasLeftWall)
-         {
-            if (hasRightWall)
-            {
+         if (hasLeftWall) {
+            if (hasRightWall) {
                bool hasTower = false;
-               if (leftCell.Elevation == rightCell.Elevation)
-               {
+               if (leftCell.Elevation == rightCell.Elevation) {
                   HexHash hash = HexMetrics.SampleHashGrid(
                      (pivot + left + right) * (1f / 3f)
                   );
                   hasTower = hash.e < HexMetrics.wallTowerThreshold;
                }
                AddWallSegment(pivot, left, pivot, right, hasTower);
-            }
-            else if (leftCell.Elevation < rightCell.Elevation)
-            {
+            } else if (leftCell.Elevation < rightCell.Elevation) {
                AddWallWedge(pivot, left, right);
-            }
-            else
-            {
+            } else {
                AddWallCap(pivot, left);
             }
-         }
-         else if (hasRightWall)
-         {
-            if (rightCell.Elevation < leftCell.Elevation)
-            {
+         } else if (hasRightWall) {
+            if (rightCell.Elevation < leftCell.Elevation) {
                AddWallWedge(right, pivot, left);
-            }
-            else
-            {
+            } else {
                AddWallCap(right, pivot);
             }
          }
       }
 
-      void AddWallCap(Vector3 near, Vector3 far)
-      {
+      void AddWallCap(Vector3 near, Vector3 far) {
          near = HexMetrics.Perturb(near);
          far = HexMetrics.Perturb(far);
 
@@ -307,8 +247,7 @@ namespace HexMap.Map
          _walls.AddQuadUnperturbed(v1, v2, v3, v4);
       }
 
-      void AddWallWedge(Vector3 near, Vector3 far, Vector3 point)
-      {
+      void AddWallWedge(Vector3 near, Vector3 far, Vector3 point) {
          near = HexMetrics.Perturb(near);
          far = HexMetrics.Perturb(far);
          point = HexMetrics.Perturb(point);
@@ -334,8 +273,7 @@ namespace HexMap.Map
 
       #region Bridges
 
-      public void AddBridge(Vector3 roadCenter1, Vector3 roadCenter2)
-      {
+      public void AddBridge(Vector3 roadCenter1, Vector3 roadCenter2) {
          roadCenter1 = HexMetrics.Perturb(roadCenter1);
          roadCenter2 = HexMetrics.Perturb(roadCenter2);
          Transform instance = Instantiate(_bridge);

@@ -7,29 +7,29 @@ using System.Collections.Generic;
 
 namespace HexMap.Map {
    public class HexGrid : MonoBehaviour {
-      [SerializeField] int _seed = 0;
-      [SerializeField] int _cellCountX = 20;
-      [SerializeField] int _cellCountZ = 15;
-      [SerializeField] Texture2D _noiseSource = default;
-      [SerializeField] HexGridChunk _chunkPrefab = default;
-      [SerializeField] HexCell _cellPrefab = default;
-      [SerializeField] TextMeshProUGUI _cellLabelPrefab = default;
+      [SerializeField] private int _seed = 0;
+      [SerializeField] private int _cellCountX = 20;
+      [SerializeField] private int _cellCountZ = 15;
+      [SerializeField] private Texture2D _noiseSource = default;
+      [SerializeField] private HexGridChunk _chunkPrefab = default;
+      [SerializeField] private HexCell _cellPrefab = default;
+      [SerializeField] private TextMeshProUGUI _cellLabelPrefab = default;
 
-      int chunkCountX,
+      private int chunkCountX,
          chunkCountZ,
          searchFrontierPhase;
 
-      bool currentPathExists;
+      private bool currentPathExists;
 
-      HexCell currentPathFrom,
-         currentPathTo;
+      private HexCell currentPathFrom,
+          currentPathTo;
 
-      HexCell[] m_Cells = default;
-      HexGridChunk[] m_Chunks = default;
-      HexCellPriorityQueue searchFrontier = default;
-      HexCellShaderData cellShaderData = default;
+      private HexCell[] m_Cells = default;
+      private HexGridChunk[] m_Chunks = default;
+      private HexCellPriorityQueue searchFrontier = default;
+      private HexCellShaderData cellShaderData = default;
 
-      List<HexUnit> units = new List<HexUnit>();
+      private List<HexUnit> units = new List<HexUnit>();
 
       public bool HasPath {
          get {

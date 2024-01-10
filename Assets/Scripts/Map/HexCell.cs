@@ -6,10 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HexMap.Map
-{
-   public class HexCell : MonoBehaviour
-   {
+namespace HexMap.Map {
+   public class HexCell : MonoBehaviour {
       int elevation = -1,
          waterLevel = -1,
          urbanLevel = 0,
@@ -32,23 +30,18 @@ namespace HexMap.Map
       [SerializeField] HexCell[] _neighbors = default;
 
       public int Index { get; set; }
-      public int Elevation
-      {
-         get
-         {
+      public int Elevation {
+         get {
             return elevation;
          }
-         set
-         {
-            if (elevation == value)
-            {
+         set {
+            if (elevation == value) {
                return;
             }
 
             int originalViewElevation = ViewElevation;
             elevation = value;
-            if (ViewElevation != originalViewElevation)
-            {
+            if (ViewElevation != originalViewElevation) {
                ShaderData.ViewElevationChanged();
             }
 
@@ -56,10 +49,8 @@ namespace HexMap.Map
             RefreshPosition();
             ValidateRivers();
 
-            for (int i = 0; i < _roads.Length; i++)
-            {
-               if (_roads[i] && GetElevationDifference((HexGrid.HexDirection)i) > 1)
-               {
+            for (int i = 0; i < _roads.Length; i++) {
+               if (_roads[i] && GetElevationDifference((HexGrid.HexDirection)i) > 1) {
                   SetRoad(i, false);
                }
             }
@@ -67,23 +58,18 @@ namespace HexMap.Map
             Refresh();
          }
       }
-      public int WaterLevel
-      {
-         get
-         {
+      public int WaterLevel {
+         get {
             return waterLevel;
          }
-         set
-         {
-            if (WaterLevel == value)
-            {
+         set {
+            if (WaterLevel == value) {
                return;
             }
 
             int originalViewElevation = ViewElevation;
             waterLevel = value;
-            if (ViewElevation != originalViewElevation)
-            {
+            if (ViewElevation != originalViewElevation) {
                ShaderData.ViewElevationChanged();
             }
 
@@ -91,152 +77,111 @@ namespace HexMap.Map
             Refresh();
          }
       }
-      public int UrbanLevel
-      {
-         get
-         {
+      public int UrbanLevel {
+         get {
             return urbanLevel;
          }
-         set
-         {
-            if (urbanLevel != value)
-            {
+         set {
+            if (urbanLevel != value) {
                urbanLevel = value;
                RefreshSelfOnly();
             }
          }
       }
-      public int FarmLevel
-      {
-         get
-         {
+      public int FarmLevel {
+         get {
             return farmLevel;
          }
-         set
-         {
-            if (farmLevel != value)
-            {
+         set {
+            if (farmLevel != value) {
                farmLevel = value;
                RefreshSelfOnly();
             }
          }
       }
-      public int PlantLevel
-      {
-         get
-         {
+      public int PlantLevel {
+         get {
             return plantLevel;
          }
-         set
-         {
-            if (plantLevel != value)
-            {
+         set {
+            if (plantLevel != value) {
                plantLevel = value;
                RefreshSelfOnly();
             }
          }
       }
-      public int SpecialIndex
-      {
-         get
-         {
+      public int SpecialIndex {
+         get {
             return specialIndex;
          }
-         set
-         {
-            if (specialIndex != value && !HasRiver)
-            {
+         set {
+            if (specialIndex != value && !HasRiver) {
                specialIndex = value;
                RemoveRoads();
                RefreshSelfOnly();
             }
          }
       }
-      public int TerrainTypeIndex
-      {
-         get
-         {
+      public int TerrainTypeIndex {
+         get {
             return terrainTypeIndex;
          }
-         set
-         {
-            if (terrainTypeIndex != value)
-            {
+         set {
+            if (terrainTypeIndex != value) {
                terrainTypeIndex = value;
                ShaderData.RefreshTerrain(this);
             }
          }
       }
-      public int Distance
-      {
-         get
-         {
+      public int Distance {
+         get {
             return distance;
          }
-         set
-         {
+         set {
             distance = value;
          }
       }
-      public int SearchPriority
-      {
-         get
-         {
+      public int SearchPriority {
+         get {
             return Distance + SearchHeuristic;
          }
       }
-      public int ViewElevation
-      {
-         get
-         {
+      public int ViewElevation {
+         get {
             return elevation >= waterLevel ? elevation : waterLevel;
          }
       }
       public int SearchPhase { get; set; }
 
-      public bool IsSpecial
-      {
-         get
-         {
+      public bool IsSpecial {
+         get {
             return specialIndex > 0;
          }
       }
-      public bool HasRiver
-      {
-         get
-         {
+      public bool HasRiver {
+         get {
             return hasIncomingRiver || hasOutgoingRiver;
          }
       }
-      public bool HasRiverBeginOrEnd
-      {
-         get
-         {
+      public bool HasRiverBeginOrEnd {
+         get {
             return hasIncomingRiver != hasOutgoingRiver;
          }
       }
-      public bool HasIncomingRiver
-      {
-         get
-         {
+      public bool HasIncomingRiver {
+         get {
             return hasIncomingRiver;
          }
       }
-      public bool HasOutgoingRiver
-      {
-         get
-         {
+      public bool HasOutgoingRiver {
+         get {
             return hasOutgoingRiver;
          }
       }
-      public bool HasRoads
-      {
-         get
-         {
-            for (int i = 0; i < _roads.Length; i++)
-            {
-               if (_roads[i])
-               {
+      public bool HasRoads {
+         get {
+            for (int i = 0; i < _roads.Length; i++) {
+               if (_roads[i]) {
                   return true;
                }
 
@@ -245,97 +190,72 @@ namespace HexMap.Map
             return false;
          }
       }
-      public bool IsUnderwater
-      {
-         get
-         {
+      public bool IsUnderwater {
+         get {
             return waterLevel > elevation;
          }
       }
-      public bool Walled
-      {
-         get
-         {
+      public bool Walled {
+         get {
             return walled;
          }
-         set
-         {
-            if (walled != value)
-            {
+         set {
+            if (walled != value) {
                walled = value;
                Refresh();
             }
          }
       }
-      public bool IsVisible
-      {
-         get
-         {
+      public bool IsVisible {
+         get {
             return visibility > 0 && Explorable;
          }
       }
-      public bool IsExplored
-      {
-         get
-         {
+      public bool IsExplored {
+         get {
             return explored && Explorable;
          }
-         set
-         {
+         set {
             explored = value;
          }
       }
       public bool Explorable { get; set; }
 
-      public float StreamBedY
-      {
-         get
-         {
+      public float StreamBedY {
+         get {
             return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
          }
       }
-      public float RiverSurfaceY
-      {
-         get
-         {
+      public float RiverSurfaceY {
+         get {
             return (elevation + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
          }
       }
-      public float WaterSurfaceY
-      {
-         get
-         {
+      public float WaterSurfaceY {
+         get {
             return (waterLevel + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
          }
       }
 
-      public Vector3 Position
-      {
-         get
-         {
+      public Vector3 Position {
+         get {
             return transform.localPosition;
          }
       }
       public HexCell NextWithSamePriority { get; set; }
       public HexUnit Unit { get; set; }
-      public HexGrid.HexDirection IncomingRiver
-      {
-         get
-         {
+      public HexGrid.HexDirection IncomingRiver {
+         get {
             return incomingRiver;
          }
       }
-      public HexGrid.HexDirection OutgoingRiver
-      {
-         get
-         {
+      public HexGrid.HexDirection OutgoingRiver {
+         get {
             return outgoingRiver;
          }
       }
-      public HexGrid.HexDirection RiverBeginOrEndDirection
-      {
-         get
-         {
+      public HexGrid.HexDirection RiverBeginOrEndDirection {
+         get {
             return hasIncomingRiver ? incomingRiver : outgoingRiver;
          }
       }
@@ -347,28 +267,22 @@ namespace HexMap.Map
       [NonSerialized] public RectTransform UIRect = default;
       [NonSerialized] public HexCell PathFrom = default;
 
-      void Refresh()
-      {
-         if (Chunk)
-         {
+      void Refresh() {
+         if (Chunk) {
             Chunk.Refresh();
-            for (int i = 0; i < _neighbors.Length; i++)
-            {
+            for (int i = 0; i < _neighbors.Length; i++) {
                HexCell neighbor = _neighbors[i];
-               if (neighbor != null && neighbor.Chunk != Chunk)
-               {
+               if (neighbor != null && neighbor.Chunk != Chunk) {
                   neighbor.Chunk.Refresh();
                }
             }
-            if (Unit)
-            {
+            if (Unit) {
                Unit.ValidateLocation();
             }
          }
       }
 
-      void RefreshPosition()
-      {
+      void RefreshPosition() {
          Vector3 position = transform.localPosition;
          position.y = elevation * HexMetrics.elevationStep;
          position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
@@ -379,60 +293,49 @@ namespace HexMap.Map
          UIRect.localPosition = uiPosition;
       }
 
-      void RefreshSelfOnly()
-      {
+      void RefreshSelfOnly() {
          Chunk.Refresh();
-         if (Unit)
-         {
+         if (Unit) {
             Unit.ValidateLocation();
          }
       }
 
-      public void EnableHighlight(Color color)
-      {
+      public void EnableHighlight(Color color) {
          Image highlight = UIRect.GetChild(0).GetComponent<Image>();
          highlight.color = color;
          highlight.enabled = true;
       }
 
-      public void DisableHighlight()
-      {
+      public void DisableHighlight() {
          Image highlight = UIRect.GetChild(0).GetComponent<Image>();
          highlight.enabled = false;
       }
 
-      public void SetLabel(string text)
-      {
+      public void SetLabel(string text) {
          TMP_Text label = UIRect.GetComponent<TMP_Text>();
          label.text = text;
       }
 
       #region Visibility
 
-      public void IncreaseVisibility()
-      {
+      public void IncreaseVisibility() {
          visibility += 1;
-         if (visibility >= 1)
-         {
+         if (visibility >= 1) {
             IsExplored = true;
             ShaderData.RefreshVisibility(this);
          }
       }
 
-      public void DecreaseVisibility()
-      {
+      public void DecreaseVisibility() {
          visibility -= 1;
-         if (visibility <= 0)
-         {
+         if (visibility <= 0) {
             ShaderData.RefreshVisibility(this);
             visibility = 0;
          }
       }
 
-      public void ResetVisibility()
-      {
-         if (visibility > 0)
-         {
+      public void ResetVisibility() {
+         if (visibility > 0) {
             visibility = 0;
             ShaderData.RefreshVisibility(this);
          }
@@ -442,26 +345,22 @@ namespace HexMap.Map
 
       #region Neighbors
 
-      public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell)
-      {
+      public void SetNeighbor(HexGrid.HexDirection direction, HexCell cell) {
          _neighbors[(int)direction] = cell;
          cell._neighbors[(int)direction.Opposite()] = this;
       }
 
-      public HexCell GetNeighbor(HexGrid.HexDirection direction)
-      {
+      public HexCell GetNeighbor(HexGrid.HexDirection direction) {
          return _neighbors[(int)direction];
       }
 
-      public HexGrid.HexEdgeType GetEdgeType(HexGrid.HexDirection direction)
-      {
+      public HexGrid.HexEdgeType GetEdgeType(HexGrid.HexDirection direction) {
          return HexMetrics.GetEdgeType(
             elevation, _neighbors[(int)direction].elevation
          );
       }
 
-      public HexGrid.HexEdgeType GetEdgeType(HexCell otherCell)
-      {
+      public HexGrid.HexEdgeType GetEdgeType(HexCell otherCell) {
          return HexMetrics.GetEdgeType(
             elevation, otherCell.elevation
          );
@@ -471,10 +370,8 @@ namespace HexMap.Map
 
       #region Rivers
 
-      public void RemoveOutgoingRiver()
-      {
-         if (!hasOutgoingRiver)
-         {
+      public void RemoveOutgoingRiver() {
+         if (!hasOutgoingRiver) {
             return;
          }
          hasOutgoingRiver = false;
@@ -485,10 +382,8 @@ namespace HexMap.Map
          neighbor.RefreshSelfOnly();
       }
 
-      public void RemoveIncomingRiver()
-      {
-         if (!hasIncomingRiver)
-         {
+      public void RemoveIncomingRiver() {
+         if (!hasIncomingRiver) {
             return;
          }
          hasIncomingRiver = false;
@@ -499,35 +394,29 @@ namespace HexMap.Map
          neighbor.RefreshSelfOnly();
       }
 
-      public void RemoveRiver()
-      {
+      public void RemoveRiver() {
          RemoveOutgoingRiver();
          RemoveIncomingRiver();
       }
 
-      public bool HasRiverThroughEdge(HexGrid.HexDirection direction)
-      {
+      public bool HasRiverThroughEdge(HexGrid.HexDirection direction) {
          return
             hasIncomingRiver && incomingRiver == direction ||
             hasOutgoingRiver && outgoingRiver == direction;
       }
 
-      public void SetOutgoingRiver(HexGrid.HexDirection direction)
-      {
-         if (hasOutgoingRiver && outgoingRiver == direction)
-         {
+      public void SetOutgoingRiver(HexGrid.HexDirection direction) {
+         if (hasOutgoingRiver && outgoingRiver == direction) {
             return;
          }
 
          HexCell neighbor = GetNeighbor(direction);
-         if (!IsValidRiverDestination(neighbor))
-         {
+         if (!IsValidRiverDestination(neighbor)) {
             return;
          }
 
          RemoveOutgoingRiver();
-         if (hasIncomingRiver && incomingRiver == direction)
-         {
+         if (hasIncomingRiver && incomingRiver == direction) {
             RemoveIncomingRiver();
          }
 
@@ -543,21 +432,17 @@ namespace HexMap.Map
          SetRoad((int)direction, false);
       }
 
-      bool IsValidRiverDestination(HexCell neighbor)
-      {
+      bool IsValidRiverDestination(HexCell neighbor) {
          return neighbor && (
             elevation >= neighbor.elevation || waterLevel == neighbor.elevation
          );
       }
 
-      void ValidateRivers()
-      {
-         if (hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(outgoingRiver)))
-         {
+      void ValidateRivers() {
+         if (hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(outgoingRiver))) {
             RemoveOutgoingRiver();
          }
-         if (hasIncomingRiver && !GetNeighbor(incomingRiver).IsValidRiverDestination(this))
-         {
+         if (hasIncomingRiver && !GetNeighbor(incomingRiver).IsValidRiverDestination(this)) {
             RemoveIncomingRiver();
          }
       }
@@ -566,40 +451,32 @@ namespace HexMap.Map
 
       #region Roads
 
-      public void AddRoad(HexGrid.HexDirection direction)
-      {
-         if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && !IsSpecial && !GetNeighbor(direction).IsSpecial && GetElevationDifference(direction) <= 1)
-         {
+      public void AddRoad(HexGrid.HexDirection direction) {
+         if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && !IsSpecial && !GetNeighbor(direction).IsSpecial && GetElevationDifference(direction) <= 1) {
             SetRoad((int)direction, true);
          }
       }
 
-      public void SetRoad(int index, bool state)
-      {
+      public void SetRoad(int index, bool state) {
          _roads[index] = state;
          _neighbors[index]._roads[(int)((HexGrid.HexDirection)index).Opposite()] = state;
          _neighbors[index].RefreshSelfOnly();
          RefreshSelfOnly();
       }
 
-      public void RemoveRoads()
-      {
-         for (int i = 0; i < _roads.Length; i++)
-         {
-            if (_roads[i])
-            {
+      public void RemoveRoads() {
+         for (int i = 0; i < _roads.Length; i++) {
+            if (_roads[i]) {
                SetRoad(i, false);
             }
          }
       }
 
-      public bool HasRoadThroughEdge(HexGrid.HexDirection direction)
-      {
+      public bool HasRoadThroughEdge(HexGrid.HexDirection direction) {
          return _roads[(int)direction];
       }
 
-      public int GetElevationDifference(HexGrid.HexDirection direction)
-      {
+      public int GetElevationDifference(HexGrid.HexDirection direction) {
          int difference = elevation - GetNeighbor(direction).elevation;
          return difference >= 0 ? difference : -difference;
       }
@@ -608,8 +485,7 @@ namespace HexMap.Map
 
       #region Perist Data
 
-      public void Save(BinaryWriter writer)
-      {
+      public void Save(BinaryWriter writer) {
          writer.Write((byte)terrainTypeIndex);
          // Offset for negative numbers
          writer.Write((byte)(elevation + 127));
@@ -620,29 +496,21 @@ namespace HexMap.Map
          writer.Write((byte)specialIndex);
          writer.Write(walled);
 
-         if (hasIncomingRiver)
-         {
+         if (hasIncomingRiver) {
             writer.Write((byte)(incomingRiver + 128));
-         }
-         else
-         {
+         } else {
             writer.Write((byte)0);
          }
 
-         if (hasOutgoingRiver)
-         {
+         if (hasOutgoingRiver) {
             writer.Write((byte)(outgoingRiver + 128));
-         }
-         else
-         {
+         } else {
             writer.Write((byte)0);
          }
 
          int roadFlags = 0;
-         for (int i = 0; i < _roads.Length; i++)
-         {
-            if (_roads[i])
-            {
+         for (int i = 0; i < _roads.Length; i++) {
+            if (_roads[i]) {
                roadFlags |= 1 << i;
             }
          }
@@ -650,8 +518,7 @@ namespace HexMap.Map
          writer.Write(IsExplored);
       }
 
-      public void Load(BinaryReader reader, int header)
-      {
+      public void Load(BinaryReader reader, int header) {
          terrainTypeIndex = reader.ReadByte();
          ShaderData.RefreshTerrain(this);
          elevation = reader.ReadByte();
@@ -666,30 +533,23 @@ namespace HexMap.Map
          walled = reader.ReadBoolean();
 
          byte riverData = reader.ReadByte();
-         if (riverData >= 128)
-         {
+         if (riverData >= 128) {
             hasIncomingRiver = true;
             incomingRiver = (HexGrid.HexDirection)(riverData - 128);
-         }
-         else
-         {
+         } else {
             hasIncomingRiver = false;
          }
 
          riverData = reader.ReadByte();
-         if (riverData >= 128)
-         {
+         if (riverData >= 128) {
             hasOutgoingRiver = true;
             outgoingRiver = (HexGrid.HexDirection)(riverData - 128);
-         }
-         else
-         {
+         } else {
             hasOutgoingRiver = false;
          }
 
          int roadFlags = reader.ReadByte();
-         for (int i = 0; i < _roads.Length; i++)
-         {
+         for (int i = 0; i < _roads.Length; i++) {
             _roads[i] = (roadFlags & (1 << i)) != 0;
          }
 
