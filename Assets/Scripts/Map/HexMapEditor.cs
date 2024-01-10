@@ -6,17 +6,15 @@ using HexMap.Gameplay;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HexMap.Map
-{
-   public class HexMapEditor : MonoBehaviour
-   {
-      [SerializeField] HexGrid _hexGrid = default;
-      [SerializeField] InputReader _inputReader = default;
-      [SerializeField] Material _terrainMaterial = default;
-      [SerializeField] HexGameUI _gameUI = default;
-      [SerializeField] UIManager _uiManager = default;
+namespace HexMap.Map {
+   public class HexMapEditor : MonoBehaviour {
+      [SerializeField] private HexGrid _hexGrid = default;
+      [SerializeField] private InputReader _inputReader = default;
+      [SerializeField] private Material _terrainMaterial = default;
+      [SerializeField] private HexGameUI _gameUI = default;
+      [SerializeField] private UIManager _uiManager = default;
 
-      int activeElevation,
+      private int activeElevation,
          activeWaterLevel,
          activeUrbanLevel,
          activeFarmLevel,
@@ -25,7 +23,7 @@ namespace HexMap.Map
          activeTerrainTypeIndex = -1,
          brushSize;
 
-      bool isDrag,
+      private bool isDrag,
          applyElevation = false,
          applyWaterLevel = false,
          applyUrbanLevel = false,
@@ -34,25 +32,27 @@ namespace HexMap.Map
          applySpecialIndex = false,
          leftShiftActive = false;
 
-      HexCell previousCell;
-      OptionalToggle riverMode = OptionalToggle.Ignore,
+      private HexCell previousCell;
+      private OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
-      HexGrid.HexDirection dragDirection;
+      private HexGrid.HexDirection dragDirection;
 
-      enum OptionalToggle
-      {
+      private enum OptionalToggle {
          Ignore, Yes, No
       }
 
-      void Awake()
-      {
+      private void Awake() {
          ShowGrid(false);
          Shader.EnableKeyword("_HEX_MAP_EDIT_MODE");
       }
 
-      void OnEnable()
-      {
+      private void Start() {
+         // Have to call this once
+         _inputReader.EnableInput();
+      }
+
+      void OnEnable() {
          _inputReader.MouseClick += OnClick;
          _inputReader.MouseDrag += OnClick;
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
@@ -60,8 +60,7 @@ namespace HexMap.Map
          _inputReader.PlaceUnit += HandleUnitInput;
       }
 
-      void OnDisable()
-      {
+      void OnDisable() {
          _inputReader.MouseClick -= OnClick;
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
@@ -69,72 +68,56 @@ namespace HexMap.Map
          _inputReader.PlaceUnit -= HandleUnitInput;
       }
 
-      void EditCell(HexCell cell)
-      {
-         if (cell != null)
-         {
-            if (activeTerrainTypeIndex >= 0)
-            {
+      private void EditCell(HexCell cell) {
+         if (cell != null) {
+            if (activeTerrainTypeIndex >= 0) {
                cell.TerrainTypeIndex = activeTerrainTypeIndex;
             }
-            if (applyElevation && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
-            {
+            if (applyElevation && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore) {
                cell.Elevation = activeElevation;
             }
-            if (applyWaterLevel && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore)
-            {
+            if (applyWaterLevel && riverMode == OptionalToggle.Ignore && roadMode == OptionalToggle.Ignore) {
                cell.WaterLevel = activeWaterLevel;
             }
-            if (applyUrbanLevel)
-            {
+            if (applyUrbanLevel) {
                cell.UrbanLevel = activeUrbanLevel;
             }
-            if (applyFarmLevel)
-            {
+            if (applyFarmLevel) {
                cell.FarmLevel = activeFarmLevel;
             }
-            if (applyPlantLevel)
-            {
+            if (applyPlantLevel) {
                cell.PlantLevel = activePlantLevel;
             }
-            if (applySpecialIndex)
-            {
+            if (applySpecialIndex) {
                cell.SpecialIndex = activeSpecialIndex;
             }
 
-            if (riverMode == OptionalToggle.No)
-            {
+            if (riverMode == OptionalToggle.No) {
                var tempBrushSize = brushSize;
                brushSize = 0;
                cell.RemoveRiver();
                brushSize = tempBrushSize;
             }
 
-            if (roadMode == OptionalToggle.No)
-            {
+            if (roadMode == OptionalToggle.No) {
                var tempBrushSize = brushSize;
                brushSize = 0;
                cell.RemoveRoads();
                brushSize = tempBrushSize;
             }
 
-            if (walledMode != OptionalToggle.Ignore)
-            {
+            if (walledMode != OptionalToggle.Ignore) {
                cell.Walled = walledMode == OptionalToggle.Yes;
             }
 
-            if (isDrag)
-            {
+            if (isDrag) {
                HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
-               if (otherCell)
-               {
-                  if (riverMode == OptionalToggle.Yes)
-                  {
+               if (otherCell) {
+                  if (riverMode == OptionalToggle.Yes) {
                      otherCell.SetOutgoingRiver(dragDirection);
                   }
 
-                  if (roadMode == OptionalToggle.Yes)
-                  {
+                  if (roadMode == OptionalToggle.Yes) {
                      otherCell.AddRoad(dragDirection);
                   }
                }
@@ -142,57 +125,44 @@ namespace HexMap.Map
          }
       }
 
-      void EditCells(HexCell center)
-      {
+      private void EditCells(HexCell center) {
          int centerX = center.Coordinates.X;
          int centerZ = center.Coordinates.Z;
 
-         for (int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++)
-         {
-            for (int x = centerX - r; x <= centerX + brushSize; x++)
-            {
+         for (int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++) {
+            for (int x = centerX - r; x <= centerX + brushSize; x++) {
                EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
             }
          }
 
-         for (int r = 0, z = centerZ + brushSize; z > centerZ; z--, r++)
-         {
-            for (int x = centerX - brushSize; x <= centerX + r; x++)
-            {
+         for (int r = 0, z = centerZ + brushSize; z > centerZ; z--, r++) {
+            for (int x = centerX - brushSize; x <= centerX + r; x++) {
                EditCell(_hexGrid.GetCell(new HexCoordinates(x, z)));
             }
          }
       }
 
-      void CreateUnit()
-      {
+      private void CreateUnit() {
          HexCell cell = GetCellUnderCursor();
-         if (cell)
-         {
-            if (!cell.Unit)
-            {
+         if (cell) {
+            if (!cell.Unit) {
                _hexGrid.AddUnit(
                   Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
                );
-            }
-            else
-            {
+            } else {
                Debug.Log("Unit already placed at location: " + cell.Coordinates.ToString());
             }
          }
       }
 
-      void DestroyUnit()
-      {
+      private void DestroyUnit() {
          HexCell cell = GetCellUnderCursor();
-         if (cell && cell.Unit)
-         {
+         if (cell && cell.Unit) {
             _hexGrid.RemoveUnit(cell.Unit);
          }
       }
 
-      HexCell GetCellUnderCursor()
-      {
+      private HexCell GetCellUnderCursor() {
          Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
          Ray inputRay = Camera.main.ScreenPointToRay(position);
 
@@ -201,70 +171,46 @@ namespace HexMap.Map
 
       #region Input
 
-      void LeftShiftBeingHeld()
-      {
+      private void LeftShiftBeingHeld() {
          leftShiftActive = true;
       }
 
-      void LeftShiftReleased()
-      {
+      private void LeftShiftReleased() {
          leftShiftActive = false;
       }
 
-      void HandleUnitInput()
-      {
-         if (leftShiftActive)
-         {
+      private void HandleUnitInput() {
+         if (leftShiftActive) {
             DestroyUnit();
-         }
-         else
-         {
+         } else {
             CreateUnit();
          }
       }
 
-      void OnClick()
-      {
+      private void OnClick() {
          HandleInput();
-         // if (EventSystem.current.IsPointerOverGameObject() == false)
-         // {
-         // }
-         // else
-         // {
-         //    
-         // }
       }
 
-      void HandleInput()
-      {
+      private void HandleInput() {
          HexCell currentCell = GetCellUnderCursor();
-         if (currentCell != null)
-         {
-            if (previousCell && previousCell != currentCell)
-            {
+         if (currentCell != null) {
+            if (previousCell && previousCell != currentCell) {
                ValidateDrag(currentCell);
-            }
-            else
-            {
+            } else {
                isDrag = false;
             }
 
             EditCells(currentCell);
 
             previousCell = currentCell;
-         }
-         else
-         {
+         } else {
             previousCell = null;
          }
       }
 
-      void ValidateDrag(HexCell currentCell)
-      {
-         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++)
-         {
-            if (previousCell.GetNeighbor(dragDirection) == currentCell)
-            {
+      private void ValidateDrag(HexCell currentCell) {
+         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++) {
+            if (previousCell.GetNeighbor(dragDirection) == currentCell) {
                isDrag = true;
                return;
             }
@@ -276,137 +222,110 @@ namespace HexMap.Map
 
       #region UI
 
-      public void SetElevation(int elevation)
-      {
+      public void SetElevation(int elevation) {
          activeElevation = elevation;
       }
 
-      public void SetElevation(float elevation)
-      {
+      public void SetElevation(float elevation) {
          activeElevation = (int)elevation;
       }
 
-      public void SetWaterLevel(int level)
-      {
+      public void SetWaterLevel(int level) {
          activeWaterLevel = level;
       }
 
-      public void SetWaterLevel(float level)
-      {
+      public void SetWaterLevel(float level) {
          activeWaterLevel = (int)level;
       }
 
-      public void SetUrbanLevel(int level)
-      {
+      public void SetUrbanLevel(int level) {
          activeUrbanLevel = level;
       }
 
-      public void SetUrbanLevel(float level)
-      {
+      public void SetUrbanLevel(float level) {
          activeUrbanLevel = (int)level;
       }
 
-      public void SetFarmLevel(int level)
-      {
+      public void SetFarmLevel(int level) {
          activeFarmLevel = level;
       }
 
-      public void SetFarmLevel(float level)
-      {
+      public void SetFarmLevel(float level) {
          activeFarmLevel = (int)level;
       }
 
-      public void SetPlantLevel(int level)
-      {
+      public void SetPlantLevel(int level) {
          activePlantLevel = level;
       }
 
-      public void SetPlantLevel(float level)
-      {
+      public void SetPlantLevel(float level) {
          activePlantLevel = (int)level;
       }
 
-      public void SetSpecialIndex(int index)
-      {
+      public void SetSpecialIndex(int index) {
          activeSpecialIndex = index;
       }
 
-      public void SetSpecialIndex(float index)
-      {
+      public void SetSpecialIndex(float index) {
          activeSpecialIndex = (int)index;
       }
 
-      public void SetBrushSize(int size)
-      {
+      public void SetBrushSize(int size) {
          brushSize = size;
       }
 
-      public void SetBrushSize(float size)
-      {
+      public void SetBrushSize(float size) {
          brushSize = (int)size;
       }
 
-      public void SetApplyElevation(bool toggle)
-      {
+      public void SetApplyElevation(bool toggle) {
          applyElevation = toggle;
       }
 
-      public void SetApplyWaterLevel(bool toggle)
-      {
+      public void SetApplyWaterLevel(bool toggle) {
          applyWaterLevel = toggle;
       }
 
-      public void SetApplyUrbanLevel(bool toggle)
-      {
+      public void SetApplyUrbanLevel(bool toggle) {
          applyUrbanLevel = toggle;
       }
 
-      public void SetApplyFarmLevel(bool toggle)
-      {
+      public void SetApplyFarmLevel(bool toggle) {
          applyFarmLevel = toggle;
       }
 
-      public void SetApplyPlantLevel(bool toggle)
-      {
+      public void SetApplyPlantLevel(bool toggle) {
          applyPlantLevel = toggle;
       }
 
-      public void SetApplySpecialIndex(bool toggle)
-      {
+      public void SetApplySpecialIndex(bool toggle) {
          applySpecialIndex = toggle;
       }
 
-      public void SetRiverMode(int mode)
-      {
+      public void SetRiverMode(int mode) {
          riverMode = (OptionalToggle)mode;
       }
 
-      public void SetRoadMode(int mode)
-      {
+      public void SetRoadMode(int mode) {
          roadMode = (OptionalToggle)mode;
       }
 
-      public void SetWalledMode(int mode)
-      {
+      public void SetWalledMode(int mode) {
          walledMode = (OptionalToggle)mode;
       }
 
-      public void SetTerrainTypeIndex(int index)
-      {
+      public void SetTerrainTypeIndex(int index) {
          activeTerrainTypeIndex = index;
       }
 
-      public void SetEditMode(bool toggle)
-      {
+      public void SetEditMode(bool toggle) {
          enabled = toggle;
 
          _gameUI.SetEditMode(toggle);
       }
 
-      public void ShowGrid(bool visible)
-      {
-         if (_terrainMaterial != null)
-         {
+      public void ShowGrid(bool visible) {
+         if (_terrainMaterial != null) {
             _terrainMaterial.SetFloat("_GridOn", visible ? 1f : 0f);
          }
       }

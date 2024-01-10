@@ -86,6 +86,7 @@ namespace HexMap.Gameplay {
 
       private void MoveCamera(Vector2 movement) {
          movementInput = movement;
+         Debug.Log(movement);
       }
 
       private void AdjustPosition(float xDelta, float zDelta) {
