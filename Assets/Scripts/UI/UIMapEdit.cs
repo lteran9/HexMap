@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 
-namespace HexMap.UI
-{
+namespace HexMap.UI {
    [RequireComponent(typeof(UIDocument))]
-   public class UIMapEdit : BaseUIWindow
-   {
+   public class UIMapEdit : BaseUIWindow {
       #region Actions
 
       public event UnityAction SaveEvent = delegate { };
@@ -41,92 +39,83 @@ namespace HexMap.UI
 
       #region Toggle
 
-      Toggle _none = default;
-      Toggle _sand = default;
-      Toggle _grass = default;
-      Toggle _mud = default;
-      Toggle _stone = default;
-      Toggle _snow = default;
+      private Toggle _none = default;
+      private Toggle _sand = default;
+      private Toggle _grass = default;
+      private Toggle _mud = default;
+      private Toggle _stone = default;
+      private Toggle _snow = default;
 
-      Toggle _elevationApply = default;
-      Toggle _waterApply = default;
+      private Toggle _elevationApply = default;
+      private Toggle _waterApply = default;
 
-      Toggle _riverNone = default;
-      Toggle _riverYes = default;
-      Toggle _riverNo = default;
+      private Toggle _riverNone = default;
+      private Toggle _riverYes = default;
+      private Toggle _riverNo = default;
 
-      Toggle _roadNone = default;
-      Toggle _roadYes = default;
-      Toggle _roadNo = default;
+      private Toggle _roadNone = default;
+      private Toggle _roadYes = default;
+      private Toggle _roadNo = default;
 
-      Toggle _urban = default;
-      Toggle _farm = default;
-      Toggle _plant = default;
-      Toggle _special = default;
+      private Toggle _urban = default;
+      private Toggle _farm = default;
+      private Toggle _plant = default;
+      private Toggle _special = default;
 
-      Toggle _wallNone = default;
-      Toggle _wallYes = default;
-      Toggle _wallNo = default;
+      private Toggle _wallNone = default;
+      private Toggle _wallYes = default;
+      private Toggle _wallNo = default;
 
-      Toggle _gridMode = default;
-      Toggle _editMode = default;
+      private Toggle _gridMode = default;
+      private Toggle _editMode = default;
 
       #endregion
 
       #region Slider
 
-      SliderInt _elevationLevel = default;
-      SliderInt _waterLevel = default;
-      SliderInt _urbanLevel = default;
-      SliderInt _farmLevel = default;
-      SliderInt _plantLevel = default;
-      SliderInt _specialLevel = default;
+      private SliderInt _elevationLevel = default;
+      private SliderInt _waterLevel = default;
+      private SliderInt _urbanLevel = default;
+      private SliderInt _farmLevel = default;
+      private SliderInt _plantLevel = default;
+      private SliderInt _specialLevel = default;
 
       #endregion
 
-      void Awake()
-      {
+      private void Awake() {
          _uiDocument = GetComponent<UIDocument>();
       }
 
-      void OnEnable()
-      {
+      private void OnEnable() {
          VisualElement rootVisualElement = _uiDocument?.rootVisualElement;
 
-         if (rootVisualElement != null)
-         {
+         if (rootVisualElement != null) {
             #region LeftSideMenu
 
             #region Register callbacks for FeatureToggle
 
             _none = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_None));
-            if (_none != null)
-            {
+            if (_none != null) {
                _none.RegisterValueChangedCallback(ToggleNoneValue);
             }
             _sand = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Sand));
-            if (_sand != null)
-            {
+            if (_sand != null) {
                _sand.RegisterValueChangedCallback(ToggleSandValue);
             }
             _grass = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Grass));
-            if (_grass != null)
-            {
+            if (_grass != null) {
                _grass.RegisterValueChangedCallback(ToggleGrassValue);
             }
             _mud = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Mud));
-            if (_mud != null)
-            {
+            if (_mud != null) {
                _mud.RegisterValueChangedCallback(ToggleMudValue);
             }
             _stone = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Stone));
-            if (_stone != null)
-            {
+            if (_stone != null) {
                _stone.RegisterValueChangedCallback(ToggleStoneValue);
             }
             _snow = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Snow));
-            if (_snow != null)
-            {
+            if (_snow != null) {
                _snow.RegisterValueChangedCallback(ToggleSnowValue);
             }
 
@@ -135,13 +124,11 @@ namespace HexMap.UI
             #region Register callbacks for Elevation
 
             _elevationApply = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Elevation));
-            if (_elevationApply != null)
-            {
+            if (_elevationApply != null) {
                _elevationApply.RegisterValueChangedCallback(ToggleElevationValue);
             }
             _elevationLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Elevation));
-            if (_elevationLevel != null)
-            {
+            if (_elevationLevel != null) {
                _elevationLevel.RegisterValueChangedCallback(SliderIntElevationValue);
             }
 
@@ -150,13 +137,11 @@ namespace HexMap.UI
             #region Register callbacks for Water
 
             _waterApply = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Water));
-            if (_waterApply != null)
-            {
+            if (_waterApply != null) {
                _waterApply.RegisterValueChangedCallback(ToggleWaterValue);
             }
             _waterLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Water));
-            if (_waterLevel != null)
-            {
+            if (_waterLevel != null) {
                _waterLevel.RegisterValueChangedCallback(SliderIntWaterValue);
             }
 
@@ -165,18 +150,15 @@ namespace HexMap.UI
             #region Register callbacks for River
 
             _riverNone = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RiverNone));
-            if (_riverNone != null)
-            {
+            if (_riverNone != null) {
                _riverNone.RegisterValueChangedCallback(ToggleRiverNoneValue);
             }
             _riverYes = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RiverYes));
-            if (_riverYes != null)
-            {
+            if (_riverYes != null) {
                _riverYes.RegisterValueChangedCallback(ToggleRiverYesValue);
             }
             _riverNo = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RiverNo));
-            if (_riverNo != null)
-            {
+            if (_riverNo != null) {
                _riverNo.RegisterValueChangedCallback(ToggleRiverNoValue);
             }
 
@@ -185,18 +167,15 @@ namespace HexMap.UI
             #region Register callbacks for Road
 
             _roadNone = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RoadNone));
-            if (_roadNone != null)
-            {
+            if (_roadNone != null) {
                _roadNone.RegisterValueChangedCallback(ToggleRoadNoneValue);
             }
             _roadYes = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RoadYes));
-            if (_roadYes != null)
-            {
+            if (_roadYes != null) {
                _roadYes.RegisterValueChangedCallback(ToggleRoadYesValue);
             }
             _roadNo = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_RoadNo));
-            if (_roadNo != null)
-            {
+            if (_roadNo != null) {
                _roadNo.RegisterValueChangedCallback(ToggleRoadNoValue);
             }
 
@@ -205,8 +184,7 @@ namespace HexMap.UI
             #region Register callbacks for Brush Size
 
             rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_BrushSize))
-               .RegisterValueChangedCallback(evt =>
-               {
+               .RegisterValueChangedCallback(evt => {
                   BrushSizeSlider.Invoke(evt.newValue);
                });
 
@@ -219,44 +197,36 @@ namespace HexMap.UI
             #region Features 
 
             _urban = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Urban));
-            if (_urban != null)
-            {
+            if (_urban != null) {
                _urban.RegisterValueChangedCallback(ToggleUrbanValue);
             }
             _farm = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Farm));
-            if (_farm != null)
-            {
+            if (_farm != null) {
                _farm.RegisterValueChangedCallback(ToggleFarmValue);
             }
             _plant = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Plant));
-            if (_plant != null)
-            {
+            if (_plant != null) {
                _plant.RegisterValueChangedCallback(TogglePlantValue);
             }
             _special = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Special));
-            if (_special != null)
-            {
+            if (_special != null) {
                _special.RegisterValueChangedCallback(ToggleSpecialValue);
             }
 
             _urbanLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Urban));
-            if (_urbanLevel != null)
-            {
+            if (_urbanLevel != null) {
                _urbanLevel.RegisterValueChangedCallback(SliderIntUrbanValue);
             }
             _farmLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Farm));
-            if (_farmLevel != null)
-            {
+            if (_farmLevel != null) {
                _farmLevel.RegisterValueChangedCallback(SliderIntFarmValue);
             }
             _plantLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Plant));
-            if (_plantLevel != null)
-            {
+            if (_plantLevel != null) {
                _plantLevel.RegisterValueChangedCallback(SliderIntPlantValue);
             }
             _specialLevel = rootVisualElement.Q<SliderInt>(nameof(UIDocumentNames.SliderInt_Special));
-            if (_specialLevel != null)
-            {
+            if (_specialLevel != null) {
                _specialLevel.RegisterValueChangedCallback(SliderIntSpecialValue);
             }
 
@@ -265,18 +235,15 @@ namespace HexMap.UI
             #region Wall
 
             _wallNone = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_WallNone));
-            if (_wallNone != null)
-            {
+            if (_wallNone != null) {
                _wallNone.RegisterValueChangedCallback(ToggleWallNoneValue);
             }
             _wallYes = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_WallYes));
-            if (_wallYes != null)
-            {
+            if (_wallYes != null) {
                _wallYes.RegisterValueChangedCallback(ToggleWallYesValue);
             }
             _wallNo = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_WallNo));
-            if (_wallNo != null)
-            {
+            if (_wallNo != null) {
                _wallNo.RegisterValueChangedCallback(ToggleWallNoValue);
             }
 
@@ -285,14 +252,12 @@ namespace HexMap.UI
             #region Save/Load Buttons
 
             var saveButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Save));
-            if (saveButton != null)
-            {
+            if (saveButton != null) {
                saveButton.clicked += () => { SaveEvent.Invoke(); };
             }
 
             var loadButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Load));
-            if (loadButton != null)
-            {
+            if (loadButton != null) {
                loadButton.clicked += () => { LoadEvent.Invoke(); };
             }
 
@@ -301,8 +266,7 @@ namespace HexMap.UI
             #region New Map Button
 
             var newMapButton = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_NewMap));
-            if (newMapButton != null)
-            {
+            if (newMapButton != null) {
                newMapButton.clicked += () => { NewMapEvent.Invoke(); };
             }
 
@@ -311,8 +275,7 @@ namespace HexMap.UI
             #region Grid Toggle
 
             _gridMode = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_Grid));
-            if (_gridMode != null)
-            {
+            if (_gridMode != null) {
                _gridMode.RegisterValueChangedCallback(ToggleGridValue);
             }
 
@@ -320,8 +283,7 @@ namespace HexMap.UI
 
             #region Edit Mode
             _editMode = rootVisualElement.Q<Toggle>(nameof(UIDocumentNames.Toggle_EditMode));
-            if (_editMode != null)
-            {
+            if (_editMode != null) {
                _editMode.RegisterValueChangedCallback(ToggleEditValue);
             }
             #endregion
@@ -332,10 +294,8 @@ namespace HexMap.UI
 
       #region Feature Toggles
 
-      void ToggleNoneValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleNoneValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(-1);
 
             _sand.SetValueWithoutNotify(false);
@@ -346,10 +306,8 @@ namespace HexMap.UI
          }
       }
 
-      void ToggleSandValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleSandValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(0);
 
             _none.SetValueWithoutNotify(false);
@@ -357,17 +315,13 @@ namespace HexMap.UI
             _mud.SetValueWithoutNotify(false);
             _stone.SetValueWithoutNotify(false);
             _snow.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             FeatureToggleChanged.Invoke(-1);
          }
       }
 
-      void ToggleGrassValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleGrassValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(1);
 
             _none.SetValueWithoutNotify(false);
@@ -375,17 +329,13 @@ namespace HexMap.UI
             _mud.SetValueWithoutNotify(false);
             _stone.SetValueWithoutNotify(false);
             _snow.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             FeatureToggleChanged.Invoke(-1);
          }
       }
 
-      void ToggleMudValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleMudValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(2);
 
             _none.SetValueWithoutNotify(false);
@@ -393,17 +343,13 @@ namespace HexMap.UI
             _grass.SetValueWithoutNotify(false);
             _stone.SetValueWithoutNotify(false);
             _snow.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             FeatureToggleChanged.Invoke(-1);
          }
       }
 
-      void ToggleStoneValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleStoneValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(3);
 
             _none.SetValueWithoutNotify(false);
@@ -411,17 +357,13 @@ namespace HexMap.UI
             _grass.SetValueWithoutNotify(false);
             _mud.SetValueWithoutNotify(false);
             _snow.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             FeatureToggleChanged.Invoke(-1);
          }
       }
 
-      void ToggleSnowValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleSnowValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             FeatureToggleChanged.Invoke(4);
 
             _none.SetValueWithoutNotify(false);
@@ -429,9 +371,7 @@ namespace HexMap.UI
             _grass.SetValueWithoutNotify(false);
             _mud.SetValueWithoutNotify(false);
             _stone.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             FeatureToggleChanged.Invoke(-1);
          }
       }
@@ -440,27 +380,22 @@ namespace HexMap.UI
 
       #region Elevation
 
-      void ToggleElevationValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleElevationValue(ChangeEvent<bool> evt) {
          ElevationToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntElevationValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntElevationValue(ChangeEvent<int> evt) {
          ElevationSlider.Invoke(evt.newValue);
       }
 
       #endregion
 
       #region Water
-
-      void ToggleWaterValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleWaterValue(ChangeEvent<bool> evt) {
          WaterToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntWaterValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntWaterValue(ChangeEvent<int> evt) {
          WaterSlider.Invoke(evt.newValue);
       }
 
@@ -468,40 +403,30 @@ namespace HexMap.UI
 
       #region River 
 
-      void ToggleRiverNoneValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRiverNoneValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RiverModeChanged.Invoke(0);
             _riverNo.SetValueWithoutNotify(false);
             _riverYes.SetValueWithoutNotify(false);
          }
       }
 
-      void ToggleRiverYesValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRiverYesValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RiverModeChanged.Invoke(1);
             _riverNo.SetValueWithoutNotify(false);
             _riverNone.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             RiverModeChanged.Invoke(0);
          }
       }
 
-      void ToggleRiverNoValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRiverNoValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RiverModeChanged.Invoke(2);
             _riverNone.SetValueWithoutNotify(false);
             _riverYes.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             RiverModeChanged.Invoke(0);
          }
       }
@@ -510,40 +435,30 @@ namespace HexMap.UI
 
       #region Road 
 
-      void ToggleRoadNoneValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRoadNoneValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RoadModeChanged.Invoke(0);
             _roadNo.SetValueWithoutNotify(false);
             _roadYes.SetValueWithoutNotify(false);
          }
       }
 
-      void ToggleRoadYesValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRoadYesValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RoadModeChanged.Invoke(1);
             _roadNo.SetValueWithoutNotify(false);
             _roadNone.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             RoadModeChanged.Invoke(0);
          }
       }
 
-      void ToggleRoadNoValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleRoadNoValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             RoadModeChanged.Invoke(2);
             _roadNone.SetValueWithoutNotify(false);
             _roadYes.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             RoadModeChanged.Invoke(0);
          }
       }
@@ -552,13 +467,11 @@ namespace HexMap.UI
 
       #region Urban
 
-      void ToggleUrbanValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleUrbanValue(ChangeEvent<bool> evt) {
          UrbanToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntUrbanValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntUrbanValue(ChangeEvent<int> evt) {
          UrbanSlider.Invoke(evt.newValue);
       }
 
@@ -566,13 +479,11 @@ namespace HexMap.UI
 
       #region Farm
 
-      void ToggleFarmValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleFarmValue(ChangeEvent<bool> evt) {
          FarmToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntFarmValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntFarmValue(ChangeEvent<int> evt) {
          FarmSlider.Invoke(evt.newValue);
       }
 
@@ -580,13 +491,11 @@ namespace HexMap.UI
 
       #region Plant
 
-      void TogglePlantValue(ChangeEvent<bool> evt)
-      {
+      private void TogglePlantValue(ChangeEvent<bool> evt) {
          PlantToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntPlantValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntPlantValue(ChangeEvent<int> evt) {
          PlantSlider.Invoke(evt.newValue);
       }
 
@@ -594,13 +503,11 @@ namespace HexMap.UI
 
       #region Special
 
-      void ToggleSpecialValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleSpecialValue(ChangeEvent<bool> evt) {
          SpecialToggle.Invoke(evt.newValue);
       }
 
-      void SliderIntSpecialValue(ChangeEvent<int> evt)
-      {
+      private void SliderIntSpecialValue(ChangeEvent<int> evt) {
          SpecialSlider.Invoke(evt.newValue);
       }
 
@@ -608,61 +515,48 @@ namespace HexMap.UI
 
       #region Walled
 
-      void ToggleWallNoneValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleWallNoneValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             WallModeChanged.Invoke(0);
             _wallNo.SetValueWithoutNotify(false);
             _wallYes.SetValueWithoutNotify(false);
          }
       }
 
-      void ToggleWallYesValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleWallYesValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             WallModeChanged.Invoke(1);
             _wallNo.SetValueWithoutNotify(false);
             _wallNone.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             WallModeChanged.Invoke(0);
          }
       }
 
-      void ToggleWallNoValue(ChangeEvent<bool> evt)
-      {
-         if (evt.newValue)
-         {
+      private void ToggleWallNoValue(ChangeEvent<bool> evt) {
+         if (evt.newValue) {
             WallModeChanged.Invoke(2);
             _wallNone.SetValueWithoutNotify(false);
             _wallYes.SetValueWithoutNotify(false);
-         }
-         else
-         {
+         } else {
             WallModeChanged.Invoke(0);
          }
       }
 
       #endregion
 
-      void ToggleGridValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleGridValue(ChangeEvent<bool> evt) {
          GridModeToggle.Invoke(evt.newValue);
       }
 
-      void ToggleEditValue(ChangeEvent<bool> evt)
-      {
+      private void ToggleEditValue(ChangeEvent<bool> evt) {
          EditModeToggle.Invoke(evt.newValue);
       }
 
       /// <summary>
       /// Do not use int values of this enum; subject to change.
       /// </summary>
-      enum UIDocumentNames
-      {
+      private enum UIDocumentNames {
          #region Features
          Toggle_None,
          Toggle_Sand,
