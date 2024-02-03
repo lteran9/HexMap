@@ -101,10 +101,10 @@ namespace HexMap.Gameplay {
       }
 
       private Vector3 ClampPosition(Vector3 position) {
-         float xMax = (_HexGrid.GetCellCountX() - 0.5f) * (2f * HexMetrics.innerRadius);
+         float xMax = (_HexGrid.GetCellCountX() - 0.5f) * (2f * HexMetrics.InnerRadius);
          position.x = Mathf.Clamp(position.x, 0f, xMax);
 
-         float zMax = (_HexGrid.GetCellCountZ() - 1) * (1.5f * HexMetrics.outerRadius);
+         float zMax = (_HexGrid.GetCellCountZ() - 1) * (1.5f * HexMetrics.OuterRadius);
          position.z = Mathf.Clamp(position.z, 0f, zMax);
 
          return position;

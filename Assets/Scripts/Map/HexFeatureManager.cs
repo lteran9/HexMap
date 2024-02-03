@@ -165,8 +165,8 @@ namespace HexMap.Map {
          Vector3 rightThicknessOffset =
             HexMetrics.WallThicknessOffset(nearRight, farRight);
 
-         float leftTop = left.y + HexMetrics.wallHeight;
-         float rightTop = right.y + HexMetrics.wallHeight;
+         float leftTop = left.y + HexMetrics.WallHeight;
+         float rightTop = right.y + HexMetrics.WallHeight;
 
          Vector3 v1, v2, v3, v4;
          v1 = v3 = left - leftThicknessOffset;
@@ -215,7 +215,7 @@ namespace HexMap.Map {
                   HexHash hash = HexMetrics.SampleHashGrid(
                      (pivot + left + right) * (1f / 3f)
                   );
-                  hasTower = hash.e < HexMetrics.wallTowerThreshold;
+                  hasTower = hash.e < HexMetrics.WallTowerThreshold;
                }
                AddWallSegment(pivot, left, pivot, right, hasTower);
             } else if (leftCell.Elevation < rightCell.Elevation) {
@@ -243,7 +243,7 @@ namespace HexMap.Map {
 
          v1 = v3 = center - thickness;
          v2 = v4 = center + thickness;
-         v3.y = v4.y = center.y + HexMetrics.wallHeight;
+         v3.y = v4.y = center.y + HexMetrics.WallHeight;
          _walls.AddQuadUnperturbed(v1, v2, v3, v4);
       }
 
@@ -261,7 +261,7 @@ namespace HexMap.Map {
 
          v1 = v3 = center - thickness;
          v2 = v4 = center + thickness;
-         v3.y = v4.y = pointTop.y = center.y + HexMetrics.wallHeight;
+         v3.y = v4.y = pointTop.y = center.y + HexMetrics.WallHeight;
 
          _walls.AddQuadUnperturbed(v1, point, v3, pointTop);
          _walls.AddQuadUnperturbed(point, v2, pointTop, v4);
@@ -281,7 +281,7 @@ namespace HexMap.Map {
          instance.forward = roadCenter2 - roadCenter1;
          float length = Vector3.Distance(roadCenter1, roadCenter2);
          instance.localScale = new Vector3(
-            1f, 1f, length * (1f / HexMetrics.bridgeDesignLength)
+            1f, 1f, length * (1f / HexMetrics.BridgeDesignLength)
          );
          instance.SetParent(container, false);
       }

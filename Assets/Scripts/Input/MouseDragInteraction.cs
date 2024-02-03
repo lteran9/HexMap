@@ -4,45 +4,38 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 #if UNITY_EDITOR
 using UnityEditor;
- 
+
 #endif
 
-namespace HexMap.Input
-{
+namespace HexMap.Input {
    /// <summary>
    /// Mouse drag interaction.
    /// </summary>
 #if UNITY_EDITOR
-    [InitializeOnLoad]
+   [InitializeOnLoad]
 #endif
-   public class MouseDragInteraction : IInputInteraction
-   {
-      static MouseDragInteraction()
-      {
+   public class MouseDragInteraction : IInputInteraction {
+      static MouseDragInteraction() {
          InputSystem.RegisterInteraction<MouseDragInteraction>();
       }
 
-      public void Reset()
-      {
+      public void Reset() {
+         // Required by interface
       }
 
-      public void Process(ref InputInteractionContext context)
-      {
-         if (context.timerHasExpired)
-         {
+      public void Process(ref InputInteractionContext context) {
+         if (context.timerHasExpired) {
             context.Performed();
             return;
          }
 
          var phase = context.phase;
 
-         switch (phase)
-         {
+         switch (phase) {
             case InputActionPhase.Disabled:
                break;
             case InputActionPhase.Waiting:
-               if (context.ControlIsActuated())
-               {
+               if (context.ControlIsActuated()) {
                   context.Started();
                   context.SetTimeout(float.PositiveInfinity);
                }
@@ -52,12 +45,9 @@ namespace HexMap.Input
                context.PerformedAndStayPerformed();
                break;
             case InputActionPhase.Performed:
-               if (context.ControlIsActuated())
-               {
+               if (context.ControlIsActuated()) {
                   context.PerformedAndStayPerformed();
-               }
-               else if (!((ButtonControl)context.action.controls[0]).isPressed)
-               {
+               } else if (!((ButtonControl)context.action.controls[0]).isPressed) {
                   context.Canceled();
                }
 
@@ -69,9 +59,9 @@ namespace HexMap.Input
          }
       }
 
-      [RuntimeInitializeOnLoadMethod]
-      private static void Init()
-      {
-      }
+      // [RuntimeInitializeOnLoadMethod]
+      // private static void Init()
+      // {
+      // }
    }
 }

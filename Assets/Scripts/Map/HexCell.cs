@@ -223,17 +223,17 @@ namespace HexMap.Map {
 
       public float StreamBedY {
          get {
-            return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
+            return (elevation + HexMetrics.StreamBedElevationOffset) * HexMetrics.ElevationStep;
          }
       }
       public float RiverSurfaceY {
          get {
-            return (elevation + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
+            return (elevation + HexMetrics.WaterElevationOffset) * HexMetrics.ElevationStep;
          }
       }
       public float WaterSurfaceY {
          get {
-            return (waterLevel + HexMetrics.waterElevationOffset) * HexMetrics.elevationStep;
+            return (waterLevel + HexMetrics.WaterElevationOffset) * HexMetrics.ElevationStep;
          }
       }
 
@@ -284,12 +284,12 @@ namespace HexMap.Map {
 
       void RefreshPosition() {
          Vector3 position = transform.localPosition;
-         position.y = elevation * HexMetrics.elevationStep;
-         position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
+         position.y = elevation * HexMetrics.ElevationStep;
+         position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.ElevationPerturbStrength;
          transform.localPosition = position;
 
          Vector3 uiPosition = UIRect.localPosition;
-         uiPosition.z = elevation * -HexMetrics.elevationStep;
+         uiPosition.z = elevation * -HexMetrics.ElevationStep;
          UIRect.localPosition = uiPosition;
       }
 

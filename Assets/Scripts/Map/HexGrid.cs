@@ -48,7 +48,7 @@ namespace HexMap.Map {
       }
 
       void Awake() {
-         HexMetrics.noiseSource = _noiseSource;
+         HexMetrics.NoiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
          HexUnit.unitPrefab = unitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
@@ -57,8 +57,8 @@ namespace HexMap.Map {
       }
 
       void OnEnable() {
-         if (!HexMetrics.noiseSource) {
-            HexMetrics.noiseSource = _noiseSource;
+         if (!HexMetrics.NoiseSource) {
+            HexMetrics.NoiseSource = _noiseSource;
             HexMetrics.InitializeHashGrid(_seed);
             HexUnit.unitPrefab = unitPrefab;
             ResetVisibility();
@@ -89,9 +89,9 @@ namespace HexMap.Map {
       void CreateCell(int x, int z, int i) {
          Vector3 position;
 
-         position.x = (x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f);
+         position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
          position.y = 0f;
-         position.z = z * (HexMetrics.outerRadius * 1.5f);
+         position.z = z * (HexMetrics.OuterRadius * 1.5f);
 
          HexCell cell = m_Cells[i] = Instantiate<HexCell>(_cellPrefab);
          cell.transform.localPosition = position;
@@ -131,13 +131,13 @@ namespace HexMap.Map {
       }
 
       void AddCellToChunk(int x, int z, HexCell cell) {
-         int chunkX = x / HexMetrics.chunkSizeX;
-         int chunkZ = z / HexMetrics.chunkSizeZ;
+         int chunkX = x / HexMetrics.ChunkSizeX;
+         int chunkZ = z / HexMetrics.ChunkSizeZ;
          HexGridChunk chunk = m_Chunks[chunkX + chunkZ * chunkCountX];
 
-         int localX = x - chunkX * HexMetrics.chunkSizeX;
-         int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
-         chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
+         int localX = x - chunkX * HexMetrics.ChunkSizeX;
+         int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
+         chunk.AddCell(localX + localZ * HexMetrics.ChunkSizeX, cell);
       }
 
       void ClearUnits() {
@@ -424,7 +424,7 @@ namespace HexMap.Map {
       }
 
       public bool CreateMap(int x, int z) {
-         if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0) {
+         if (x <= 0 || x % HexMetrics.ChunkSizeX != 0 || z <= 0 || z % HexMetrics.ChunkSizeZ != 0) {
             Debug.LogError("Unsupported map size.");
             return false;
          }
@@ -439,8 +439,8 @@ namespace HexMap.Map {
 
          _cellCountX = x;
          _cellCountZ = z;
-         chunkCountX = _cellCountX / HexMetrics.chunkSizeX;
-         chunkCountZ = _cellCountZ / HexMetrics.chunkSizeZ;
+         chunkCountX = _cellCountX / HexMetrics.ChunkSizeX;
+         chunkCountZ = _cellCountZ / HexMetrics.ChunkSizeZ;
          cellShaderData.Initialize(_cellCountX, _cellCountZ);
 
          CreateChunks();

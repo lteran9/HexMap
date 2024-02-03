@@ -7,26 +7,22 @@ using UnityEngine.InputSystem.Layouts;
 using UnityEditor;
 #endif
 
-namespace HexMap.Input
-{
+namespace HexMap.Input {
 #if UNITY_EDITOR
-    [InitializeOnLoad]
+   [InitializeOnLoad]
 #endif
-   public class MouseDragComposite : InputBindingComposite<Vector2>
-   {
-      static MouseDragComposite()
-      {
+   public class MouseDragComposite : InputBindingComposite<Vector2> {
+      static MouseDragComposite() {
          InputSystem.RegisterBindingComposite<MouseDragComposite>();
       }
 
-      [RuntimeInitializeOnLoadMethod]
-      [SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
-      private static void Init()
-      {
-      }
+      // [RuntimeInitializeOnLoadMethod]
+      // [SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
+      // private static void Init()
+      // {
+      // }
 
-      public override Vector2 ReadValue(ref InputBindingCompositeContext context)
-      {
+      public override Vector2 ReadValue(ref InputBindingCompositeContext context) {
          var b = context.ReadValueAsButton(Button);
          var x = context.ReadValue<float>(Axis1);
          var y = context.ReadValue<float>(Axis2);
@@ -35,8 +31,7 @@ namespace HexMap.Input
          return b && v.magnitude > 0.0f ? v : default;
       }
 
-      public override float EvaluateMagnitude(ref InputBindingCompositeContext context)
-      {
+      public override float EvaluateMagnitude(ref InputBindingCompositeContext context) {
          return ReadValue(ref context).magnitude;
       }
 
