@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public static class HexMetrics {
@@ -61,35 +62,35 @@ namespace HexMap.Map {
          Random.state = currentState;
       }
 
-      public static Vector3 GetFirstCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetFirstCorner(HexDirection direction) {
          return Corners[(int)direction];
       }
 
-      public static Vector3 GetSecondCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetSecondCorner(HexDirection direction) {
          return Corners[(int)direction + 1];
       }
 
-      public static Vector3 GetFirstSolidCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetFirstSolidCorner(HexDirection direction) {
          return Corners[(int)direction] * SolidFactor;
       }
 
-      public static Vector3 GetSecondSolidCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetSecondSolidCorner(HexDirection direction) {
          return Corners[(int)direction + 1] * SolidFactor;
       }
 
-      public static Vector3 GetFirstWaterCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetFirstWaterCorner(HexDirection direction) {
          return Corners[(int)direction] * WaterFactor;
       }
 
-      public static Vector3 GetSecondWaterCorner(HexGrid.HexDirection direction) {
+      public static Vector3 GetSecondWaterCorner(HexDirection direction) {
          return Corners[(int)direction + 1] * WaterFactor;
       }
 
-      public static Vector3 GetBridge(HexGrid.HexDirection direction) {
+      public static Vector3 GetBridge(HexDirection direction) {
          return (Corners[(int)direction] + Corners[(int)direction + 1]) * BlendFactor;
       }
 
-      public static Vector3 GetWaterBridge(HexGrid.HexDirection direction) {
+      public static Vector3 GetWaterBridge(HexDirection direction) {
          return (Corners[(int)direction] + Corners[(int)direction + 1]) * WaterBlendFactor;
       }
 
@@ -107,15 +108,15 @@ namespace HexMap.Map {
          return Color.Lerp(a, b, h);
       }
 
-      public static HexGrid.HexEdgeType GetEdgeType(int elevation1, int elevation2) {
+      public static HexEdgeType GetEdgeType(int elevation1, int elevation2) {
          if (elevation1 == elevation2) {
-            return HexGrid.HexEdgeType.Flat;
+            return HexEdgeType.Flat;
          }
          int delta = elevation2 - elevation1;
          if (delta == 1 || delta == -1) {
-            return HexGrid.HexEdgeType.Slope;
+            return HexEdgeType.Slope;
          }
-         return HexGrid.HexEdgeType.Cliff;
+         return HexEdgeType.Cliff;
       }
 
       public static Vector4 SampleNoise(Vector3 position) {
@@ -137,7 +138,7 @@ namespace HexMap.Map {
          return HashGrid[x + z * HashGridSize];
       }
 
-      public static Vector3 GetSolidEdgeMiddle(HexGrid.HexDirection direction) {
+      public static Vector3 GetSolidEdgeMiddle(HexDirection direction) {
          return
             (Corners[(int)direction] + Corners[(int)direction + 1]) * (0.5f * SolidFactor);
       }

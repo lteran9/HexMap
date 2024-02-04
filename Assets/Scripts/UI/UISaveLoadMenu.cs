@@ -7,11 +7,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 
-namespace HexMap.UI
-{
+namespace HexMap.UI {
    [RequireComponent(typeof(UIDocument))]
-   public class UISaveLoadMenu : BaseUIWindow
-   {
+   public class UISaveLoadMenu : BaseUIWindow {
       const int mapFileVersion = 0;
 
       #region Actions
@@ -40,17 +38,14 @@ namespace HexMap.UI
 
       [SerializeField] HexGrid _hexGrid = default;
 
-      void Awake()
-      {
+      void Awake() {
          _uiDocument = GetComponent<UIDocument>();
       }
 
-      void OnEnable()
-      {
+      void OnEnable() {
          VisualElement rootVisualElement = _uiDocument?.rootVisualElement;
 
-         if (rootVisualElement != null)
-         {
+         if (rootVisualElement != null) {
             _save = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Save));
             _load = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Load));
             _cancel = rootVisualElement.Q<Button>(nameof(UIDocumentNames.Button_Cancel));
@@ -77,53 +72,42 @@ namespace HexMap.UI
          }
       }
 
-      void Click_Save()
-      {
-         if (!string.IsNullOrEmpty(inputFileName))
-         {
+      void Click_Save() {
+         if (!string.IsNullOrEmpty(inputFileName)) {
             Save(GetSelectedPath());
             Click_Cancel();
          }
       }
 
-      void Click_Load()
-      {
-         if (!string.IsNullOrEmpty(inputFileName))
-         {
+      void Click_Load() {
+         if (!string.IsNullOrEmpty(inputFileName)) {
             Load(GetSelectedPath());
             Click_Cancel();
          }
       }
 
-      void Click_Cancel()
-      {
+      void Click_Cancel() {
          CloseDocument.Invoke();
       }
 
-      void FileName_TextField_Changed(ChangeEvent<string> evt)
-      {
-         if (!string.IsNullOrWhiteSpace(evt.newValue) && evt.newValue.Length > 3)
-         {
+      void FileName_TextField_Changed(ChangeEvent<string> evt) {
+         if (!string.IsNullOrWhiteSpace(evt.newValue) && evt.newValue.Length > 3) {
             inputFileName = evt.newValue;
          }
       }
 
       #region List View 
 
-      void FillList()
-      {
-         if (_mapNamesList.childCount > 0)
-         {
+      void FillList() {
+         if (_mapNamesList.childCount > 0) {
             _mapNamesList.Clear();
          }
 
          string[] paths = Directory.GetFiles(Application.persistentDataPath, "*.map");
          Array.Sort(paths);
-         foreach (var path in paths)
-         {
-            if (path.Length > 0)
-            {
-               var sections = path.Replace(".map", "").Split("/");
+         foreach (var path in paths) {
+            if (path.Length > 0) {
+               var sections = path.Replace("\\", "/").Replace(".map", "").Split("/");
                pathNames.Add(sections[sections.Length - 1]);
             }
          }
@@ -131,17 +115,14 @@ namespace HexMap.UI
          _mapNamesList?.RefreshItems();
       }
 
-      void FileName_Selected(IEnumerable<object> selection)
-      {
-         if (selection?.Any() == true)
-         {
+      void FileName_Selected(IEnumerable<object> selection) {
+         if (selection?.Any() == true) {
             _fileName.SetValueWithoutNotify((string)selection.First());
             inputFileName = _fileName.text;
          }
       }
 
-      VisualElement MakeListView()
-      {
+      VisualElement MakeListView() {
          var label = new Label();
          label.name = "Label_PathName";
          label.style.fontSize = 18f;
@@ -164,22 +145,19 @@ namespace HexMap.UI
          btnDelete.style.marginBottom = btnDelete.style.marginLeft = btnDelete.style.marginRight = btnDelete.style.marginTop = 10f;
          btnDelete.style.borderBottomWidth = btnDelete.style.borderLeftWidth = btnDelete.style.borderRightWidth = btnDelete.style.borderTopWidth = 0f;
          btnDelete.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0f));
-         btnDelete.clicked += () =>
-            {
-               var path = GetSelectedPath();
-               Delete(path);
-               for (int i = 0; i < pathNames.Count; i++)
-               {
-                  if (path.Contains(pathNames[i]))
-                  {
-                     pathNames.RemoveAt(i);
-                     break;
-                  }
+         btnDelete.clicked += () => {
+            var path = GetSelectedPath();
+            Delete(path);
+            for (int i = 0; i < pathNames.Count; i++) {
+               if (path.Contains(pathNames[i])) {
+                  pathNames.RemoveAt(i);
+                  break;
                }
+            }
 
-               _mapNamesList.Rebuild();
-               _fileName.value = string.Empty;
-            };
+            _mapNamesList.Rebuild();
+            _fileName.value = string.Empty;
+         };
 
          var container = new VisualElement();
          container.style.flexDirection = FlexDirection.Row;
@@ -189,8 +167,7 @@ namespace HexMap.UI
          return container;
       }
 
-      void BindListViewItem(VisualElement e, int index)
-      {
+      void BindListViewItem(VisualElement e, int index) {
          //We add the game name to the label of the list item
          e.Q<Label>("Label_PathName").text = pathNames[index];
       }
@@ -199,56 +176,42 @@ namespace HexMap.UI
 
       #region Data Storage
 
-      void Save(string path)
-      {
-         using (var writer = new BinaryWriter(File.Open(path, FileMode.Create)))
-         {
+      void Save(string path) {
+         using (var writer = new BinaryWriter(File.Open(path, FileMode.Create))) {
             writer.Write(mapFileVersion);
             _hexGrid.Save(writer);
          }
 
       }
 
-      void Load(string path)
-      {
-         if (!File.Exists(path))
-         {
+      void Load(string path) {
+         if (!File.Exists(path)) {
             Debug.LogError("File does not exist " + path);
             return;
          }
 
-         using (var reader = new BinaryReader(File.OpenRead(path)))
-         {
+         using (var reader = new BinaryReader(File.OpenRead(path))) {
             int header = reader.ReadInt32();
-            if (header <= mapFileVersion)
-            {
+            if (header <= mapFileVersion) {
                _hexGrid.Load(reader, header);
                //CameraManager.ValidatePosition();
-            }
-            else
-            {
+            } else {
                Debug.LogWarning("Unknown map format " + header);
             }
          }
       }
 
-      void Delete(string path)
-      {
-         if (!string.IsNullOrEmpty(path))
-         {
+      void Delete(string path) {
+         if (!string.IsNullOrEmpty(path)) {
             File.Delete(path);
-         }
-         else
-         {
+         } else {
             Debug.Log("Given path is NULL.");
          }
       }
 
-      string GetSelectedPath()
-      {
+      string GetSelectedPath() {
          string mapName = inputFileName;
-         if (mapName.Length == 0)
-         {
+         if (mapName.Length == 0) {
             return null;
          }
 
@@ -257,8 +220,7 @@ namespace HexMap.UI
 
       #endregion
 
-      enum UIDocumentNames
-      {
+      enum UIDocumentNames {
          Button_Save,
          Button_Load,
          Button_Cancel,

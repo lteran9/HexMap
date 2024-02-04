@@ -1,19 +1,21 @@
+using System.IO;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
 using HexMap.Misc;
 using HexMap.Units;
-using System.IO;
-using TMPro;
-using UnityEngine;
-using System.Collections.Generic;
+using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexGrid : MonoBehaviour {
       [SerializeField] private int _seed = 0;
-      [SerializeField] private int _cellCountX = 20;
-      [SerializeField] private int _cellCountZ = 15;
+      [SerializeField] private int _cellCountX = 20; // Must be  multiple of 5
+      [SerializeField] private int _cellCountZ = 15; // Must be multiple of 5
       [SerializeField] private Texture2D _noiseSource = default;
       [SerializeField] private HexGridChunk _chunkPrefab = default;
       [SerializeField] private HexCell _cellPrefab = default;
       [SerializeField] private TextMeshProUGUI _cellLabelPrefab = default;
+      [SerializeField] private HexUnit _unitPrefab;
 
       private int chunkCountX,
          chunkCountZ,
@@ -37,35 +39,25 @@ namespace HexMap.Map {
          }
       }
 
-      public HexUnit unitPrefab;
-
-      public enum HexDirection {
-         NE, E, SE, SW, W, NW
-      }
-
-      public enum HexEdgeType {
-         Flat, Slope, Cliff
-      }
-
-      void Awake() {
+      private void Awake() {
          HexMetrics.NoiseSource = _noiseSource;
          HexMetrics.InitializeHashGrid(_seed);
-         HexUnit.unitPrefab = unitPrefab;
+         HexUnit.unitPrefab = _unitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
          cellShaderData.Grid = this;
          CreateMap(_cellCountX, _cellCountZ);
       }
 
-      void OnEnable() {
+      private void OnEnable() {
          if (!HexMetrics.NoiseSource) {
             HexMetrics.NoiseSource = _noiseSource;
             HexMetrics.InitializeHashGrid(_seed);
-            HexUnit.unitPrefab = unitPrefab;
+            HexUnit.unitPrefab = _unitPrefab;
             ResetVisibility();
          }
       }
 
-      void CreateChunks() {
+      private void CreateChunks() {
          m_Chunks = new HexGridChunk[chunkCountX * chunkCountZ];
 
          for (int z = 0, i = 0; z < chunkCountZ; z++) {
@@ -76,7 +68,7 @@ namespace HexMap.Map {
          }
       }
 
-      void CreateCells() {
+      private void CreateCells() {
          m_Cells = new HexCell[_cellCountZ * _cellCountX];
 
          for (int z = 0, i = 0; z < _cellCountZ; z++) {
@@ -86,7 +78,7 @@ namespace HexMap.Map {
          }
       }
 
-      void CreateCell(int x, int z, int i) {
+      private void CreateCell(int x, int z, int i) {
          Vector3 position;
 
          position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
@@ -130,7 +122,7 @@ namespace HexMap.Map {
          AddCellToChunk(x, z, cell);
       }
 
-      void AddCellToChunk(int x, int z, HexCell cell) {
+      private void AddCellToChunk(int x, int z, HexCell cell) {
          int chunkX = x / HexMetrics.ChunkSizeX;
          int chunkZ = z / HexMetrics.ChunkSizeZ;
          HexGridChunk chunk = m_Chunks[chunkX + chunkZ * chunkCountX];
@@ -140,14 +132,14 @@ namespace HexMap.Map {
          chunk.AddCell(localX + localZ * HexMetrics.ChunkSizeX, cell);
       }
 
-      void ClearUnits() {
+      private void ClearUnits() {
          for (int i = 0; i < units.Count; i++) {
             units[i].Die();
          }
          units.Clear();
       }
 
-      void ShowPath(int speed) {
+      private void ShowPath(int speed) {
          if (currentPathExists) {
             HexCell current = currentPathTo;
             while (current != currentPathFrom) {
@@ -161,7 +153,7 @@ namespace HexMap.Map {
          }
       }
 
-      bool Search(HexCell fromCell, HexCell toCell, HexUnit unit) {
+      private bool Search(HexCell fromCell, HexCell toCell, HexUnit unit) {
          searchFrontierPhase += 2;
          if (searchFrontier == null) {
             searchFrontier = new HexCellPriorityQueue();
@@ -222,7 +214,7 @@ namespace HexMap.Map {
          return false;
       }
 
-      List<HexCell> GetVisibleCells(HexCell fromCell, int range) {
+      private List<HexCell> GetVisibleCells(HexCell fromCell, int range) {
          List<HexCell> visibleCells = ListPool<HexCell>.Get();
 
          searchFrontierPhase += 2;

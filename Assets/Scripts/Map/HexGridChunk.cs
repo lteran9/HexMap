@@ -1,26 +1,27 @@
-using HexMap.Extensions;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using HexMap.Map.Grid;
+using HexMap.Extensions;
 
 namespace HexMap.Map {
    public class HexGridChunk : MonoBehaviour {
-      static Color weights1 = new Color(1f, 0, 0);
-      static Color weights2 = new Color(0, 1f, 0);
-      static Color weights3 = new Color(0, 0, 1f);
+      private static Color weights1 = new Color(1f, 0, 0);
+      private static Color weights2 = new Color(0, 1f, 0);
+      private static Color weights3 = new Color(0, 0, 1f);
 
-      Canvas gridCanvas = default;
+      private Canvas gridCanvas = default;
 
-      HexCell[] hexCells = default;
+      private HexCell[] hexCells = default;
 
-      [SerializeField] HexMesh _terrain = default;
-      [SerializeField] HexMesh _rivers = default;
-      [SerializeField] HexMesh _roads = default;
-      [SerializeField] HexMesh _water = default;
-      [SerializeField] HexMesh _waterShore = default;
-      [SerializeField] HexMesh _estuaries = default;
+      [SerializeField] private HexMesh _terrain = default;
+      [SerializeField] private HexMesh _rivers = default;
+      [SerializeField] private HexMesh _roads = default;
+      [SerializeField] private HexMesh _water = default;
+      [SerializeField] private HexMesh _waterShore = default;
+      [SerializeField] private HexMesh _estuaries = default;
 
-      [SerializeField] HexFeatureManager _featureManager = default;
+      [SerializeField] private HexFeatureManager _featureManager = default;
 
       void Awake() {
          gridCanvas = GetComponentInChildren<Canvas>();
@@ -73,8 +74,7 @@ namespace HexMap.Map {
       }
 
       void Triangulate(HexCell cell) {
-         //Debug.Log(nameof(Triangulate) + " called");
-         for (var d = HexGrid.HexDirection.NE; d <= HexGrid.HexDirection.NW; d++) {
+         for (var d = HexDirection.NE; d <= HexDirection.NW; d++) {
             Triangulate(d, cell);
          }
 
@@ -88,7 +88,7 @@ namespace HexMap.Map {
          }
       }
 
-      void Triangulate(HexGrid.HexDirection direction, HexCell cell) {
+      void Triangulate(HexDirection direction, HexCell cell) {
          Vector3 center = cell.Position;
          EdgeVertices eVertices = new EdgeVertices(
             center + HexMetrics.GetFirstSolidCorner(direction),
@@ -114,7 +114,7 @@ namespace HexMap.Map {
             }
          }
 
-         if (direction <= HexGrid.HexDirection.SE) {
+         if (direction <= HexDirection.SE) {
             TriangulateConnection(direction, cell, eVertices);
          }
 
@@ -124,7 +124,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateConnection(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          EdgeVertices e1) {
          HexCell neighbor = cell.GetNeighbor(direction);
@@ -171,7 +171,7 @@ namespace HexMap.Map {
             }
          }
 
-         if (cell.GetEdgeType(direction) == HexGrid.HexEdgeType.Slope) {
+         if (cell.GetEdgeType(direction) == HexEdgeType.Slope) {
             TriangulateEdgeTerraces(
                e1, cell, e2, neighbor, hasRoad
             );
@@ -184,7 +184,7 @@ namespace HexMap.Map {
          _featureManager.AddWall(e1, cell, e2, neighbor, hasRiver, hasRoad);
 
          HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
-         if (direction <= HexGrid.HexDirection.E && nextNeighbor != null) {
+         if (direction <= HexDirection.E && nextNeighbor != null) {
             Vector3 v5 = e1.v5 + HexMetrics.GetBridge(direction.Next());
             v5.y = nextNeighbor.Position.y;
 
@@ -206,24 +206,24 @@ namespace HexMap.Map {
          Vector3 bottom, HexCell bottomCell,
          Vector3 left, HexCell leftCell,
          Vector3 right, HexCell rightCell) {
-         HexGrid.HexEdgeType leftEdgeType = bottomCell.GetEdgeType(leftCell);
-         HexGrid.HexEdgeType rightEdgeType = bottomCell.GetEdgeType(rightCell);
+         HexEdgeType leftEdgeType = bottomCell.GetEdgeType(leftCell);
+         HexEdgeType rightEdgeType = bottomCell.GetEdgeType(rightCell);
 
-         if (leftEdgeType == HexGrid.HexEdgeType.Slope) {
-            if (rightEdgeType == HexGrid.HexEdgeType.Slope) {
+         if (leftEdgeType == HexEdgeType.Slope) {
+            if (rightEdgeType == HexEdgeType.Slope) {
                TriangulateCornerTerraces(bottom, bottomCell, left, leftCell, right, rightCell);
-            } else if (rightEdgeType == HexGrid.HexEdgeType.Flat) {
+            } else if (rightEdgeType == HexEdgeType.Flat) {
                TriangulateCornerTerraces(left, leftCell, right, rightCell, bottom, bottomCell);
             } else {
                TriangulateCornerTerracesCliff(bottom, bottomCell, left, leftCell, right, rightCell);
             }
-         } else if (rightEdgeType == HexGrid.HexEdgeType.Slope) {
-            if (leftEdgeType == HexGrid.HexEdgeType.Flat) {
+         } else if (rightEdgeType == HexEdgeType.Slope) {
+            if (leftEdgeType == HexEdgeType.Flat) {
                TriangulateCornerTerraces(right, rightCell, bottom, bottomCell, left, leftCell);
             } else {
                TriangulateCornerCliffTerraces(bottom, bottomCell, left, leftCell, right, rightCell);
             }
-         } else if (leftCell.GetEdgeType(rightCell) == HexGrid.HexEdgeType.Slope) {
+         } else if (leftCell.GetEdgeType(rightCell) == HexEdgeType.Slope) {
             if (leftCell.Elevation < rightCell.Elevation) {
                TriangulateCornerCliffTerraces(right, rightCell, bottom, bottomCell, left, leftCell);
             } else {
@@ -293,7 +293,7 @@ namespace HexMap.Map {
 
          TriangulateBoundaryTriangle(begin, weights1, left, weights2, boundary, boundaryWeights, indices);
 
-         if (leftCell.GetEdgeType(rightCell) == HexGrid.HexEdgeType.Slope) {
+         if (leftCell.GetEdgeType(rightCell) == HexEdgeType.Slope) {
             TriangulateBoundaryTriangle(left, weights2, right, weights3, boundary, boundaryWeights, indices);
          } else {
             _terrain.AddTriangleUnperturbed(HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
@@ -319,7 +319,7 @@ namespace HexMap.Map {
 
          TriangulateBoundaryTriangle(right, weights3, begin, weights1, boundary, boundaryWeights, indices);
 
-         if (leftCell.GetEdgeType(rightCell) == HexGrid.HexEdgeType.Slope) {
+         if (leftCell.GetEdgeType(rightCell) == HexEdgeType.Slope) {
             TriangulateBoundaryTriangle(left, weights2, right, weights3, boundary, boundaryWeights, indices);
          } else {
             _terrain.AddTriangleUnperturbed(HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
@@ -419,7 +419,7 @@ namespace HexMap.Map {
       #region Rivers
 
       void TriangulateWithoutRiver(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          Vector3 center,
          EdgeVertices eVertices) {
@@ -439,7 +439,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateWithRiver(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          Vector3 center,
          EdgeVertices eVertices) {
@@ -455,7 +455,7 @@ namespace HexMap.Map {
          } else if (cell.HasRiverThroughEdge(direction.Previous())) {
             centerL = Vector3.Lerp(center, eVertices.v1, 2f / 3f);
             centerR = center;
-         } else if (cell.HasRiverThroughEdge(direction.Next2())) {
+         } else if (cell.HasRiverThroughEdge(direction.Next().Next())) {
             centerL = center;
             centerR = center + HexMetrics.GetSolidEdgeMiddle(direction.Next()) * (0.5f * HexMetrics.InnerToOuter);
          } else {
@@ -499,7 +499,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateWithRiverBeginOrEnd(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          Vector3 center,
          EdgeVertices eVertices) {
@@ -535,7 +535,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateAdjacentToRiver(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          Vector3 center,
          EdgeVertices eVertices) {
@@ -546,10 +546,10 @@ namespace HexMap.Map {
          if (cell.HasRiverThroughEdge(direction.Next())) {
             if (cell.HasRiverThroughEdge(direction.Previous())) {
                center += HexMetrics.GetSolidEdgeMiddle(direction) * (HexMetrics.InnerToOuter * 0.5f);
-            } else if (cell.HasRiverThroughEdge(direction.Previous2())) {
+            } else if (cell.HasRiverThroughEdge(direction.Previous().Previous())) {
                center += HexMetrics.GetFirstSolidCorner(direction) * 0.25f;
             }
-         } else if (cell.HasRiverThroughEdge(direction.Previous()) && cell.HasRiverThroughEdge(direction.Next2())) {
+         } else if (cell.HasRiverThroughEdge(direction.Previous()) && cell.HasRiverThroughEdge(direction.Next().Next())) {
             center += HexMetrics.GetSecondSolidCorner(direction) * 0.25f;
          }
 
@@ -646,7 +646,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateRoadAdjacentToRiver(
-         HexGrid.HexDirection direction,
+         HexDirection direction,
          HexCell cell,
          Vector3 center,
          EdgeVertices eVertices) {
@@ -673,7 +673,7 @@ namespace HexMap.Map {
             }
             roadCenter += corner * 0.5f;
             if (cell.IncomingRiver == direction.Next() &&
-               (cell.HasRoadThroughEdge(direction.Next2()) || cell.HasRoadThroughEdge(direction.Opposite()))) {
+               (cell.HasRoadThroughEdge(direction.Next().Next()) || cell.HasRoadThroughEdge(direction.Opposite()))) {
                _featureManager.AddBridge(roadCenter, center - corner * 0.5f);
             }
             center += corner * 0.25f;
@@ -689,7 +689,7 @@ namespace HexMap.Map {
             roadCenter += offset * 0.7f;
             center += offset * 0.5f;
          } else {
-            HexGrid.HexDirection middle;
+            HexDirection middle;
             if (previousHasRiver) {
                middle = direction.Next();
             } else if (nextHasRiver) {
@@ -721,7 +721,7 @@ namespace HexMap.Map {
          }
       }
 
-      Vector2 GetRoadInterpolators(HexGrid.HexDirection direction, HexCell cell) {
+      Vector2 GetRoadInterpolators(HexDirection direction, HexCell cell) {
          Vector2 interpolators;
          if (cell.HasRoadThroughEdge(direction)) {
             interpolators.x = interpolators.y = 0.5f;
@@ -739,7 +739,7 @@ namespace HexMap.Map {
       #region Water
 
       void TriangulateWater(
-            HexGrid.HexDirection direction, HexCell cell, Vector3 center
+            HexDirection direction, HexCell cell, Vector3 center
       ) {
          center.y = cell.WaterSurfaceY;
          HexCell neighbor = cell.GetNeighbor(direction);
@@ -751,7 +751,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateOpenWater(
-         HexGrid.HexDirection direction, HexCell cell, HexCell neighbor, Vector3 center
+         HexDirection direction, HexCell cell, HexCell neighbor, Vector3 center
       ) {
          Vector3 c1 = center + HexMetrics.GetFirstWaterCorner(direction);
          Vector3 c2 = center + HexMetrics.GetSecondWaterCorner(direction);
@@ -761,7 +761,7 @@ namespace HexMap.Map {
          indices.x = indices.y = indices.z = cell.Index;
          _water.AddTriangleCellData(indices, weights1);
 
-         if (direction <= HexGrid.HexDirection.SE && neighbor != null) {
+         if (direction <= HexDirection.SE && neighbor != null) {
             Vector3 bridge = HexMetrics.GetWaterBridge(direction);
             Vector3 e1 = c1 + bridge;
             Vector3 e2 = c2 + bridge;
@@ -770,7 +770,7 @@ namespace HexMap.Map {
             indices.y = neighbor.Index;
             _water.AddQuadCellData(indices, weights1, weights2);
 
-            if (direction <= HexGrid.HexDirection.E) {
+            if (direction <= HexDirection.E) {
                HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
                if (nextNeighbor == null || !nextNeighbor.IsUnderwater) {
                   return;
@@ -786,7 +786,7 @@ namespace HexMap.Map {
       }
 
       void TriangulateWaterShore(
-         HexGrid.HexDirection direction, HexCell cell, HexCell neighbor, Vector3 center
+         HexDirection direction, HexCell cell, HexCell neighbor, Vector3 center
       ) {
          EdgeVertices e1 = new EdgeVertices(
             center + HexMetrics.GetFirstWaterCorner(direction),

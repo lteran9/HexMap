@@ -1,5 +1,6 @@
 using HexMap.Map;
 using UnityEngine;
+using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexFeatureManager : MonoBehaviour {
@@ -108,7 +109,7 @@ namespace HexMap.Map {
          EdgeVertices far, HexCell farCell,
          bool hasRiver, bool hasRoad
       ) {
-         if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexGrid.HexEdgeType.Cliff) {
+         if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexEdgeType.Cliff) {
             AddWallSegment(near.v1, far.v1, near.v2, far.v2);
             if (hasRiver || hasRoad) {
                AddWallCap(near.v2, far.v2);
@@ -204,9 +205,9 @@ namespace HexMap.Map {
          }
 
          bool hasLeftWall = !leftCell.IsUnderwater &&
-            pivotCell.GetEdgeType(leftCell) != HexGrid.HexEdgeType.Cliff;
+            pivotCell.GetEdgeType(leftCell) != HexEdgeType.Cliff;
          bool hasRightWall = !rightCell.IsUnderwater &&
-            pivotCell.GetEdgeType(rightCell) != HexGrid.HexEdgeType.Cliff;
+            pivotCell.GetEdgeType(rightCell) != HexEdgeType.Cliff;
 
          if (hasLeftWall) {
             if (hasRightWall) {

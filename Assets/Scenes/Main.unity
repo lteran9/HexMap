@@ -977,6 +977,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: _unitPrefab
+      value: 
+      objectReference: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
+    - target: {fileID: 5140604653758627178, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: chunkCountX
       value: 3
       objectReference: {fileID: 0}

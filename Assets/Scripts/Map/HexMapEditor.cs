@@ -1,10 +1,11 @@
+using UnityEngine;
+using UnityEngine.UIElements;
 using HexMap.Input;
 using HexMap.Extensions;
 using HexMap.UI;
 using HexMap.Units;
 using HexMap.Gameplay;
-using UnityEngine;
-using UnityEngine.UIElements;
+using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexMapEditor : MonoBehaviour {
@@ -36,7 +37,7 @@ namespace HexMap.Map {
       private OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
-      private HexGrid.HexDirection dragDirection;
+      private HexDirection dragDirection;
 
       private enum OptionalToggle {
          Ignore, Yes, No
@@ -209,7 +210,7 @@ namespace HexMap.Map {
       }
 
       private void ValidateDrag(HexCell currentCell) {
-         for (dragDirection = HexGrid.HexDirection.NE; dragDirection <= HexGrid.HexDirection.NW; dragDirection++) {
+         for (dragDirection = HexDirection.NE; dragDirection <= HexDirection.NW; dragDirection++) {
             if (previousCell.GetNeighbor(dragDirection) == currentCell) {
                isDrag = true;
                return;
