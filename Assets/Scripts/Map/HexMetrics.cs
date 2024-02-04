@@ -62,35 +62,35 @@ namespace HexMap.Map {
          Random.state = currentState;
       }
 
-      public static Vector3 GetFirstCorner(HexDirection direction) {
+      public static Vector3 GetFirstCorner(HexGridDirection direction) {
          return Corners[(int)direction];
       }
 
-      public static Vector3 GetSecondCorner(HexDirection direction) {
+      public static Vector3 GetSecondCorner(HexGridDirection direction) {
          return Corners[(int)direction + 1];
       }
 
-      public static Vector3 GetFirstSolidCorner(HexDirection direction) {
+      public static Vector3 GetFirstSolidCorner(HexGridDirection direction) {
          return Corners[(int)direction] * SolidFactor;
       }
 
-      public static Vector3 GetSecondSolidCorner(HexDirection direction) {
+      public static Vector3 GetSecondSolidCorner(HexGridDirection direction) {
          return Corners[(int)direction + 1] * SolidFactor;
       }
 
-      public static Vector3 GetFirstWaterCorner(HexDirection direction) {
+      public static Vector3 GetFirstWaterCorner(HexGridDirection direction) {
          return Corners[(int)direction] * WaterFactor;
       }
 
-      public static Vector3 GetSecondWaterCorner(HexDirection direction) {
+      public static Vector3 GetSecondWaterCorner(HexGridDirection direction) {
          return Corners[(int)direction + 1] * WaterFactor;
       }
 
-      public static Vector3 GetBridge(HexDirection direction) {
+      public static Vector3 GetBridge(HexGridDirection direction) {
          return (Corners[(int)direction] + Corners[(int)direction + 1]) * BlendFactor;
       }
 
-      public static Vector3 GetWaterBridge(HexDirection direction) {
+      public static Vector3 GetWaterBridge(HexGridDirection direction) {
          return (Corners[(int)direction] + Corners[(int)direction + 1]) * WaterBlendFactor;
       }
 
@@ -138,7 +138,7 @@ namespace HexMap.Map {
          return HashGrid[x + z * HashGridSize];
       }
 
-      public static Vector3 GetSolidEdgeMiddle(HexDirection direction) {
+      public static Vector3 GetSolidEdgeMiddle(HexGridDirection direction) {
          return
             (Corners[(int)direction] + Corners[(int)direction + 1]) * (0.5f * SolidFactor);
       }

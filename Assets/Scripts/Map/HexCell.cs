@@ -25,7 +25,7 @@ namespace HexMap.Map {
          _walled,
          _explored;
 
-      private HexDirection incomingRiver, outgoingRiver;
+      private HexGridDirection incomingRiver, outgoingRiver;
 
       [SerializeField] bool[] _roads;
       [SerializeField] HexCell[] _neighbors = default;
@@ -51,7 +51,7 @@ namespace HexMap.Map {
             ValidateRivers();
 
             for (int i = 0; i < _roads.Length; i++) {
-               if (_roads[i] && GetElevationDifference((HexDirection)i) > 1) {
+               if (_roads[i] && GetElevationDifference((HexGridDirection)i) > 1) {
                   SetRoad(i, false);
                }
             }
@@ -245,17 +245,17 @@ namespace HexMap.Map {
       }
       public HexCell NextWithSamePriority { get; set; }
       public HexUnit Unit { get; set; }
-      public HexDirection IncomingRiver {
+      public HexGridDirection IncomingRiver {
          get {
             return incomingRiver;
          }
       }
-      public HexDirection OutgoingRiver {
+      public HexGridDirection OutgoingRiver {
          get {
             return outgoingRiver;
          }
       }
-      public HexDirection RiverBeginOrEndDirection {
+      public HexGridDirection RiverBeginOrEndDirection {
          get {
             return _hasIncomingRiver ? incomingRiver : outgoingRiver;
          }
@@ -346,16 +346,16 @@ namespace HexMap.Map {
 
       #region Neighbors
 
-      public void SetNeighbor(HexDirection direction, HexCell cell) {
+      public void SetNeighbor(HexGridDirection direction, HexCell cell) {
          _neighbors[(int)direction] = cell;
          cell._neighbors[(int)direction.Opposite()] = this;
       }
 
-      public HexCell GetNeighbor(HexDirection direction) {
+      public HexCell GetNeighbor(HexGridDirection direction) {
          return _neighbors[(int)direction];
       }
 
-      public HexEdgeType GetEdgeType(HexDirection direction) {
+      public HexEdgeType GetEdgeType(HexGridDirection direction) {
          return HexMetrics.GetEdgeType(
             elevation, _neighbors[(int)direction].elevation
          );
@@ -400,13 +400,13 @@ namespace HexMap.Map {
          RemoveIncomingRiver();
       }
 
-      public bool HasRiverThroughEdge(HexDirection direction) {
+      public bool HasRiverThroughEdge(HexGridDirection direction) {
          return
             _hasIncomingRiver && incomingRiver == direction ||
             _hasOutgoingRiver && outgoingRiver == direction;
       }
 
-      public void SetOutgoingRiver(HexDirection direction) {
+      public void SetOutgoingRiver(HexGridDirection direction) {
          if (_hasOutgoingRiver && outgoingRiver == direction) {
             return;
          }
@@ -452,7 +452,7 @@ namespace HexMap.Map {
 
       #region Roads
 
-      public void AddRoad(HexDirection direction) {
+      public void AddRoad(HexGridDirection direction) {
          if (!_roads[(int)direction] && !HasRiverThroughEdge(direction) && !IsSpecial && !GetNeighbor(direction).IsSpecial && GetElevationDifference(direction) <= 1) {
             SetRoad((int)direction, true);
          }
@@ -460,7 +460,7 @@ namespace HexMap.Map {
 
       public void SetRoad(int index, bool state) {
          _roads[index] = state;
-         _neighbors[index]._roads[(int)((HexDirection)index).Opposite()] = state;
+         _neighbors[index]._roads[(int)((HexGridDirection)index).Opposite()] = state;
          _neighbors[index].RefreshSelfOnly();
          RefreshSelfOnly();
       }
@@ -473,11 +473,11 @@ namespace HexMap.Map {
          }
       }
 
-      public bool HasRoadThroughEdge(HexDirection direction) {
+      public bool HasRoadThroughEdge(HexGridDirection direction) {
          return _roads[(int)direction];
       }
 
-      public int GetElevationDifference(HexDirection direction) {
+      public int GetElevationDifference(HexGridDirection direction) {
          int difference = elevation - GetNeighbor(direction).elevation;
          return difference >= 0 ? difference : -difference;
       }
@@ -536,7 +536,7 @@ namespace HexMap.Map {
          byte riverData = reader.ReadByte();
          if (riverData >= 128) {
             _hasIncomingRiver = true;
-            incomingRiver = (HexDirection)(riverData - 128);
+            incomingRiver = (HexGridDirection)(riverData - 128);
          } else {
             _hasIncomingRiver = false;
          }
@@ -544,7 +544,7 @@ namespace HexMap.Map {
          riverData = reader.ReadByte();
          if (riverData >= 128) {
             _hasOutgoingRiver = true;
-            outgoingRiver = (HexDirection)(riverData - 128);
+            outgoingRiver = (HexGridDirection)(riverData - 128);
          } else {
             _hasOutgoingRiver = false;
          }

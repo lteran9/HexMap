@@ -172,7 +172,7 @@ namespace HexMap.Units {
          StartCoroutine(TravelPath());
       }
 
-      public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction) {
+      public int GetMoveCost(HexCell fromCell, HexCell toCell, HexGridDirection direction) {
          HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
          if (edgeType == HexEdgeType.Cliff) {
             return -1;

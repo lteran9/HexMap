@@ -110,7 +110,7 @@ namespace HexMap.Map {
             }
             size += 1;
 
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+            for (HexGridDirection d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
                HexCell neighbor = current.GetNeighbor(d);
                if (neighbor && neighbor.SearchPhase < searchFrontierPhase) {
                   neighbor.SearchPhase = searchFrontierPhase;
@@ -149,7 +149,7 @@ namespace HexMap.Map {
             }
             size += 1;
 
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+            for (HexGridDirection d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
                HexCell neighbor = current.GetNeighbor(d);
                if (neighbor && neighbor.SearchPhase < searchFrontierPhase) {
                   neighbor.SearchPhase = searchFrontierPhase;
@@ -166,7 +166,7 @@ namespace HexMap.Map {
 
       private bool IsErodible(HexCell cell) {
          int erodibleElevation = cell.Elevation - 2;
-         for (var d = HexDirection.NE; d <= HexDirection.NW; d++) {
+         for (var d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
             HexCell neighbor = cell.GetNeighbor(d);
             if (neighbor && neighbor.Elevation <= erodibleElevation) {
                return true;
@@ -225,7 +225,7 @@ namespace HexMap.Map {
                erodibleCells.RemoveAt(erodibleCells.Count - 1);
             }
 
-            for (var d = HexDirection.NE; d <= HexDirection.NW; d++) {
+            for (var d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
                HexCell neighbor = cell.GetNeighbor(d);
                if (
                   neighbor && neighbor.Elevation == cell.Elevation + 2 &&
@@ -239,7 +239,7 @@ namespace HexMap.Map {
                erodibleCells.Add(targetCell);
             }
 
-            for (var d = HexDirection.NE; d <= HexDirection.NW; d++) {
+            for (var d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
                HexCell neighbor = targetCell.GetNeighbor(d);
                if (
                   neighbor && neighbor != cell &&
@@ -336,7 +336,7 @@ namespace HexMap.Map {
       private HexCell GetErosionTarget(HexCell cell) {
          List<HexCell> candidates = ListPool<HexCell>.Get();
          int erodibleElevation = cell.Elevation - 2;
-         for (var d = HexDirection.NE; d <= HexDirection.NW; d++) {
+         for (var d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
             HexCell neighbor = cell.GetNeighbor(d);
             if (neighbor && neighbor.Elevation <= erodibleElevation) {
                candidates.Add(neighbor);

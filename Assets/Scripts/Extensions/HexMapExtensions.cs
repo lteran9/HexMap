@@ -8,22 +8,22 @@ namespace HexMap.Extensions {
       /// <summary>
       /// Returns the opposite direction.
       /// </summary>
-      public static HexDirection Opposite(this HexDirection direction) {
+      public static HexGridDirection Opposite(this HexGridDirection direction) {
          return (int)direction < 3 ? (direction + 3) : (direction - 3);
       }
 
       /// <summary>
       /// Returns the previous direction.
       /// </summary>
-      public static HexDirection Previous(this HexDirection direction) {
-         return direction == HexDirection.NE ? HexDirection.NW : (direction - 1);
+      public static HexGridDirection Previous(this HexGridDirection direction) {
+         return direction == HexGridDirection.NE ? HexGridDirection.NW : (direction - 1);
       }
 
       /// <summary>
       /// Returns the following direction.
       /// </summary>
-      public static HexDirection Next(this HexDirection direction) {
-         return direction == HexDirection.NW ? HexDirection.NE : (direction + 1);
+      public static HexGridDirection Next(this HexGridDirection direction) {
+         return direction == HexGridDirection.NW ? HexGridDirection.NE : (direction + 1);
       }
    }
 }

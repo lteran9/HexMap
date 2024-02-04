@@ -1,7 +1,7 @@
 using System;
 
 namespace HexMap.Map.Grid {
-   public enum HexDirection {
+   public enum HexGridDirection {
       NE, E, SE, SW, W, NW
    }
 }

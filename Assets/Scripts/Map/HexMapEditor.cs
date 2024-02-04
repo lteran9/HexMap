@@ -37,7 +37,7 @@ namespace HexMap.Map {
       private OptionalToggle riverMode = OptionalToggle.Ignore,
          roadMode = OptionalToggle.Ignore,
          walledMode = OptionalToggle.Ignore;
-      private HexDirection dragDirection;
+      private HexGridDirection dragDirection;
 
       private enum OptionalToggle {
          Ignore, Yes, No
@@ -210,7 +210,7 @@ namespace HexMap.Map {
       }
 
       private void ValidateDrag(HexCell currentCell) {
-         for (dragDirection = HexDirection.NE; dragDirection <= HexDirection.NW; dragDirection++) {
+         for (dragDirection = HexGridDirection.NE; dragDirection <= HexGridDirection.NW; dragDirection++) {
             if (previousCell.GetNeighbor(dragDirection) == currentCell) {
                isDrag = true;
                return;

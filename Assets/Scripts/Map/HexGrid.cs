@@ -95,19 +95,19 @@ namespace HexMap.Map {
          cell.Explorable = x > 0 && z > 0 && x < _cellCountX - 1 && z < _cellCountZ - 1;
 
          if (x > 0) {
-            cell.SetNeighbor(HexDirection.W, m_Cells[i - 1]);
+            cell.SetNeighbor(HexGridDirection.W, m_Cells[i - 1]);
          }
 
          if (z > 0) {
             if ((z & 1) == 0) {
-               cell.SetNeighbor(HexDirection.SE, m_Cells[i - _cellCountX]);
+               cell.SetNeighbor(HexGridDirection.SE, m_Cells[i - _cellCountX]);
                if (x > 0) {
-                  cell.SetNeighbor(HexDirection.SW, m_Cells[i - _cellCountX - 1]);
+                  cell.SetNeighbor(HexGridDirection.SW, m_Cells[i - _cellCountX - 1]);
                }
             } else {
-               cell.SetNeighbor(HexDirection.SW, m_Cells[i - _cellCountX]);
+               cell.SetNeighbor(HexGridDirection.SW, m_Cells[i - _cellCountX]);
                if (x < _cellCountX - 1) {
-                  cell.SetNeighbor(HexDirection.SE, m_Cells[i - _cellCountX + 1]);
+                  cell.SetNeighbor(HexGridDirection.SE, m_Cells[i - _cellCountX + 1]);
                }
             }
          }
@@ -174,7 +174,7 @@ namespace HexMap.Map {
 
             int currentTurn = (current.Distance - 1) / unit.Speed;
 
-            for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++) {
+            for (HexGridDirection dir = HexGridDirection.NE; dir <= HexGridDirection.NW; dir++) {
                HexCell neighbor = current.GetNeighbor(dir);
                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase) {
                   continue;
@@ -234,7 +234,7 @@ namespace HexMap.Map {
             current.SearchPhase += 1;
             visibleCells.Add(current);
 
-            for (HexDirection dir = HexDirection.NE; dir <= HexDirection.NW; dir++) {
+            for (HexGridDirection dir = HexGridDirection.NE; dir <= HexGridDirection.NW; dir++) {
                HexCell neighbor = current.GetNeighbor(dir);
                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase || !neighbor.Explorable) {
                   continue;
