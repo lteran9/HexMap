@@ -45,7 +45,7 @@ namespace HexMap.Map {
       public void AddCell(int index, HexCell cell) {
          hexCells[index] = cell;
          cell.Chunk = this;
-         cell.transform.SetParent(transform, false);
+         cell.transform.SetParent(_terrain.transform, false);
          cell.UIRect.SetParent(gridCanvas.transform, false);
       }
 

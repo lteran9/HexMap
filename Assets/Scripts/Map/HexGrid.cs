@@ -5,17 +5,11 @@ using TMPro;
 using HexMap.Misc;
 using HexMap.Units;
 using HexMap.Map.Grid;
+using System.ComponentModel;
 
 namespace HexMap.Map {
    public class HexGrid : MonoBehaviour {
-      [SerializeField] private int _seed = 0;
-      [SerializeField] private int _cellCountX = 20; // Must be  multiple of 5
-      [SerializeField] private int _cellCountZ = 15; // Must be multiple of 5
-      [SerializeField] private Texture2D _noiseSource = default;
-      [SerializeField] private HexGridChunk _chunkPrefab = default;
-      [SerializeField] private HexCell _cellPrefab = default;
-      [SerializeField] private TextMeshProUGUI _cellLabelPrefab = default;
-      [SerializeField] private HexUnit _unitPrefab;
+      [SerializeField] private HexGridSettingsSO _settings = default;
 
       private int chunkCountX,
          chunkCountZ,
@@ -26,11 +20,10 @@ namespace HexMap.Map {
       private HexCell currentPathFrom,
           currentPathTo;
 
-      private HexCell[] m_Cells = default;
-      private HexGridChunk[] m_Chunks = default;
+      private HexCell[] cells = default;
+      private HexGridChunk[] chunks = default;
       private HexCellPriorityQueue searchFrontier = default;
       private HexCellShaderData cellShaderData = default;
-
       private List<HexUnit> units = new List<HexUnit>();
 
       public bool HasPath {
@@ -40,81 +33,79 @@ namespace HexMap.Map {
       }
 
       private void Awake() {
-         HexMetrics.NoiseSource = _noiseSource;
-         HexMetrics.InitializeHashGrid(_seed);
-         HexUnit.unitPrefab = _unitPrefab;
+         HexMetrics.NoiseSource = _settings.NoiseSource;
+         HexMetrics.InitializeHashGrid(_settings.Seed);
+         HexUnit.unitPrefab = _settings.UnitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
          cellShaderData.Grid = this;
-         CreateMap(_cellCountX, _cellCountZ);
+         CreateMap(_settings.CellCountX, _settings.CellCountZ);
       }
 
       private void OnEnable() {
          if (!HexMetrics.NoiseSource) {
-            HexMetrics.NoiseSource = _noiseSource;
-            HexMetrics.InitializeHashGrid(_seed);
-            HexUnit.unitPrefab = _unitPrefab;
+            HexMetrics.NoiseSource = _settings.NoiseSource;
+            HexMetrics.InitializeHashGrid(_settings.Seed);
+            HexUnit.unitPrefab = _settings.UnitPrefab;
             ResetVisibility();
          }
       }
 
       private void CreateChunks() {
-         m_Chunks = new HexGridChunk[chunkCountX * chunkCountZ];
+         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
 
          for (int z = 0, i = 0; z < chunkCountZ; z++) {
             for (int x = 0; x < chunkCountX; x++) {
-               HexGridChunk chunk = m_Chunks[i++] = Instantiate(_chunkPrefab);
-               chunk.transform.SetParent(transform);
+               chunks[i++] = Instantiate(_settings.ChunkPrefab, transform);
             }
          }
       }
 
       private void CreateCells() {
-         m_Cells = new HexCell[_cellCountZ * _cellCountX];
+         cells = new HexCell[_settings.CellCountZ * _settings.CellCountX];
 
-         for (int z = 0, i = 0; z < _cellCountZ; z++) {
-            for (int x = 0; x < _cellCountX; x++) {
+         for (int z = 0, i = 0; z < _settings.CellCountZ; z++) {
+            for (int x = 0; x < _settings.CellCountX; x++) {
                CreateCell(x, z, i++);
             }
          }
       }
 
       private void CreateCell(int x, int z, int i) {
-         Vector3 position;
+         var position =
+            new Vector3() {
+               x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f),
+               y = 0f,
+               z = z * (HexMetrics.OuterRadius * 1.5f)
+            };
 
-         position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
-         position.y = 0f;
-         position.z = z * (HexMetrics.OuterRadius * 1.5f);
-
-         HexCell cell = m_Cells[i] = Instantiate<HexCell>(_cellPrefab);
+         HexCell cell = cells[i] = Instantiate<HexCell>(_settings.CellPrefab);
          cell.transform.localPosition = position;
          cell.name = $"Cell #{i}";
          cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
          cell.Index = i;
          cell.ShaderData = cellShaderData;
-
-         cell.Explorable = x > 0 && z > 0 && x < _cellCountX - 1 && z < _cellCountZ - 1;
+         cell.Explorable = x > 0 && z > 0 && x < _settings.CellCountX - 1 && z < _settings.CellCountZ - 1;
 
          if (x > 0) {
-            cell.SetNeighbor(HexGridDirection.W, m_Cells[i - 1]);
+            cell.SetNeighbor(HexGridDirection.W, cells[i - 1]);
          }
 
          if (z > 0) {
             if ((z & 1) == 0) {
-               cell.SetNeighbor(HexGridDirection.SE, m_Cells[i - _cellCountX]);
+               cell.SetNeighbor(HexGridDirection.SE, cells[i - _settings.CellCountX]);
                if (x > 0) {
-                  cell.SetNeighbor(HexGridDirection.SW, m_Cells[i - _cellCountX - 1]);
+                  cell.SetNeighbor(HexGridDirection.SW, cells[i - _settings.CellCountX - 1]);
                }
             } else {
-               cell.SetNeighbor(HexGridDirection.SW, m_Cells[i - _cellCountX]);
-               if (x < _cellCountX - 1) {
-                  cell.SetNeighbor(HexGridDirection.SE, m_Cells[i - _cellCountX + 1]);
+               cell.SetNeighbor(HexGridDirection.SW, cells[i - _settings.CellCountX]);
+               if (x < _settings.CellCountX - 1) {
+                  cell.SetNeighbor(HexGridDirection.SE, cells[i - _settings.CellCountX + 1]);
                }
             }
          }
 
-         TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(_cellLabelPrefab);
+         TextMeshProUGUI label = Instantiate<TextMeshProUGUI>(_settings.CellLabelPrefab);
          label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-         //label.text = cell.coordinates.ToStringOnSeparateLines();
 
          cell.UIRect = label.rectTransform;
          cell.Elevation = 0;
@@ -125,7 +116,7 @@ namespace HexMap.Map {
       private void AddCellToChunk(int x, int z, HexCell cell) {
          int chunkX = x / HexMetrics.ChunkSizeX;
          int chunkZ = z / HexMetrics.ChunkSizeZ;
-         HexGridChunk chunk = m_Chunks[chunkX + chunkZ * chunkCountX];
+         HexGridChunk chunk = chunks[chunkX + chunkZ * chunkCountX];
 
          int localX = x - chunkX * HexMetrics.ChunkSizeX;
          int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
@@ -263,52 +254,49 @@ namespace HexMap.Map {
       }
 
       public HexCell GetCell(Vector3 position) {
-         position = transform.InverseTransformPoint(position);
-         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-         int index = coordinates.X + coordinates.Z * _cellCountX + coordinates.Z / 2;
-         return m_Cells[index];
+         return GetCell(HexCoordinates.FromPosition(transform.InverseTransformPoint(position)));
       }
 
       public HexCell GetCell(HexCoordinates coordinates) {
          int z = coordinates.Z;
-         if (z < 0 || z >= _cellCountZ) {
+         if (z < 0 || z >= _settings.CellCountZ) {
             return null;
          }
          int x = coordinates.X + z / 2;
-         if (x < 0 || x >= _cellCountX) {
+         if (x < 0 || x >= _settings.CellCountX) {
             return null;
          }
-         return m_Cells[x + z * _cellCountX];
+         return cells[x + z * _settings.CellCountX];
       }
 
       public HexCell GetCell(int xOffset, int zOffset) {
-         return m_Cells[xOffset + zOffset * _cellCountX];
+         return cells[xOffset + zOffset * _settings.CellCountX];
       }
 
       public HexCell GetCell(int cellIndex) {
-         return m_Cells[cellIndex];
+         return cells[cellIndex];
       }
 
       public int GetCellCountX() {
-         return _cellCountX;
+         return _settings.CellCountX;
       }
 
       public int GetCellCountZ() {
-         return _cellCountZ;
+         return _settings.CellCountZ;
       }
 
       public void ShowUI(bool visible) {
-         for (int i = 0; i < m_Chunks.Length; i++) {
-            m_Chunks[i].ShowUI(visible);
+         for (int i = 0; i < chunks.Length; i++) {
+            chunks[i].ShowUI(visible);
          }
       }
 
       public void Save(BinaryWriter writer) {
-         writer.Write(_cellCountX);
-         writer.Write(_cellCountZ);
+         writer.Write(_settings.CellCountX);
+         writer.Write(_settings.CellCountZ);
 
-         for (int i = 0; i < m_Cells.Length; i++) {
-            m_Cells[i].Save(writer);
+         for (int i = 0; i < cells.Length; i++) {
+            cells[i].Save(writer);
          }
 
          writer.Write(units.Count);
@@ -326,7 +314,7 @@ namespace HexMap.Map {
          z = reader.ReadInt32();
 
 
-         if (x != _cellCountX || z != _cellCountZ) {
+         if (x != _settings.CellCountX || z != _settings.CellCountZ) {
             if (!CreateMap(x, z)) {
                return;
             }
@@ -335,12 +323,12 @@ namespace HexMap.Map {
          bool originalImmediateMode = cellShaderData.ImmediateMode;
          cellShaderData.ImmediateMode = true;
 
-         for (int i = 0; i < m_Cells.Length; i++) {
-            m_Cells[i].Load(reader, header);
+         for (int i = 0; i < cells.Length; i++) {
+            cells[i].Load(reader, header);
          }
 
-         for (int i = 0; i < m_Chunks.Length; i++) {
-            m_Chunks[i].Refresh();
+         for (int i = 0; i < chunks.Length; i++) {
+            chunks[i].Refresh();
          }
 
          int unitCount = reader.ReadInt32();
@@ -406,8 +394,8 @@ namespace HexMap.Map {
       }
 
       public void ResetVisibility() {
-         for (int i = 0; i < m_Cells.Length; i++) {
-            m_Cells[i].ResetVisibility();
+         for (int i = 0; i < cells.Length; i++) {
+            cells[i].ResetVisibility();
          }
          for (int i = 0; i < units.Count; i++) {
             HexUnit unit = units[i];
@@ -417,23 +405,24 @@ namespace HexMap.Map {
 
       public bool CreateMap(int x, int z) {
          if (x <= 0 || x % HexMetrics.ChunkSizeX != 0 || z <= 0 || z % HexMetrics.ChunkSizeZ != 0) {
-            Debug.LogError("Unsupported map size.");
+            Debug.LogError($"Unsupported map size, must be multiple of {HexMetrics.ChunkSizeX}.");
             return false;
          }
 
          ClearPath();
          ClearUnits();
-         if (m_Chunks != null) {
-            for (int i = 0; i < m_Chunks.Length; i++) {
-               Destroy(m_Chunks[i].gameObject);
+
+         if (chunks != null) {
+            for (int i = 0; i < chunks.Length; i++) {
+               Destroy(chunks[i].gameObject);
             }
          }
 
-         _cellCountX = x;
-         _cellCountZ = z;
-         chunkCountX = _cellCountX / HexMetrics.ChunkSizeX;
-         chunkCountZ = _cellCountZ / HexMetrics.ChunkSizeZ;
-         cellShaderData.Initialize(_cellCountX, _cellCountZ);
+         _settings.UpdateCellCountX(x);
+         _settings.UpdatecellCoundZ(z);
+         chunkCountX = _settings.CellCountX / HexMetrics.ChunkSizeX;
+         chunkCountZ = _settings.CellCountZ / HexMetrics.ChunkSizeZ;
+         cellShaderData.Initialize(_settings.CellCountX, _settings.CellCountZ);
 
          CreateChunks();
          CreateCells();
@@ -442,10 +431,10 @@ namespace HexMap.Map {
       }
 
       public HexCell GetCell(Ray ray) {
-         RaycastHit hit;
-         if (Physics.Raycast(ray, out hit)) {
+         if (Physics.Raycast(ray, out RaycastHit hit)) {
             return GetCell(hit.point);
          }
+
          return null;
       }
 

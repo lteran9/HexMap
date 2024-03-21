@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e115906a60a284baad0accacd2465d, type: 3}
+  m_Name: HexGridSettingsSO
+  m_EditorClassIdentifier: 
+  _seed: 1234
+  _cellCountX: 20
+  _cellCountZ: 15
+  _cellPrefab: {fileID: 2876132088134003966, guid: 1f2726c8283904d53bc8bbd7eb02bded, type: 3}
+  _unitPrefab: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
+  _chunkPrefab: {fileID: 2684866027671048218, guid: ba2b2e63a3bda41d68e2a0f8ab3ec3a4, type: 3}
+  _cellLabelPrefab: {fileID: 4129102967557465843, guid: 823d935deed7c41ff97607c2edb222f8, type: 3}
+  _noiseSource: {fileID: 2800000, guid: c2186fedb655a4db7861ba6c455ff7c7, type: 3}
