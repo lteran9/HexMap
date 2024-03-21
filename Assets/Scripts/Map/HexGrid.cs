@@ -84,7 +84,7 @@ namespace HexMap.Map {
          cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
          cell.Index = i;
          cell.ShaderData = cellShaderData;
-         cell.Explorable = x > 0 && z > 0 && x < _settings.CellCountX - 1 && z < _settings.CellCountZ - 1;
+         cell.Explorable = x >= 0 && z >= 0 && x < _settings.CellCountX && z < _settings.CellCountZ;
 
          if (x > 0) {
             cell.SetNeighbor(HexGridDirection.W, cells[i - 1]);
@@ -262,10 +262,12 @@ namespace HexMap.Map {
          if (z < 0 || z >= _settings.CellCountZ) {
             return null;
          }
+
          int x = coordinates.X + z / 2;
          if (x < 0 || x >= _settings.CellCountX) {
             return null;
          }
+
          return cells[x + z * _settings.CellCountX];
       }
 
@@ -372,7 +374,9 @@ namespace HexMap.Map {
       }
 
       public void RemoveUnit(HexUnit unit) {
+         // Remove reference
          units.Remove(unit);
+         // Destroy game object
          unit.Die();
       }
 
