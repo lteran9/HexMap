@@ -53,7 +53,7 @@ namespace HexMap.Map {
          _inputReader.EnableInput();
       }
 
-      void OnEnable() {
+      private void OnEnable() {
          _inputReader.MouseClick += OnClick;
          _inputReader.MouseDrag += OnClick;
          _inputReader.LeftShiftStarted += LeftShiftBeingHeld;
@@ -61,7 +61,7 @@ namespace HexMap.Map {
          _inputReader.PlaceUnit += HandleUnitInput;
       }
 
-      void OnDisable() {
+      private void OnDisable() {
          _inputReader.MouseClick -= OnClick;
          _inputReader.MouseDrag -= OnClick;
          _inputReader.LeftShiftStarted -= LeftShiftBeingHeld;
@@ -165,9 +165,7 @@ namespace HexMap.Map {
 
       private HexCell GetCellUnderCursor() {
          Vector3 position = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-         Ray inputRay = Camera.main.ScreenPointToRay(position);
-
-         return _hexGrid.GetCell(inputRay);
+         return _hexGrid.GetCell(Camera.main.ScreenPointToRay(position));
       }
 
       #region Input

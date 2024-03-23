@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: HexGridSettingsSO
   m_EditorClassIdentifier: 
   _seed: 1234
-  _cellCountX: 20
-  _cellCountZ: 15
+  _cellCountX: 15
+  _cellCountZ: 10
   _cellPrefab: {fileID: 2876132088134003966, guid: 1f2726c8283904d53bc8bbd7eb02bded, type: 3}
   _unitPrefab: {fileID: -3911721723649517485, guid: b12a361909ead4fddb1b9d337f4fa5ab, type: 3}
   _chunkPrefab: {fileID: 2684866027671048218, guid: ba2b2e63a3bda41d68e2a0f8ab3ec3a4, type: 3}

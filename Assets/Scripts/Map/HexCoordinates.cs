@@ -10,6 +10,10 @@ namespace HexMap.Map {
          return new HexCoordinates(x - z / 2, z);
       }
 
+      public static HexCoordinates Load(BinaryReader reader) {
+         return new HexCoordinates(reader.ReadInt32(), reader.ReadInt32());
+      }
+
       public static HexCoordinates FromPosition(Vector3 position) {
          float x = position.x / (HexMetrics.InnerRadius * 2f);
          float y = -x;
@@ -36,24 +40,13 @@ namespace HexMap.Map {
          return new HexCoordinates(iX, iZ);
       }
 
-      public static HexCoordinates Load(BinaryReader reader) {
-         HexCoordinates c;
-         c.x = reader.ReadInt32();
-         c.z = reader.ReadInt32();
-         return c;
-      }
-
       #endregion
 
-      [SerializeField] private int x, z;
+      private readonly int x, z;
 
       public int X { get { return x; } }
       public int Z { get { return z; } }
-      public int Y {
-         get {
-            return -X - Z;
-         }
-      }
+      public int Y { get { return -X - Z; } }
 
       public HexCoordinates(int x, int z) {
          this.x = x;
@@ -61,11 +54,7 @@ namespace HexMap.Map {
       }
 
       public override string ToString() {
-         return "(" + X.ToString() + "," + Z.ToString() + ")";
-      }
-
-      public string ToStringOnSeparateLines() {
-         return X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
+         return "(x:" + X.ToString() + ", y:" + Y.ToString() + ", z:" + Z.ToString() + ")";
       }
 
       public int DistanceTo(HexCoordinates other) {

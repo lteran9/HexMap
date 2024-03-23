@@ -6,22 +6,18 @@ using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexMapGenerator : MonoBehaviour {
-      struct MapRegion {
+      private struct MapRegion {
          public int xMin, xMax, zMin, zMax;
 
+         /// <summary>
+         /// Used for debugging purposes. 
+         /// </summary>
+         /// <returns></returns>
          public override string ToString() => $"{xMin}, {xMax}, {zMin}, {zMax}";
       }
 
-      private int cellCount = 0;
-      private int searchFrontierPhase;
-
-      private List<MapRegion> regions;
-      private HexCellPriorityQueue searchFrontier;
-
       [SerializeField] private bool _useFixedSeed = default;
-
       [SerializeField] private int _seed = 0;
-
       [Range(20, 200)]
       [SerializeField] private int _chunkSizeMin = 30;
       [Range(20, 200)]
@@ -53,10 +49,18 @@ namespace HexMap.Map {
       [Range(0f, 0.4f)]
       [SerializeField] private float sinkProbability = 0.2f;
 
-      [SerializeField] private HexGrid _hexGrid;
+      private int cellCount = 0;
+      private int searchFrontierPhase = 0;
+
+      private HexGrid _hexGrid = default;
+      private HexCellPriorityQueue searchFrontier = default;
+      private List<MapRegion> regions = default;
+
+      private void Start() {
+         _hexGrid = GetComponentInParent<HexGrid>();
+      }
 
       public void GenerateMap(int x, int z) {
-         Debug.Log(nameof(GenerateMap));
          Random.State originalRandomState = Random.state;
          if (!_useFixedSeed) {
             _seed = Random.Range(0, int.MaxValue);
@@ -64,6 +68,7 @@ namespace HexMap.Map {
             _seed ^= (int)Time.unscaledTime;
             _seed &= int.MaxValue;
          }
+
          Random.InitState(_seed);
 
          cellCount = x * z;
@@ -262,7 +267,7 @@ namespace HexMap.Map {
             regions.Clear();
          }
 
-         MapRegion region;
+         var region = new MapRegion();
          switch (_regionCount) {
             default:
                region.xMin = _mapBorderX;
@@ -273,7 +278,6 @@ namespace HexMap.Map {
                break;
             case 2:
                if (Random.value < 0.5f) {
-
                   region.xMin = _mapBorderX;
                   region.xMax = _hexGrid.GetCellCountX() / 2 - _regionBorder;
                   region.zMin = _mapBorderZ;

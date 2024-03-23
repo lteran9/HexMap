@@ -37,7 +37,6 @@ namespace HexMap.Map {
          HexMetrics.InitializeHashGrid(_settings.Seed);
          HexUnit.unitPrefab = _settings.UnitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
-         cellShaderData.Grid = this;
          CreateMap(_settings.CellCountX, _settings.CellCountZ);
       }
 
@@ -120,7 +119,8 @@ namespace HexMap.Map {
 
          int localX = x - chunkX * HexMetrics.ChunkSizeX;
          int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
-         chunk.AddCell(localX + localZ * HexMetrics.ChunkSizeX, cell);
+         int index = localX + localZ * HexMetrics.ChunkSizeX;
+         chunk.AddCell(index, cell);
       }
 
       private void ClearUnits() {

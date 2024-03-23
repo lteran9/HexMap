@@ -57,7 +57,7 @@ namespace HexMap.Map {
          Random.State currentState = Random.state;
          Random.InitState(seed);
          for (int i = 0; i < HashGrid.Length; i++) {
-            HashGrid[i] = HexHash.Create();
+            HashGrid[i] = new HexHash();
          }
          Random.state = currentState;
       }

@@ -3,10 +3,17 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using HexMap.EditorTools;
 
 namespace HexMap.Map {
    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
    public class HexMesh : MonoBehaviour {
+
+      [SerializeField, ReadOnly]
+      private bool useCollider,
+               useCellData,
+               useUVCoordinates,
+               useUV2Coordinates;
 
       #region Buffers
 
@@ -26,18 +33,13 @@ namespace HexMap.Map {
       private MeshRenderer meshRenderer = default;
       private MeshCollider meshCollider = default;
 
-      public bool useCollider,
-         useCellData,
-         useUVCoordinates,
-         useUV2Coordinates;
-
       private void Awake() {
          GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
          meshRenderer = GetComponent<MeshRenderer>();
          if (useCollider) {
             meshCollider = gameObject.AddComponent<MeshCollider>();
          }
-         hexMesh.name = "Hex Mesh";
+         hexMesh.name = $"{name} Hex Mesh";
       }
 
       public void Clear() {
@@ -88,7 +90,6 @@ namespace HexMap.Map {
       }
 
       #region Triangles 
-
       public void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3) {
          int vertexIndex = vertices.Count;
          vertices.Add(HexMetrics.Perturb(v1));

@@ -4,8 +4,6 @@ using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexFeatureManager : MonoBehaviour {
-      Transform container = default;
-
       [SerializeField] HexMesh _walls = default;
       [SerializeField] Transform _wallTower = default, _bridge = default;
       [SerializeField] Transform[] _special = default;
@@ -13,10 +11,13 @@ namespace HexMap.Map {
       [SerializeField] HexFeatureCollection[] farmCollections = default;
       [SerializeField] HexFeatureCollection[] plantCollections = default;
 
+      private Transform container = default;
+
       public void Clear() {
          if (container) {
             Destroy(container.gameObject);
          }
+
          container = new GameObject("Features Container").transform;
          container.SetParent(transform, false);
 
@@ -57,11 +58,11 @@ namespace HexMap.Map {
             return;
          }
 
-         Transform instance = Instantiate(prefab);
-         position.y += instance.localScale.y * 0.5f;
-         instance.localPosition = HexMetrics.Perturb(position);
-         instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
-         instance.SetParent(container, false);
+         Transform featureInstance = Instantiate(prefab);
+         position.y += featureInstance.localScale.y * 0.5f;
+         featureInstance.localPosition = HexMetrics.Perturb(position);
+         featureInstance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
+         featureInstance.SetParent(container, false);
       }
 
       public void AddSpecialFeature(HexCell cell, Vector3 position) {
@@ -88,7 +89,7 @@ namespace HexMap.Map {
          }
       }
 
-      Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice) {
+      private Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice) {
          if (level > 0) {
             float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
             for (int i = 0; i < thresholds.Length; i++) {
@@ -148,7 +149,7 @@ namespace HexMap.Map {
          }
       }
 
-      void AddWallSegment(
+      private void AddWallSegment(
          Vector3 nearLeft, Vector3 farLeft,
          Vector3 nearRight, Vector3 farRight,
          bool addTower = false
@@ -195,11 +196,11 @@ namespace HexMap.Map {
          }
       }
 
-      void AddWallSegment(
-         Vector3 pivot, HexCell pivotCell,
-         Vector3 left, HexCell leftCell,
-         Vector3 right, HexCell rightCell
-      ) {
+      private void AddWallSegment(
+          Vector3 pivot, HexCell pivotCell,
+          Vector3 left, HexCell leftCell,
+          Vector3 right, HexCell rightCell
+       ) {
          if (pivotCell.IsUnderwater) {
             return;
          }
@@ -233,7 +234,7 @@ namespace HexMap.Map {
          }
       }
 
-      void AddWallCap(Vector3 near, Vector3 far) {
+      private void AddWallCap(Vector3 near, Vector3 far) {
          near = HexMetrics.Perturb(near);
          far = HexMetrics.Perturb(far);
 
@@ -248,7 +249,7 @@ namespace HexMap.Map {
          _walls.AddQuadUnperturbed(v1, v2, v3, v4);
       }
 
-      void AddWallWedge(Vector3 near, Vector3 far, Vector3 point) {
+      private void AddWallWedge(Vector3 near, Vector3 far, Vector3 point) {
          near = HexMetrics.Perturb(near);
          far = HexMetrics.Perturb(far);
          point = HexMetrics.Perturb(point);

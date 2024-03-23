@@ -494,7 +494,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1059135464
 GameObject:
@@ -529,7 +529,7 @@ Transform:
   - {fileID: 107188}
   - {fileID: 1167682646}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1059135468
 MonoBehaviour:
@@ -700,7 +700,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1651849809
 GameObject:
@@ -731,7 +731,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1780560175
 MonoBehaviour:
@@ -788,7 +788,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1888352579
 MonoBehaviour:
@@ -804,67 +804,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _grid: {fileID: 1809051975}
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
---- !u!1 &1905831164
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1905831166}
-  - component: {fileID: 1905831165}
-  m_Layer: 0
-  m_Name: HexMapGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1905831165
+--- !u!114 &1905831165 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 379213393861007706, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+  m_PrefabInstance: {fileID: 5140604653084560429}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905831164}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3da9a267e043d4651aa3c80b5e0458b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useFixedSeed: 0
-  _seed: 0
-  _chunkSizeMin: 35
-  _chunkSizeMax: 100
-  _landPercentage: 75
-  _waterLevel: 2
-  _elevationMinimum: -2
-  _elevationMaximum: 8
-  _mapBorderX: 5
-  _mapBorderZ: 5
-  _regionBorder: 5
-  _regionCount: 3
-  _erosionPercentage: 50
-  _jitterProbability: 0.25
-  _highRiseProbability: 0.35
-  sinkProbability: 0.2
-  _hexGrid: {fileID: 1809051975}
---- !u!4 &1905831166
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905831164}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 220.51588, y: -41.506256, z: 130.2829}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1912316806
 MonoBehaviour:
   m_ObjectHideFlags: 0
