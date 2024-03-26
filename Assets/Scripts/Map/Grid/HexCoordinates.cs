@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    [System.Serializable]
    public struct HexCoordinates {
       #region Static Methods 

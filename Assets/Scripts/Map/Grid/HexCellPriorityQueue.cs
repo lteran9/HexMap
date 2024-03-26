@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    public class HexCellPriorityQueue {
-      int count = 0, minimum = int.MaxValue;
-      List<HexCell> list = new List<HexCell>();
+      private int count = 0;
+      private int minimum = int.MaxValue;
+      private List<HexCell> list = new List<HexCell>();
 
       public int Count {
          get {

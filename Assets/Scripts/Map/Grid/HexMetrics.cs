@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HexMap.Map.Grid;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    public static class HexMetrics {
       public const int TerracesPerSlope = 2;
       public const int ChunkSizeX = 5, ChunkSizeZ = 5;

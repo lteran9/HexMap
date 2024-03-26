@@ -1,3 +1,4 @@
+using HexMap.EditorTools;
 using HexMap.Extensions;
 using HexMap.Map.Grid;
 using HexMap.Units;
@@ -9,6 +10,14 @@ using UnityEngine.UI;
 
 namespace HexMap.Map {
    public class HexCell : MonoBehaviour {
+      [SerializeField, ReadOnly]
+      private bool _hasIncomingRiver,
+         _hasOutgoingRiver,
+         _walled,
+         _explored;
+      [SerializeField] bool[] _roads;
+      [SerializeField] HexCell[] _neighbors = default;
+
       private int elevation = -1,
          waterLevel = -1,
          urbanLevel = 0,
@@ -19,16 +28,9 @@ namespace HexMap.Map {
          distance,
          visibility;
 
-      [SerializeField]
-      private bool _hasIncomingRiver,
-         _hasOutgoingRiver,
-         _walled,
-         _explored;
-
-      private HexGridDirection incomingRiver, outgoingRiver;
-
-      [SerializeField] bool[] _roads;
-      [SerializeField] HexCell[] _neighbors = default;
+      private HexGridDirection incomingRiver,
+         outgoingRiver;
+      private HexGridChunk chunk = default;
 
       public int Index { get; set; }
       public int Elevation {
@@ -263,18 +265,17 @@ namespace HexMap.Map {
       public HexCellShaderData ShaderData { get; set; }
 
       [NonSerialized] public int SearchHeuristic = default;
-      [NonSerialized] public HexGridChunk Chunk = default;
       [NonSerialized] public HexCoordinates Coordinates = default;
       [NonSerialized] public RectTransform UIRect = default;
       [NonSerialized] public HexCell PathFrom = default;
 
-      void Refresh() {
-         if (Chunk) {
-            Chunk.Refresh();
+      private void Refresh() {
+         if (chunk) {
+            chunk.Refresh();
             for (int i = 0; i < _neighbors.Length; i++) {
                HexCell neighbor = _neighbors[i];
-               if (neighbor != null && neighbor.Chunk != Chunk) {
-                  neighbor.Chunk.Refresh();
+               if (neighbor != null && neighbor.chunk != chunk) {
+                  neighbor.chunk.Refresh();
                }
             }
             if (Unit) {
@@ -283,7 +284,7 @@ namespace HexMap.Map {
          }
       }
 
-      void RefreshPosition() {
+      private void RefreshPosition() {
          Vector3 position = transform.localPosition;
          position.y = elevation * HexMetrics.ElevationStep;
          position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.ElevationPerturbStrength;
@@ -294,11 +295,15 @@ namespace HexMap.Map {
          UIRect.localPosition = uiPosition;
       }
 
-      void RefreshSelfOnly() {
-         Chunk.Refresh();
+      private void RefreshSelfOnly() {
+         chunk.Refresh();
          if (Unit) {
             Unit.ValidateLocation();
          }
+      }
+
+      public void SetChunk(HexGridChunk parent) {
+         chunk = parent;
       }
 
       public void EnableHighlight(Color color) {

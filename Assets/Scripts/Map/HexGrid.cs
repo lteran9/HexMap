@@ -5,27 +5,33 @@ using TMPro;
 using HexMap.Misc;
 using HexMap.Units;
 using HexMap.Map.Grid;
-using System.ComponentModel;
 
 namespace HexMap.Map {
+   /// <summary>
+   /// Starting point of the hex map. Handles creating all of the cells assigns them to chunks.
+   /// </summary>
    public class HexGrid : MonoBehaviour {
       [SerializeField] private HexGridSettingsSO _settings = default;
 
-      private int chunkCountX,
-         chunkCountZ,
-         searchFrontierPhase;
-
+      private int searchFrontierPhase;
       private bool currentPathExists;
-
-      private HexCell currentPathFrom,
-          currentPathTo;
-
+      private HexCell currentPathFrom, currentPathTo;
       private HexCell[] cells = default;
       private HexGridChunk[] chunks = default;
       private HexCellPriorityQueue searchFrontier = default;
       private HexCellShaderData cellShaderData = default;
       private List<HexUnit> units = new List<HexUnit>();
 
+      public int ChunkCountX {
+         get {
+            return _settings.CellCountX / HexMetrics.ChunkSizeX;
+         }
+      }
+      public int ChunkCountZ {
+         get {
+            return _settings.CellCountZ / HexMetrics.ChunkSizeZ;
+         }
+      }
       public bool HasPath {
          get {
             return currentPathExists;
@@ -50,10 +56,10 @@ namespace HexMap.Map {
       }
 
       private void CreateChunks() {
-         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
+         chunks = new HexGridChunk[ChunkCountX * ChunkCountZ];
 
-         for (int z = 0, i = 0; z < chunkCountZ; z++) {
-            for (int x = 0; x < chunkCountX; x++) {
+         for (int z = 0, i = 0; z < ChunkCountZ; z++) {
+            for (int x = 0; x < ChunkCountX; x++) {
                chunks[i++] = Instantiate(_settings.ChunkPrefab, transform);
             }
          }
@@ -115,7 +121,7 @@ namespace HexMap.Map {
       private void AddCellToChunk(int x, int z, HexCell cell) {
          int chunkX = x / HexMetrics.ChunkSizeX;
          int chunkZ = z / HexMetrics.ChunkSizeZ;
-         HexGridChunk chunk = chunks[chunkX + chunkZ * chunkCountX];
+         HexGridChunk chunk = chunks[chunkX + chunkZ * ChunkCountX];
 
          int localX = x - chunkX * HexMetrics.ChunkSizeX;
          int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
@@ -367,10 +373,7 @@ namespace HexMap.Map {
 
       public void AddUnit(HexUnit unit, HexCell location, float orientation) {
          units.Add(unit);
-         unit.Grid = this;
-         unit.transform.SetParent(transform, false);
-         unit.Location = location;
-         unit.Orientation = orientation;
+         unit.Initialize(this, transform, location, orientation);
       }
 
       public void RemoveUnit(HexUnit unit) {
@@ -424,8 +427,7 @@ namespace HexMap.Map {
 
          _settings.UpdateCellCountX(x);
          _settings.UpdatecellCoundZ(z);
-         chunkCountX = _settings.CellCountX / HexMetrics.ChunkSizeX;
-         chunkCountZ = _settings.CellCountZ / HexMetrics.ChunkSizeZ;
+
          cellShaderData.Initialize(_settings.CellCountX, _settings.CellCountZ);
 
          CreateChunks();

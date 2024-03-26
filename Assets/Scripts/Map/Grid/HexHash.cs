@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    public class HexHash {
       public readonly float a;
       public readonly float b;

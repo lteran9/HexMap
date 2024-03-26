@@ -56,7 +56,7 @@ namespace HexMap.Map {
       private HexCellPriorityQueue searchFrontier = default;
       private List<MapRegion> regions = default;
 
-      private void Start() {
+      private void Awake() {
          _hexGrid = GetComponentInParent<HexGrid>();
       }
 

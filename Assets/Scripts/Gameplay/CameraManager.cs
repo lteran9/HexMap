@@ -1,6 +1,7 @@
 using UnityEngine;
 using HexMap.Input;
 using HexMap.Map;
+using HexMap.Map.Grid;
 
 namespace HexMap.Gameplay {
    public class CameraManager : MonoBehaviour {

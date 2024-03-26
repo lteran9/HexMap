@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using HexMap.EditorTools;
+using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]

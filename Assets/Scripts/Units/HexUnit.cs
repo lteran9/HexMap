@@ -10,33 +10,34 @@ namespace HexMap.Units {
    public class HexUnit : MonoBehaviour {
       #region Static Methods
 
-      public static HexUnit unitPrefab;
+      private const float travelSpeed = 4f;
+      private const float rotationSpeed = 180f;
+
+      public static HexUnit unitPrefab = default;
 
       public static void Load(BinaryReader reader, HexGrid grid) {
-         HexCoordinates coordinates = HexCoordinates.Load(reader);
+         var coordinates = HexCoordinates.Load(reader);
          float orientation = reader.ReadSingle();
          grid.AddUnit(
             Instantiate(unitPrefab), grid.GetCell(coordinates), orientation
          );
       }
 
-      const float travelSpeed = 4f;
-      const float rotationSpeed = 180f;
-
       #endregion
 
-      float orientation = default;
+      private float orientation = default;
 
-      HexCell location = default,
-         currentTravelLocation = null;
-
-      List<HexCell> pathToTravel = default;
+      private HexCell location = default;
+      private HexCell currentTravelLocation = default;
+      private HexGrid hexGrid = default;
+      private List<HexCell> pathToTravel = default;
 
       public int Speed {
          get {
             return 24;
          }
       }
+
       public int VisionRange {
          get {
             return 2;
@@ -59,32 +60,31 @@ namespace HexMap.Units {
          }
          set {
             if (location) {
-               Grid.DecreaseVisibility(location, VisionRange);
+               hexGrid.DecreaseVisibility(location, VisionRange);
                location.Unit = null;
             }
             location = value;
             value.Unit = this;
-            Grid.IncreaseVisibility(location, VisionRange);
+            hexGrid.IncreaseVisibility(location, VisionRange);
             transform.localPosition = value.Position;
          }
       }
-      public HexGrid Grid { get; set; }
 
-      void OnEnable() {
+      private void OnEnable() {
          if (location) {
             transform.localPosition = location.Position;
             if (currentTravelLocation) {
-               Grid.IncreaseVisibility(location, VisionRange);
-               Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
+               hexGrid.IncreaseVisibility(location, VisionRange);
+               hexGrid.DecreaseVisibility(currentTravelLocation, VisionRange);
                currentTravelLocation = null;
             }
          }
       }
 
-      IEnumerator TravelPath() {
+      private IEnumerator TravelPath() {
          Vector3 a, b, c = pathToTravel[0].Position;
          yield return LookAt(pathToTravel[1].Position);
-         Grid.DecreaseVisibility(
+         hexGrid.DecreaseVisibility(
             currentTravelLocation ?? pathToTravel[0],
             VisionRange
          );
@@ -95,7 +95,7 @@ namespace HexMap.Units {
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
+            hexGrid.IncreaseVisibility(pathToTravel[i], VisionRange);
             for (; t < 1f; t += Time.deltaTime * travelSpeed) {
                transform.localPosition = Bezier.GetPoint(a, b, c, t);
                Vector3 d = Bezier.GetDerivative(a, b, c, t);
@@ -103,7 +103,7 @@ namespace HexMap.Units {
                transform.localRotation = Quaternion.LookRotation(d);
                yield return null;
             }
-            Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
+            hexGrid.DecreaseVisibility(pathToTravel[i], VisionRange);
             t -= 1;
          }
          currentTravelLocation = null;
@@ -111,7 +111,7 @@ namespace HexMap.Units {
          a = c;
          b = location.Position;
          c = b;
-         Grid.IncreaseVisibility(location, VisionRange);
+         hexGrid.IncreaseVisibility(location, VisionRange);
          for (; t < 1f; t += Time.deltaTime * travelSpeed) {
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
             Vector3 d = Bezier.GetDerivative(a, b, c, t);
@@ -126,7 +126,7 @@ namespace HexMap.Units {
          pathToTravel = null;
       }
 
-      IEnumerator LookAt(Vector3 point) {
+      private IEnumerator LookAt(Vector3 point) {
          point.y = transform.localPosition.y;
          Quaternion fromRotation = transform.localRotation;
          Quaternion toRotation = Quaternion.LookRotation(point - transform.localPosition);
@@ -146,14 +146,19 @@ namespace HexMap.Units {
          orientation = transform.localRotation.eulerAngles.y;
       }
 
+      public void Initialize(HexGrid grid, Transform parent, HexCell location, float orientation) {
+         hexGrid = grid;
+         transform.SetParent(parent, false);
+         Location = location;
+         Orientation = orientation;
+      }
+
       public void ValidateLocation() {
          transform.localPosition = location.Position;
       }
 
       public void Die() {
-         if (location) {
-            Grid.DecreaseVisibility(location, VisionRange);
-         }
+         hexGrid.DecreaseVisibility(location, VisionRange);
          location.Unit = null;
          Destroy(gameObject);
       }
@@ -190,6 +195,11 @@ namespace HexMap.Units {
          return moveCost;
       }
 
+      /// <summary>
+      /// Cells must be explored and not underwater or currently occupied by another unit to be a valid destination.
+      /// </summary>
+      /// <param name="cell"></param>
+      /// <returns></returns>
       public bool IsValidDestination(HexCell cell) {
          return cell.IsExplored && !cell.IsUnderwater && !cell.Unit;
       }

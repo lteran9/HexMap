@@ -15,7 +15,7 @@ namespace HexMap.Map {
 
       public bool ImmediateMode { get; set; }
 
-      private void Start() {
+      private void Awake() {
          grid = GetComponent<HexGrid>();
       }
 

@@ -4,12 +4,12 @@ using HexMap.Map.Grid;
 
 namespace HexMap.Map {
    public class HexFeatureManager : MonoBehaviour {
-      [SerializeField] HexMesh _walls = default;
-      [SerializeField] Transform _wallTower = default, _bridge = default;
-      [SerializeField] Transform[] _special = default;
-      [SerializeField] HexFeatureCollection[] urbanCollections = default;
-      [SerializeField] HexFeatureCollection[] farmCollections = default;
-      [SerializeField] HexFeatureCollection[] plantCollections = default;
+      [SerializeField] private HexMesh _walls = default;
+      [SerializeField] private Transform _wallTower = default, _bridge = default;
+      [SerializeField] private Transform[] _special = default;
+      [SerializeField] private HexFeatureCollection[] urbanCollections = default;
+      [SerializeField] private HexFeatureCollection[] farmCollections = default;
+      [SerializeField] private HexFeatureCollection[] plantCollections = default;
 
       private Transform container = default;
 

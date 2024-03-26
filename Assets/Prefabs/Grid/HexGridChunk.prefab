@@ -517,6 +517,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6309510099614409959}
     m_Modifications:
+    - target: {fileID: 4066769775691917397, guid: ca9cb5d96491b45ca8216ac5dd7d8977, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4066769775691918250, guid: ca9cb5d96491b45ca8216ac5dd7d8977, type: 3}
       propertyPath: m_Name
       value: HexGridCanvas

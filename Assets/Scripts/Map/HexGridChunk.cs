@@ -5,14 +5,13 @@ using HexMap.Map.Grid;
 using HexMap.Extensions;
 
 namespace HexMap.Map {
+   /// <summary>
+   /// Handles the actual creation of the hex map mesh along with any features.
+   /// </summary>
    public class HexGridChunk : MonoBehaviour {
       private static Color weights1 = new Color(1f, 0, 0);
       private static Color weights2 = new Color(0, 1f, 0);
       private static Color weights3 = new Color(0, 0, 1f);
-
-      private Canvas gridCanvas = default;
-
-      private HexCell[] hexCells = default;
 
       [SerializeField] private HexMesh _terrain = default;
       [SerializeField] private HexMesh _rivers = default;
@@ -20,16 +19,17 @@ namespace HexMap.Map {
       [SerializeField] private HexMesh _water = default;
       [SerializeField] private HexMesh _waterShore = default;
       [SerializeField] private HexMesh _estuaries = default;
-
       [SerializeField] private HexFeatureManager _featureManager = default;
 
-      void Awake() {
-         gridCanvas = GetComponentInChildren<Canvas>();
+      private Canvas gridCanvas = default;
+      private HexCell[] hexCells = default;
 
+      private void Awake() {
+         gridCanvas = GetComponentInChildren<Canvas>();
          hexCells = new HexCell[HexMetrics.ChunkSizeX * HexMetrics.ChunkSizeZ];
       }
 
-      void LateUpdate() {
+      private void LateUpdate() {
          Triangulate(hexCells);
          enabled = false;
       }
@@ -44,7 +44,7 @@ namespace HexMap.Map {
 
       public void AddCell(int index, HexCell cell) {
          hexCells[index] = cell;
-         cell.Chunk = this;
+         cell.SetChunk(this);
          cell.transform.SetParent(_terrain.transform, false);
          cell.UIRect.SetParent(gridCanvas.transform, false);
       }

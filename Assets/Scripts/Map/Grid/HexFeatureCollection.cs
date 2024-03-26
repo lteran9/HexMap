@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    [System.Serializable]
    public struct HexFeatureCollection {
       public Transform[] prefabs;

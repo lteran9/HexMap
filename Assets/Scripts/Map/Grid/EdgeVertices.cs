@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HexMap.Map {
+namespace HexMap.Map.Grid {
    public struct EdgeVertices {
       public Vector3 v1, v2, v3, v4, v5;
 

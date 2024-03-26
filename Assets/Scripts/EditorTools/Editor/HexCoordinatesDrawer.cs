@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using HexMap.Map;
 using UnityEngine;
 using UnityEditor;
+using HexMap.Map.Grid;
 
 namespace HexMap.Editor {
    /// <summary>
