@@ -21,12 +21,12 @@ namespace HexMap.Gameplay {
       [SerializeField] float _StickMaxZoom = -45;
 
       [SerializeField] Transform _Stick = default;
-      [SerializeField] Transform _Swivel = default;
+      //[SerializeField] Transform _Swivel = default;
       [SerializeField] InputReader _InputReader = default;
       [SerializeField] HexGrid _HexGrid = default;
 
       float zoom = 1f,
-         moveSpeed = 250f,
+         //moveSpeed = 250f,
          rotationAngle = 0,
          rotationSpeed = 180,
          rotateInput = 0;
