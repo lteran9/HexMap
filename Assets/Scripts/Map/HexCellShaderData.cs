@@ -45,7 +45,6 @@ namespace HexMap.Map {
          enabled = transitioningCells.Count > 0;
       }
 
-
       public void Initialize(int x, int z) {
          if (cellTexture != null) {
             cellTexture.Reinitialize(x, z);

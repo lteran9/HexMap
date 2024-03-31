@@ -1,15 +1,16 @@
 using HexMap.Map;
 using UnityEngine;
 using HexMap.Map.Grid;
+using HexMap.Map.ScriptableObjects;
 
 namespace HexMap.Map {
    public class HexFeatureManager : MonoBehaviour {
       [SerializeField] private HexMesh _walls = default;
       [SerializeField] private Transform _wallTower = default, _bridge = default;
       [SerializeField] private Transform[] _special = default;
-      [SerializeField] private HexFeatureCollection[] urbanCollections = default;
-      [SerializeField] private HexFeatureCollection[] farmCollections = default;
-      [SerializeField] private HexFeatureCollection[] plantCollections = default;
+      [SerializeField] private HexFeatureCollectionSO _urbanCollections = default;
+      [SerializeField] private HexFeatureCollectionSO _farmCollections = default;
+      [SerializeField] private HexFeatureCollectionSO _plantCollections = default;
 
       private Transform container = default;
 
@@ -18,7 +19,7 @@ namespace HexMap.Map {
             Destroy(container.gameObject);
          }
 
-         container = new GameObject("Features Container").transform;
+         container = new GameObject("Container").transform;
          container.SetParent(transform, false);
 
          _walls.Clear();
@@ -36,8 +37,8 @@ namespace HexMap.Map {
          }
 
          HexHash hash = HexMetrics.SampleHashGrid(position);
-         Transform prefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.b);
-         Transform otherPrefab = PickPrefab(farmCollections, cell.FarmLevel, hash.b, hash.d);
+         Transform prefab = PickPrefab(_urbanCollections, cell.UrbanLevel, hash.a, hash.b);
+         Transform otherPrefab = PickPrefab(_farmCollections, cell.FarmLevel, hash.b, hash.d);
          float usedHash = hash.a;
          if (prefab) {
             if (otherPrefab && hash.b < hash.a) {
@@ -47,7 +48,7 @@ namespace HexMap.Map {
          } else if (otherPrefab) {
             prefab = otherPrefab;
          }
-         otherPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.c, hash.d);
+         otherPrefab = PickPrefab(_plantCollections, cell.PlantLevel, hash.c, hash.d);
          if (prefab) {
             if (otherPrefab && hash.c < usedHash) {
                prefab = otherPrefab;
@@ -89,12 +90,12 @@ namespace HexMap.Map {
          }
       }
 
-      private Transform PickPrefab(HexFeatureCollection[] collection, int level, float hash, float choice) {
+      private Transform PickPrefab(HexFeatureCollectionSO collection, int level, float hash, float choice) {
          if (level > 0) {
             float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
             for (int i = 0; i < thresholds.Length; i++) {
                if (hash < thresholds[i]) {
-                  return collection[i].Pick(choice);
+                  return collection.Pick(i, choice);
                }
             }
          }

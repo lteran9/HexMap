@@ -850,6 +850,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 379213393861007706, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
+      propertyPath: _regionBorder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5140604652927617490, guid: 612d27bb7883c4a7487a7f0910334daa, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068

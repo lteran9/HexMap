@@ -88,6 +88,7 @@ namespace HexMap.Map {
       }
 
       #region Triangles 
+
       public void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3) {
          int vertexIndex = vertices.Count;
          vertices.Add(HexMetrics.Perturb(v1));

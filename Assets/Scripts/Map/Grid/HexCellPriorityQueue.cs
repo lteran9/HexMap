@@ -15,9 +15,8 @@ namespace HexMap.Map.Grid {
       }
 
       public void Enqueue(HexCell cell, bool addToCount = true) {
-         if (addToCount) {
-            count += 1;
-         }
+         count += (addToCount ? 1 : 0);
+
          int priority = cell.SearchPriority;
          if (priority < minimum) {
             minimum = priority;
@@ -38,6 +37,7 @@ namespace HexMap.Map.Grid {
                return cell;
             }
          }
+
          return null;
       }
 

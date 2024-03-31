@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using HexMap.Units;
 
-namespace HexMap.Map {
+namespace HexMap.Map.ScriptableObjects {
    [CreateAssetMenu(fileName = "HexGridSettingsSO", menuName = "Map/HexGridSettings")]
    public class HexGridSettingsSO : ScriptableObject {
       [SerializeField] private int _seed = 0;

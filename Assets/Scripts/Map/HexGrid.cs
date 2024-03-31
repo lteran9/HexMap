@@ -5,6 +5,7 @@ using TMPro;
 using HexMap.Misc;
 using HexMap.Units;
 using HexMap.Map.Grid;
+using HexMap.Map.ScriptableObjects;
 
 namespace HexMap.Map {
    /// <summary>
