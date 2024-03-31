@@ -206,7 +206,7 @@ namespace HexMap.Map {
       }
 
       private void ErodeLand() {
-         List<HexCell> erodibleCells = ListPool<HexCell>.Get();
+         List<HexCell> erodibleCells = HexCellPool.Get();
          for (int i = 0; i < cellCount; i++) {
             HexCell cell = _hexGrid.GetCell(i);
             if (IsErodible(cell)) {
@@ -257,7 +257,7 @@ namespace HexMap.Map {
             }
          }
 
-         ListPool<HexCell>.Add(erodibleCells);
+         HexCellPool.Add(erodibleCells);
       }
 
       private void CreateRegions() {
@@ -338,7 +338,7 @@ namespace HexMap.Map {
       }
 
       private HexCell GetErosionTarget(HexCell cell) {
-         List<HexCell> candidates = ListPool<HexCell>.Get();
+         List<HexCell> candidates = HexCellPool.Get();
          int erodibleElevation = cell.Elevation - 2;
          for (var d = HexGridDirection.NE; d <= HexGridDirection.NW; d++) {
             HexCell neighbor = cell.GetNeighbor(d);
@@ -347,7 +347,7 @@ namespace HexMap.Map {
             }
          }
          HexCell target = candidates[Random.Range(0, candidates.Count)];
-         ListPool<HexCell>.Add(candidates);
+         HexCellPool.Add(candidates);
          return target;
       }
 

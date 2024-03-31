@@ -4,10 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HexMap.UI
-{
-   public class UIManager : MonoBehaviour
-   {
+namespace HexMap.UI {
+   public class UIManager : MonoBehaviour {
       [SerializeField] HexMapEditor _hexMapEditor = default;
 
       [Header("Screens")]
@@ -15,76 +13,63 @@ namespace HexMap.UI
       [SerializeField] UISaveLoadMenu _saveLoadMenu = default;
       [SerializeField] UINewMapMenu _newMapMenu = default;
 
-      void Awake()
-      {
-         if (_hexMapEditor == null)
-         {
+      void Awake() {
+         if (_hexMapEditor == null) {
             throw new Exception(string.Format("{0} is missing!", nameof(HexMapEditor)));
          }
       }
 
-      void Start()
-      {
-         if (_mapEditorMenu != null)
-         {
+      void OnEnable() {
+         if (_mapEditorMenu != null) {
             ShowDefaultMenu();
             RegisterCallbacks_MapEdit(true);
             RegisterCallbacks_SaveLoadMenu(true);
             RegisterCallbacks_NewMapMenu(true);
-         }
-         else
-         {
+         } else {
             Debug.LogError("_mapEditorMenu was not found.");
          }
       }
 
-      void OnDestroy()
-      {
-         RegisterCallbacks_MapEdit(false);
-         RegisterCallbacks_SaveLoadMenu(false);
-         RegisterCallbacks_NewMapMenu(false);
+      void OnDisable() {
+         if (_mapEditorMenu != null) {
+            RegisterCallbacks_MapEdit(false);
+            RegisterCallbacks_SaveLoadMenu(false);
+            RegisterCallbacks_NewMapMenu(false);
+         }
       }
 
       #region UI
 
-      public void ShowDefaultMenu()
-      {
+      public void ShowDefaultMenu() {
          _mapEditorMenu.gameObject.SetActive(true);
       }
 
-      public void OpenSaveLoadMenu()
-      {
+      public void OpenSaveLoadMenu() {
          _mapEditorMenu.gameObject.SetActive(false);
          _saveLoadMenu.gameObject.SetActive(true);
       }
 
-      public void CloseSaveLoadMenu()
-      {
+      public void CloseSaveLoadMenu() {
          _mapEditorMenu.gameObject.SetActive(true);
          _saveLoadMenu.gameObject.SetActive(false);
       }
 
-      public void OpenNewMapMenu()
-      {
+      public void OpenNewMapMenu() {
          _mapEditorMenu.gameObject.SetActive(false);
          _newMapMenu.gameObject.SetActive(true);
       }
 
-      public void CloseNewMapMenu()
-      {
+      public void CloseNewMapMenu() {
          _mapEditorMenu.gameObject.SetActive(true);
          _newMapMenu.gameObject.SetActive(false);
       }
 
       #region Event Callbacks
 
-      void RegisterCallbacks_MapEdit(bool register)
-      {
-         if (_mapEditorMenu != null)
-         {
+      void RegisterCallbacks_MapEdit(bool register) {
+         if (_mapEditorMenu != null) {
             // Register vs Unregister
-            if (register)
-            {
+            if (register) {
                _mapEditorMenu.FeatureToggleChanged += _hexMapEditor.SetTerrainTypeIndex;
 
                _mapEditorMenu.ElevationSlider += _hexMapEditor.SetElevation;
@@ -113,9 +98,7 @@ namespace HexMap.UI
                _mapEditorMenu.SaveEvent += OpenSaveLoadMenu;
                _mapEditorMenu.LoadEvent += OpenSaveLoadMenu;
                _mapEditorMenu.NewMapEvent += OpenNewMapMenu;
-            }
-            else
-            {
+            } else {
                _mapEditorMenu.FeatureToggleChanged -= _hexMapEditor.SetTerrainTypeIndex;
 
                _mapEditorMenu.ElevationSlider -= _hexMapEditor.SetElevation;
@@ -149,31 +132,21 @@ namespace HexMap.UI
          }
       }
 
-      void RegisterCallbacks_SaveLoadMenu(bool register)
-      {
-         if (_saveLoadMenu != null)
-         {
-            if (register)
-            {
+      void RegisterCallbacks_SaveLoadMenu(bool register) {
+         if (_saveLoadMenu != null) {
+            if (register) {
                _saveLoadMenu.CloseDocument += CloseSaveLoadMenu;
-            }
-            else
-            {
+            } else {
                _saveLoadMenu.CloseDocument -= CloseSaveLoadMenu;
             }
          }
       }
 
-      void RegisterCallbacks_NewMapMenu(bool register)
-      {
-         if (_newMapMenu != null)
-         {
-            if (register)
-            {
+      void RegisterCallbacks_NewMapMenu(bool register) {
+         if (_newMapMenu != null) {
+            if (register) {
                _newMapMenu.CancelButtonEvent += CloseNewMapMenu;
-            }
-            else
-            {
+            } else {
                _newMapMenu.CancelButtonEvent -= CloseNewMapMenu;
             }
          }

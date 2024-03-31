@@ -122,7 +122,7 @@ namespace HexMap.Units {
 
          transform.localPosition = location.Position;
          orientation = transform.localRotation.eulerAngles.y;
-         ListPool<HexCell>.Add(pathToTravel);
+         HexCellPool.Add(pathToTravel);
          pathToTravel = null;
       }
 

@@ -6,7 +6,7 @@ using HexMap.Extensions;
 
 namespace HexMap.Map {
    /// <summary>
-   /// Handles the actual creation of the hex map mesh along with any features.
+   /// Handles the actual creation of the hex map mesh along with any features. Every chunk belongs to a grid.
    /// </summary>
    public class HexGridChunk : MonoBehaviour {
       private static Color weights1 = new Color(1f, 0, 0);
@@ -171,7 +171,7 @@ namespace HexMap.Map {
             }
          }
 
-         if (cell.GetEdgeType(direction) == HexEdgeType.Slope) {
+         if (cell.GetEdgeType(neighbor) == HexEdgeType.Slope) {
             TriangulateEdgeTerraces(
                e1, cell, e2, neighbor, hasRoad
             );

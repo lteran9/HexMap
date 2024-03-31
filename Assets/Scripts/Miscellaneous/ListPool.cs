@@ -1,27 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HexMap.Map;
 
-namespace HexMap.Misc
-{
-   public static class ListPool<T>
-   {
-      static Stack<List<T>> p_Stack = new Stack<List<T>>();
+namespace HexMap.Misc {
+   public class ListPool<T> {
+      private static Stack<List<T>> pool = new Stack<List<T>>();
 
-      public static List<T> Get()
-      {
-         if (p_Stack.Count > 0)
-         {
-            return p_Stack.Pop();
+      public static List<T> Get() {
+         if (pool.Count > 0) {
+            return pool.Pop();
          }
 
          return new List<T>();
       }
 
-      public static void Add(List<T> list)
-      {
+      public static void Add(List<T> list) {
          list.Clear();
-         p_Stack.Push(list);
+         pool.Push(list);
       }
    }
+
+   public class IntPool : ListPool<int> { }
+   public class ColorPool : ListPool<Color> { }
+   public class Vector2Pool : ListPool<Vector2> { }
+   public class Vector3Pool : ListPool<Vector3> { }
+   public class HexCellPool : ListPool<HexCell> { }
 }

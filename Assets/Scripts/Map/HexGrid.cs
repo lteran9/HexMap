@@ -212,7 +212,7 @@ namespace HexMap.Map {
       }
 
       private List<HexCell> GetVisibleCells(HexCell fromCell, int range) {
-         List<HexCell> visibleCells = ListPool<HexCell>.Get();
+         List<HexCell> visibleCells = HexCellPool.Get();
 
          searchFrontierPhase += 2;
          if (searchFrontier == null) {
@@ -360,7 +360,7 @@ namespace HexMap.Map {
          for (int i = 0; i < cells.Count; i++) {
             cells[i].IncreaseVisibility();
          }
-         ListPool<HexCell>.Add(cells);
+         HexCellPool.Add(cells);
       }
 
       public void DecreaseVisibility(HexCell fromCell, int range) {
@@ -368,7 +368,7 @@ namespace HexMap.Map {
          for (int i = 0; i < cells.Count; i++) {
             cells[i].DecreaseVisibility();
          }
-         ListPool<HexCell>.Add(cells);
+         HexCellPool.Add(cells);
       }
 
       public void AddUnit(HexUnit unit, HexCell location, float orientation) {
@@ -449,7 +449,7 @@ namespace HexMap.Map {
             return null;
          }
 
-         List<HexCell> path = ListPool<HexCell>.Get();
+         List<HexCell> path = HexCellPool.Get();
          for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom) {
             path.Add(c);
          }

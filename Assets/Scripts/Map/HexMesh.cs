@@ -31,58 +31,55 @@ namespace HexMap.Map {
       #endregion
 
       private Mesh hexMesh = default;
-      private MeshRenderer meshRenderer = default;
       private MeshCollider meshCollider = default;
 
       private void Awake() {
-         GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
-         meshRenderer = GetComponent<MeshRenderer>();
+         GetComponent<MeshFilter>().mesh = hexMesh = new Mesh() { name = $"{name} Hex Mesh" };
          if (useCollider) {
             meshCollider = gameObject.AddComponent<MeshCollider>();
          }
-         hexMesh.name = $"{name} Hex Mesh";
       }
 
       public void Clear() {
          hexMesh.Clear();
-         vertices = ListPool<Vector3>.Get();
+         vertices = Vector3Pool.Get();
 
          if (useCellData) {
-            cellWeights = ListPool<Color>.Get();
-            cellIndices = ListPool<Vector3>.Get();
+            cellWeights = ColorPool.Get();
+            cellIndices = Vector3Pool.Get();
          }
 
          if (useUVCoordinates) {
-            uvs = ListPool<Vector2>.Get();
+            uvs = Vector2Pool.Get();
          }
          if (useUV2Coordinates) {
-            uvs2 = ListPool<Vector2>.Get();
+            uvs2 = Vector2Pool.Get();
          }
 
-         triangles = ListPool<int>.Get();
+         triangles = IntPool.Get();
       }
 
       public void Apply() {
          hexMesh.SetVertices(vertices);
-         ListPool<Vector3>.Add(vertices);
+         Vector3Pool.Add(vertices);
          if (useCellData) {
             hexMesh.SetColors(cellWeights);
-            ListPool<Color>.Add(cellWeights);
+            ColorPool.Add(cellWeights);
             hexMesh.SetUVs(2, cellIndices);
-            ListPool<Vector3>.Add(cellIndices);
+            Vector3Pool.Add(cellIndices);
          }
 
          if (useUVCoordinates) {
             hexMesh.SetUVs(0, uvs);
-            ListPool<Vector2>.Add(uvs);
+            Vector2Pool.Add(uvs);
          }
          if (useUV2Coordinates) {
             hexMesh.SetUVs(1, uvs2);
-            ListPool<Vector2>.Add(uvs2);
+            Vector2Pool.Add(uvs2);
          }
 
          hexMesh.SetTriangles(triangles, 0);
-         ListPool<int>.Add(triangles);
+         IntPool.Add(triangles);
          hexMesh.RecalculateNormals();
 
          if (useCollider) {

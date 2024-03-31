@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace HexMap.Map {
@@ -15,8 +16,8 @@ namespace HexMap.Map {
          _hasOutgoingRiver,
          _walled,
          _explored;
-      [SerializeField] bool[] _roads;
-      [SerializeField] HexCell[] _neighbors = default;
+      [SerializeField] private bool[] _roads;
+      [SerializeField] private HexCell[] _neighbors = default;
 
       private int elevation = -1,
          waterLevel = -1,
@@ -28,9 +29,10 @@ namespace HexMap.Map {
          distance,
          visibility;
 
+      // Every cell in the grid belongs to a chunk
+      private HexGridChunk chunk = default;
       private HexGridDirection incomingRiver,
          outgoingRiver;
-      private HexGridChunk chunk = default;
 
       public int Index { get; set; }
       public int Elevation {
@@ -270,36 +272,28 @@ namespace HexMap.Map {
       [NonSerialized] public HexCell PathFrom = default;
 
       private void Refresh() {
-         if (chunk) {
-            chunk.Refresh();
-            for (int i = 0; i < _neighbors.Length; i++) {
-               HexCell neighbor = _neighbors[i];
-               if (neighbor != null && neighbor.chunk != chunk) {
-                  neighbor.chunk.Refresh();
-               }
-            }
-            if (Unit) {
-               Unit.ValidateLocation();
-            }
+         RefreshSelfOnly();
+
+         for (int i = 0; i < _neighbors.Length; i++) {
+            _neighbors[i]?.chunk?.Refresh();
          }
       }
 
+      private void RefreshSelfOnly() {
+         chunk?.Refresh();
+         Unit?.ValidateLocation();
+      }
+
       private void RefreshPosition() {
+         // Cell position
          Vector3 position = transform.localPosition;
          position.y = elevation * HexMetrics.ElevationStep;
          position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.ElevationPerturbStrength;
          transform.localPosition = position;
-
+         // Label position
          Vector3 uiPosition = UIRect.localPosition;
          uiPosition.z = elevation * -HexMetrics.ElevationStep;
          UIRect.localPosition = uiPosition;
-      }
-
-      private void RefreshSelfOnly() {
-         chunk.Refresh();
-         if (Unit) {
-            Unit.ValidateLocation();
-         }
       }
 
       public void SetChunk(HexGridChunk parent) {
@@ -351,19 +345,17 @@ namespace HexMap.Map {
 
       #region Neighbors
 
-      public void SetNeighbor(HexGridDirection direction, HexCell cell) {
-         _neighbors[(int)direction] = cell;
-         cell._neighbors[(int)direction.Opposite()] = this;
+      public void SetNeighbor(HexGridDirection direction, HexCell other) {
+         _neighbors[(int)direction] = other;
+         other.SetOppositeNeighbor(direction, this);
+      }
+
+      private void SetOppositeNeighbor(HexGridDirection direction, HexCell other) {
+         _neighbors[(int)direction.Opposite()] = other;
       }
 
       public HexCell GetNeighbor(HexGridDirection direction) {
          return _neighbors[(int)direction];
-      }
-
-      public HexEdgeType GetEdgeType(HexGridDirection direction) {
-         return HexMetrics.GetEdgeType(
-            elevation, _neighbors[(int)direction].elevation
-         );
       }
 
       public HexEdgeType GetEdgeType(HexCell otherCell) {
@@ -438,13 +430,13 @@ namespace HexMap.Map {
          SetRoad((int)direction, false);
       }
 
-      bool IsValidRiverDestination(HexCell neighbor) {
+      private bool IsValidRiverDestination(HexCell neighbor) {
          return neighbor && (
             elevation >= neighbor.elevation || waterLevel == neighbor.elevation
          );
       }
 
-      void ValidateRivers() {
+      private void ValidateRivers() {
          if (_hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(outgoingRiver))) {
             RemoveOutgoingRiver();
          }
