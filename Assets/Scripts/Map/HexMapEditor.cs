@@ -12,7 +12,7 @@ namespace HexMap.Map {
       [SerializeField] private HexGrid _hexGrid = default;
       [SerializeField] private InputReader _inputReader = default;
       [SerializeField] private Material _terrainMaterial = default;
-      [SerializeField] private HexGameUI _gameUI = default;
+      [SerializeField] private GameManager _gameUI = default;
       //[SerializeField] private UIManager _uiManager = default;
 
       private int activeElevation,

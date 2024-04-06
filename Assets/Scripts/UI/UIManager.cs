@@ -14,13 +14,13 @@ namespace HexMap.UI {
       [SerializeField] UISaveLoadMenu _saveLoadMenu = default;
       [SerializeField] UINewMapMenu _newMapMenu = default;
 
-      void Awake() {
+      private void Awake() {
          if (_hexMapEditor == null) {
             throw new Exception(string.Format("{0} is missing!", nameof(HexMapEditor)));
          }
       }
 
-      void OnEnable() {
+      private void OnEnable() {
          if (_mapEditorMenu != null) {
             ShowDefaultMenu();
             RegisterCallbacks_MapEdit(true);
@@ -31,7 +31,7 @@ namespace HexMap.UI {
          }
       }
 
-      void OnDisable() {
+      private void OnDisable() {
          if (_mapEditorMenu != null) {
             RegisterCallbacks_MapEdit(false);
             RegisterCallbacks_SaveLoadMenu(false);
@@ -71,7 +71,7 @@ namespace HexMap.UI {
 
       #region Event Callbacks
 
-      void RegisterCallbacks_MapEdit(bool register) {
+      private void RegisterCallbacks_MapEdit(bool register) {
          if (_mapEditorMenu != null) {
             // Register vs Unregister
             if (register) {
@@ -137,7 +137,7 @@ namespace HexMap.UI {
          }
       }
 
-      void RegisterCallbacks_SaveLoadMenu(bool register) {
+      private void RegisterCallbacks_SaveLoadMenu(bool register) {
          if (_saveLoadMenu != null) {
             if (register) {
                _saveLoadMenu.CloseDocument += CloseSaveLoadMenu;
@@ -147,7 +147,7 @@ namespace HexMap.UI {
          }
       }
 
-      void RegisterCallbacks_NewMapMenu(bool register) {
+      private void RegisterCallbacks_NewMapMenu(bool register) {
          if (_newMapMenu != null) {
             if (register) {
                _newMapMenu.CancelButtonEvent += CloseNewMapMenu;

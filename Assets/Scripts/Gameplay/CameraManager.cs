@@ -13,7 +13,6 @@ namespace HexMap.Gameplay {
       [SerializeField] private Transform _stick = default;
       //[SerializeField] Transform _swivel = default;
       [SerializeField] private InputReader _inputReader = default;
-      [SerializeField] private HexGrid _hexGrid = default;
 
       private float zoom = 1f,
          //moveSpeed = 250f,
