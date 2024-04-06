@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -44, y: -50, z: 24}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7865157689329438618}
   m_RootOrder: 0
@@ -69,6 +70,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -45}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7865157689329438618}
   m_Father: {fileID: 7865157689041727322}
@@ -105,6 +107,7 @@ RectTransform:
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7865157688836806483}
   m_Father: {fileID: 7865157690160131282}
@@ -142,6 +145,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7865157688563858182}
   m_Father: {fileID: 7865157688836806483}
@@ -178,7 +182,10 @@ MonoBehaviour:
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
+    ModeOverride: 0
     LensShift: {x: 0, y: 0}
+    GateFit: 2
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -217,6 +224,7 @@ Transform:
   m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 31.819805, z: -31.819805}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7865157690160131282}
   m_RootOrder: 0
@@ -366,6 +374,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7865157689911260569}
   - {fileID: 7865157689041727322}
@@ -384,9 +393,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0894929622e63437985d601a97a27849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _StickMinZoom: -250
+  _stickMinZoom: -250
   _StickMaxZoom: -45
-  _Stick: {fileID: 7865157688836806483}
-  _Swivel: {fileID: 7865157689041727322}
-  _InputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
-  _HexGrid: {fileID: 0}
+  _stick: {fileID: 0}
+  _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
+  _hexGrid: {fileID: 0}

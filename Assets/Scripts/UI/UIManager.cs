@@ -3,6 +3,7 @@ using HexMap.Map;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using HexMap.Gameplay;
 
 namespace HexMap.UI {
    public class UIManager : MonoBehaviour {
@@ -45,21 +46,25 @@ namespace HexMap.UI {
       }
 
       public void OpenSaveLoadMenu() {
+         CameraManager.Instance.Lock(true);
          _mapEditorMenu.gameObject.SetActive(false);
          _saveLoadMenu.gameObject.SetActive(true);
       }
 
       public void CloseSaveLoadMenu() {
+         CameraManager.Instance.Lock(false);
          _mapEditorMenu.gameObject.SetActive(true);
          _saveLoadMenu.gameObject.SetActive(false);
       }
 
       public void OpenNewMapMenu() {
+         CameraManager.Instance.Lock(true);
          _mapEditorMenu.gameObject.SetActive(false);
          _newMapMenu.gameObject.SetActive(true);
       }
 
       public void CloseNewMapMenu() {
+         CameraManager.Instance.Lock(false);
          _mapEditorMenu.gameObject.SetActive(true);
          _newMapMenu.gameObject.SetActive(false);
       }

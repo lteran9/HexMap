@@ -7,30 +7,20 @@ namespace HexMap.Gameplay {
    public class CameraManager : MonoBehaviour {
       public static CameraManager Instance { get; private set; }
 
-      public static bool Locked {
-         set {
-            Instance.enabled = !value;
-         }
-      }
+      [SerializeField] private float _stickMinZoom = -250;
+      [SerializeField] private float _StickMaxZoom = -45;
 
-      public static void ValidatePosition() {
-         Instance.AdjustPosition(0f, 0f);
-      }
+      [SerializeField] private Transform _stick = default;
+      //[SerializeField] Transform _swivel = default;
+      [SerializeField] private InputReader _inputReader = default;
+      [SerializeField] private HexGrid _hexGrid = default;
 
-      [SerializeField] float _StickMinZoom = -250;
-      [SerializeField] float _StickMaxZoom = -45;
-
-      [SerializeField] Transform _Stick = default;
-      //[SerializeField] Transform _Swivel = default;
-      [SerializeField] InputReader _InputReader = default;
-      [SerializeField] HexGrid _HexGrid = default;
-
-      float zoom = 1f,
+      private float zoom = 1f,
          //moveSpeed = 250f,
          rotationAngle = 0,
          rotationSpeed = 180,
          rotateInput = 0;
-      Vector2 movementInput;
+      private Vector2 movementInput;
 
       private void Awake() {
          if (Instance != null) {
@@ -41,26 +31,25 @@ namespace HexMap.Gameplay {
       }
 
       private void OnEnable() {
-         if (_InputReader != null) {
-            _InputReader.ZoomCamera += AdjustZoom;
-            _InputReader.MoveEvent += MoveCamera;
-            _InputReader.RotateEvent += RotateCamera;
+         if (_inputReader != null) {
+            _inputReader.ZoomCamera += AdjustZoom;
+            _inputReader.MoveEvent += MoveCamera;
+            _inputReader.RotateEvent += RotateCamera;
          }
-
-         Instance = this;
       }
 
       private void OnDisable() {
-         if (_InputReader != null) {
-            _InputReader.ZoomCamera -= AdjustZoom;
-            _InputReader.MoveEvent -= MoveCamera;
-            _InputReader.RotateEvent -= RotateCamera;
+         if (_inputReader != null) {
+            _inputReader.ZoomCamera -= AdjustZoom;
+            _inputReader.MoveEvent -= MoveCamera;
+            _inputReader.RotateEvent -= RotateCamera;
          }
       }
 
       private void LateUpdate() {
          float xDelta = movementInput.x;
          float zDelta = movementInput.y;
+
          if (xDelta != 0f || zDelta != 0f) {
             AdjustPosition(xDelta, zDelta);
          }
@@ -76,8 +65,8 @@ namespace HexMap.Gameplay {
          if (delta != 0) {
             zoom = Mathf.Clamp01(zoom + delta);
 
-            float distance = Mathf.Lerp(_StickMinZoom, _StickMaxZoom, zoom);
-            _Stick.localPosition = new Vector3(0f, 0f, distance);
+            float distance = Mathf.Lerp(_stickMinZoom, _StickMaxZoom, zoom);
+            _stick.localPosition = new Vector3(0f, 0f, distance);
          }
       }
 
@@ -101,16 +90,6 @@ namespace HexMap.Gameplay {
          transform.localPosition = position;
       }
 
-      private Vector3 ClampPosition(Vector3 position) {
-         float xMax = (_HexGrid.GetCellCountX() - 0.5f) * (2f * HexMetrics.InnerRadius);
-         position.x = Mathf.Clamp(position.x, 0f, xMax);
-
-         float zMax = (_HexGrid.GetCellCountZ() - 1) * (1.5f * HexMetrics.OuterRadius);
-         position.z = Mathf.Clamp(position.z, 0f, zMax);
-
-         return position;
-      }
-
       #endregion
 
       #region Rotate
@@ -130,5 +109,9 @@ namespace HexMap.Gameplay {
       }
 
       #endregion
+
+      public void Lock(bool value) {
+         Instance.enabled = !value;
+      }
    }
 }

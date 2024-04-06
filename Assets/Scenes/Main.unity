@@ -480,7 +480,6 @@ MonoBehaviour:
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
   _gameUI: {fileID: 1888352579}
-  _uiManager: {fileID: 1059135468}
 --- !u!4 &961960166
 Transform:
   m_ObjectHideFlags: 0
@@ -624,6 +623,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hexGrid: {fileID: 1809051975}
   _mapGenerator: {fileID: 1905831165}
+--- !u!224 &1405054517 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7865157688836806483, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
+  m_PrefabInstance: {fileID: 7865157689767008493}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1524298047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,9 +1057,21 @@ PrefabInstance:
       value: 0.40784314
       objectReference: {fileID: 0}
     - target: {fileID: 7865157690160131245, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
+      propertyPath: _stick
+      value: 
+      objectReference: {fileID: 1405054517}
+    - target: {fileID: 7865157690160131245, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
       propertyPath: _HexGrid
       value: 
       objectReference: {fileID: 1809051975}
+    - target: {fileID: 7865157690160131245, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
+      propertyPath: _hexGrid
+      value: 
+      objectReference: {fileID: 1809051975}
+    - target: {fileID: 7865157690160131245, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
+      propertyPath: _inputReader
+      value: 
+      objectReference: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
     - target: {fileID: 7865157690160131282, guid: 686425017d36c4d6da62ec55d4ca9235, type: 3}
       propertyPath: m_RootOrder
       value: 4
