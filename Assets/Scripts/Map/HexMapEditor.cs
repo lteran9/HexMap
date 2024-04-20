@@ -11,7 +11,6 @@ namespace HexMap.Map {
       [SerializeField] private InputReader _inputReader = default;
       [SerializeField] private Material _terrainMaterial = default;
       [SerializeField] private GameManager _gameManager = default;
-      //[SerializeField] private UIManager _uiManager = default;
 
       private int activeElevation,
          activeWaterLevel,

@@ -17,8 +17,8 @@ namespace HexMap.Editor {
          // Draw coordinates
          var coordinates =
             new HexCoordinates(
-                  property.FindPropertyRelative("x").intValue,
-                  property.FindPropertyRelative("z").intValue
+               property.FindPropertyRelative("x").intValue,
+               property.FindPropertyRelative("z").intValue
             );
          GUI.Label(position, coordinates.ToString());
       }

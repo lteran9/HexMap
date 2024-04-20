@@ -42,7 +42,7 @@ namespace HexMap.Map.Grid {
 
       #endregion
 
-      private readonly int x, z;
+      [SerializeField] private int x, z;
 
       public int X { get { return x; } }
       public int Z { get { return z; } }

@@ -267,7 +267,7 @@ namespace HexMap.Map {
       public HexCellShaderData ShaderData { get; set; }
 
       [NonSerialized] public int SearchHeuristic = default;
-      [NonSerialized] public HexCoordinates Coordinates = default;
+      public HexCoordinates Coordinates = default;
       [NonSerialized] public RectTransform UIRect = default;
       [NonSerialized] public HexCell PathFrom = default;
 

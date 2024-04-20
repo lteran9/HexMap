@@ -59,9 +59,10 @@ namespace HexMap.Map {
       private void CreateChunks() {
          chunks = new HexGridChunk[ChunkCountX * ChunkCountZ];
 
-         for (int z = 0, i = 0; z < ChunkCountZ; z++) {
+         int index = 0;
+         for (int z = 0; z < ChunkCountZ; z++) {
             for (int x = 0; x < ChunkCountX; x++) {
-               chunks[i++] = Instantiate(_settings.ChunkPrefab, transform);
+               chunks[index++] = Instantiate(_settings.ChunkPrefab, transform);
             }
          }
       }
