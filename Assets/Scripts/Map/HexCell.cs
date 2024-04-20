@@ -16,7 +16,7 @@ namespace HexMap.Map {
          _hasOutgoingRiver,
          _walled,
          _explored;
-      [SerializeField] private bool[] _roads;
+      [SerializeField] private bool[] _roads = default;
       [SerializeField] private HexCell[] _neighbors = default;
 
       private int elevation = -1,
@@ -267,7 +267,7 @@ namespace HexMap.Map {
       public HexCellShaderData ShaderData { get; set; }
 
       [NonSerialized] public int SearchHeuristic = default;
-      public HexCoordinates Coordinates = default;
+      [NonSerialized] public HexCoordinates Coordinates = default;
       [NonSerialized] public RectTransform UIRect = default;
       [NonSerialized] public HexCell PathFrom = default;
 
