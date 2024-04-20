@@ -479,7 +479,7 @@ MonoBehaviour:
   _hexGrid: {fileID: 1809051975}
   _inputReader: {fileID: 11400000, guid: ecb66e2e463cf4bb9bc901b95817909d, type: 2}
   _terrainMaterial: {fileID: 2100000, guid: 32127634de5714e878bfe2f566e1d148, type: 2}
-  _gameUI: {fileID: 1888352579}
+  _gameManager: {fileID: 1888352579}
 --- !u!4 &961960166
 Transform:
   m_ObjectHideFlags: 0
@@ -493,7 +493,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1059135464
 GameObject:
@@ -528,7 +528,7 @@ Transform:
   - {fileID: 107188}
   - {fileID: 1167682646}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1059135468
 MonoBehaviour:
@@ -735,7 +735,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1780560175
 MonoBehaviour:

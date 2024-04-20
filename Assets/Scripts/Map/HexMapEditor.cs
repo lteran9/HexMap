@@ -1,8 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 using HexMap.Input;
 using HexMap.Extensions;
-using HexMap.UI;
 using HexMap.Units;
 using HexMap.Gameplay;
 using HexMap.Map.Grid;
@@ -12,7 +10,7 @@ namespace HexMap.Map {
       [SerializeField] private HexGrid _hexGrid = default;
       [SerializeField] private InputReader _inputReader = default;
       [SerializeField] private Material _terrainMaterial = default;
-      [SerializeField] private GameManager _gameUI = default;
+      [SerializeField] private GameManager _gameManager = default;
       //[SerializeField] private UIManager _uiManager = default;
 
       private int activeElevation,
@@ -320,7 +318,7 @@ namespace HexMap.Map {
       public void SetEditMode(bool toggle) {
          enabled = toggle;
 
-         _gameUI.SetEditMode(toggle);
+         _gameManager.SetEditMode(toggle);
       }
 
       public void ShowGrid(bool visible) {

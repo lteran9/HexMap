@@ -3,51 +3,15 @@ using System.Collections.Generic;
 using HexMap.Misc;
 using UnityEngine;
 using HexMap.Map.Grid;
+using HexMap.Map.ScriptableObjects;
 
 namespace HexMap.Map {
    public class HexMapGenerator : MonoBehaviour {
       private struct MapRegion {
          public int xMin, xMax, zMin, zMax;
-
-         /// <summary>
-         /// Used for debugging purposes. 
-         /// </summary>
-         /// <returns></returns>
-         public override string ToString() => $"{xMin}, {xMax}, {zMin}, {zMax}";
       }
 
-      [SerializeField] private bool _useFixedSeed = default;
-      [SerializeField] private int _seed = 0;
-      [Range(20, 200)]
-      [SerializeField] private int _chunkSizeMin = 30;
-      [Range(20, 200)]
-      [SerializeField] private int _chunkSizeMax = 100;
-      [Range(5, 95)]
-      [SerializeField] private int _landPercentage = 50;
-      [Range(1, 5)]
-      [SerializeField] private int _waterLevel = 3;
-      [Range(-4, 0)]
-      [SerializeField] private int _elevationMinimum = -2;
-      [Range(6, 10)]
-      [SerializeField] private int _elevationMaximum = 8;
-      [Range(0, 10)]
-      [SerializeField] private int _mapBorderX = 5;
-      [Range(0, 10)]
-      [SerializeField] private int _mapBorderZ = 5;
-      [Range(0, 10)]
-      [SerializeField] private int _regionBorder = 5;
-      [Range(1, 4)]
-      [SerializeField] private int _regionCount = 1;
-      [Range(0, 100)]
-      [SerializeField] private int _erosionPercentage = 50;
-
-
-      [Range(0, 0.5f)]
-      [SerializeField] private float _jitterProbability = 0.25f;
-      [Range(0f, 1f)]
-      [SerializeField] private float _highRiseProbability = 0.25f;
-      [Range(0f, 0.4f)]
-      [SerializeField] private float sinkProbability = 0.2f;
+      [SerializeField] private HexMapGeneratorSettingsSO _generatorSettings = default;
 
       private int cellCount = 0;
       private int searchFrontierPhase = 0;
@@ -62,14 +26,15 @@ namespace HexMap.Map {
 
       public void GenerateMap(int x, int z) {
          Random.State originalRandomState = Random.state;
-         if (!_useFixedSeed) {
-            _seed = Random.Range(0, int.MaxValue);
-            _seed ^= (int)System.DateTime.Now.Ticks;
-            _seed ^= (int)Time.unscaledTime;
-            _seed &= int.MaxValue;
+         if (_generatorSettings.UseFixedSeed) {
+            Random.InitState(_generatorSettings.Seed);
+         } else {
+            var fixedSeed = Random.Range(0, int.MaxValue);
+            fixedSeed ^= (int)System.DateTime.Now.Ticks;
+            fixedSeed ^= (int)Time.unscaledTime;
+            fixedSeed &= int.MaxValue;
+            Random.InitState(fixedSeed);
          }
-
-         Random.InitState(_seed);
 
          cellCount = x * z;
          _hexGrid.CreateMap(x, z);
@@ -78,7 +43,7 @@ namespace HexMap.Map {
          }
 
          for (int i = 0; i < cellCount; i++) {
-            _hexGrid.GetCell(i).WaterLevel = _waterLevel;
+            _hexGrid.GetCell(i).WaterLevel = _generatorSettings.WaterLevel;
          }
 
          CreateRegions();
@@ -100,17 +65,17 @@ namespace HexMap.Map {
          searchFrontier.Enqueue(firstCell);
          HexCoordinates center = firstCell.Coordinates;
 
-         int rise = Random.value < _highRiseProbability ? 2 : 1;
+         int rise = Random.value < _generatorSettings.HighRiseProbability ? 2 : 1;
          int size = 0;
          while (size < chunkSize && searchFrontier.Count > 0) {
             HexCell current = searchFrontier.Dequeue();
             int originalElevation = current.Elevation;
             int newElevation = originalElevation + rise;
-            if (newElevation > _elevationMaximum) {
+            if (newElevation > _generatorSettings.ElevationMaximum) {
                continue;
             }
             current.Elevation = newElevation;
-            if (originalElevation < _waterLevel && current.Elevation <= _waterLevel && --budget <= 0) {
+            if (originalElevation < _generatorSettings.WaterLevel && current.Elevation <= _generatorSettings.WaterLevel && --budget <= 0) {
                break;
             }
             size += 1;
@@ -120,7 +85,7 @@ namespace HexMap.Map {
                if (neighbor && neighbor.SearchPhase < searchFrontierPhase) {
                   neighbor.SearchPhase = searchFrontierPhase;
                   neighbor.Distance = neighbor.Coordinates.DistanceTo(center); ;
-                  neighbor.SearchHeuristic = Random.value < _jitterProbability ? 1 : 0; ;
+                  neighbor.SearchHeuristic = Random.value < _generatorSettings.JitterProbability ? 1 : 0; ;
                   searchFrontier.Enqueue(neighbor);
                }
             }
@@ -139,17 +104,17 @@ namespace HexMap.Map {
          searchFrontier.Enqueue(firstCell);
          HexCoordinates center = firstCell.Coordinates;
 
-         int sink = Random.value < _highRiseProbability ? 2 : 1;
+         int sink = Random.value < _generatorSettings.HighRiseProbability ? 2 : 1;
          int size = 0;
          while (size < chunkSize && searchFrontier.Count > 0) {
             HexCell current = searchFrontier.Dequeue();
             int originalElevation = current.Elevation;
             int newElevation = current.Elevation - sink;
-            if (newElevation < _elevationMinimum) {
+            if (newElevation < _generatorSettings.EleveationMinimum) {
                continue;
             }
             current.Elevation = newElevation;
-            if (originalElevation >= _waterLevel && newElevation < _waterLevel) {
+            if (originalElevation >= _generatorSettings.WaterLevel && newElevation < _generatorSettings.WaterLevel) {
                budget += 1;
             }
             size += 1;
@@ -159,7 +124,7 @@ namespace HexMap.Map {
                if (neighbor && neighbor.SearchPhase < searchFrontierPhase) {
                   neighbor.SearchPhase = searchFrontierPhase;
                   neighbor.Distance = neighbor.Coordinates.DistanceTo(center); ;
-                  neighbor.SearchHeuristic = Random.value < _jitterProbability ? 1 : 0; ;
+                  neighbor.SearchHeuristic = Random.value < _generatorSettings.JitterProbability ? 1 : 0; ;
                   searchFrontier.Enqueue(neighbor);
                }
             }
@@ -182,12 +147,12 @@ namespace HexMap.Map {
       }
 
       private void CreateLand() {
-         int landBudget = Mathf.RoundToInt(cellCount * _landPercentage * 0.01f);
+         int landBudget = Mathf.RoundToInt(cellCount * _generatorSettings.LandPercentage * 0.01f);
          for (int guard = 0; guard < 10000; guard++) {
-            bool sink = Random.value < sinkProbability;
+            bool sink = Random.value < _generatorSettings.SinkProbability;
             for (int i = 0; i < regions.Count; i++) {
                MapRegion region = regions[i];
-               int chunkSize = Random.Range(_chunkSizeMin, _chunkSizeMax - 1);
+               int chunkSize = Random.Range(_generatorSettings.ChunkSizeMin, _generatorSettings.ChunkSizeMax - 1);
                if (sink) {
                   landBudget = SinkTerrain(chunkSize, landBudget, region);
                } else {
@@ -215,7 +180,7 @@ namespace HexMap.Map {
          }
 
          int targetErodibleCount =
-            (int)(erodibleCells.Count * (100 - _erosionPercentage) * 0.01f);
+            (int)(erodibleCells.Count * (100 - _generatorSettings.ErosionPercentage) * 0.01f);
 
          while (erodibleCells.Count > targetErodibleCount) {
             int index = Random.Range(0, erodibleCells.Count);
@@ -268,61 +233,61 @@ namespace HexMap.Map {
          }
 
          var region = new MapRegion();
-         switch (_regionCount) {
+         switch (_generatorSettings.RegionCount) {
             default:
-               region.xMin = _mapBorderX;
-               region.xMax = _hexGrid.GetCellCountX() - _mapBorderX;
-               region.zMin = _mapBorderZ;
-               region.zMax = _hexGrid.GetCellCountZ() - _mapBorderZ;
+               region.xMin = _generatorSettings.MapBorderX;
+               region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
+               region.zMin = _generatorSettings.MapBorderZ;
+               region.zMax = _hexGrid.GetCellCountZ() - _generatorSettings.MapBorderZ;
                regions.Add(region);
                break;
             case 2:
                if (Random.value < 0.5f) {
-                  region.xMin = _mapBorderX;
-                  region.xMax = _hexGrid.GetCellCountX() / 2 - _regionBorder;
-                  region.zMin = _mapBorderZ;
-                  region.zMax = _hexGrid.GetCellCountZ() - _mapBorderZ;
+                  region.xMin = _generatorSettings.MapBorderX;
+                  region.xMax = _hexGrid.GetCellCountX() / 2 - _generatorSettings.RegionBorder;
+                  region.zMin = _generatorSettings.MapBorderZ;
+                  region.zMax = _hexGrid.GetCellCountZ() - _generatorSettings.MapBorderZ;
                   regions.Add(region);
-                  region.xMin = _hexGrid.GetCellCountX() / 2 + _regionBorder;
-                  region.xMax = _hexGrid.GetCellCountX() - _mapBorderX;
+                  region.xMin = _hexGrid.GetCellCountX() / 2 + _generatorSettings.RegionBorder;
+                  region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
                   regions.Add(region);
                } else {
-                  region.xMin = _mapBorderX;
-                  region.xMax = _hexGrid.GetCellCountX() - _mapBorderX;
-                  region.zMin = _mapBorderZ;
-                  region.zMax = _hexGrid.GetCellCountZ() / 2 - _regionBorder;
+                  region.xMin = _generatorSettings.MapBorderX;
+                  region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
+                  region.zMin = _generatorSettings.MapBorderZ;
+                  region.zMax = _hexGrid.GetCellCountZ() / 2 - _generatorSettings.RegionBorder;
                   regions.Add(region);
-                  region.zMin = _hexGrid.GetCellCountZ() / 2 + _regionBorder;
-                  region.zMax = _hexGrid.GetCellCountZ() - _mapBorderZ;
+                  region.zMin = _hexGrid.GetCellCountZ() / 2 + _generatorSettings.RegionBorder;
+                  region.zMax = _hexGrid.GetCellCountZ() - _generatorSettings.MapBorderZ;
                   regions.Add(region);
                }
                break;
             case 3:
-               region.xMin = _mapBorderX;
-               region.xMax = _hexGrid.GetCellCountX() / 3 - _regionBorder;
-               region.zMin = _mapBorderZ;
-               region.zMax = _hexGrid.GetCellCountZ() - _mapBorderZ;
+               region.xMin = _generatorSettings.MapBorderX;
+               region.xMax = _hexGrid.GetCellCountX() / 3 - _generatorSettings.RegionBorder;
+               region.zMin = _generatorSettings.MapBorderZ;
+               region.zMax = _hexGrid.GetCellCountZ() - _generatorSettings.MapBorderZ;
                regions.Add(region);
-               region.xMin = _hexGrid.GetCellCountX() / 3 + _regionBorder;
-               region.xMax = _hexGrid.GetCellCountX() * 2 / 3 - _regionBorder;
+               region.xMin = _hexGrid.GetCellCountX() / 3 + _generatorSettings.RegionBorder;
+               region.xMax = _hexGrid.GetCellCountX() * 2 / 3 - _generatorSettings.RegionBorder;
                regions.Add(region);
-               region.xMin = _hexGrid.GetCellCountX() * 2 / 3 + _regionBorder;
-               region.xMax = _hexGrid.GetCellCountX() - _mapBorderX;
+               region.xMin = _hexGrid.GetCellCountX() * 2 / 3 + _generatorSettings.RegionBorder;
+               region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
                break;
             case 4:
-               region.xMin = _mapBorderX;
-               region.xMax = _hexGrid.GetCellCountX() / 2 - _regionBorder;
-               region.zMin = _mapBorderZ;
-               region.zMax = _hexGrid.GetCellCountZ() / 2 - _regionBorder;
+               region.xMin = _generatorSettings.MapBorderX;
+               region.xMax = _hexGrid.GetCellCountX() / 2 - _generatorSettings.RegionBorder;
+               region.zMin = _generatorSettings.MapBorderZ;
+               region.zMax = _hexGrid.GetCellCountZ() / 2 - _generatorSettings.RegionBorder;
                regions.Add(region);
-               region.xMin = _hexGrid.GetCellCountX() / 2 + _regionBorder;
-               region.xMax = _hexGrid.GetCellCountX() - _mapBorderX;
+               region.xMin = _hexGrid.GetCellCountX() / 2 + _generatorSettings.RegionBorder;
+               region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
                regions.Add(region);
-               region.zMin = _hexGrid.GetCellCountZ() / 2 + _regionBorder;
-               region.zMax = _hexGrid.GetCellCountZ() - _mapBorderZ;
+               region.zMin = _hexGrid.GetCellCountZ() / 2 + _generatorSettings.RegionBorder;
+               region.zMax = _hexGrid.GetCellCountZ() - _generatorSettings.MapBorderZ;
                regions.Add(region);
-               region.xMin = _mapBorderX;
-               region.xMax = _hexGrid.GetCellCountX() / 2 - _regionBorder;
+               region.xMin = _generatorSettings.MapBorderX;
+               region.xMax = _hexGrid.GetCellCountX() / 2 - _generatorSettings.RegionBorder;
                regions.Add(region);
                break;
          }
