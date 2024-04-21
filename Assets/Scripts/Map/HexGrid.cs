@@ -44,7 +44,7 @@ namespace HexMap.Map {
          HexMetrics.InitializeHashGrid(_settings.Seed);
          HexUnit.unitPrefab = _settings.UnitPrefab;
          cellShaderData = gameObject.AddComponent<HexCellShaderData>();
-         CreateMap(_settings.CellCountX, _settings.CellCountZ);
+         //CreateMap(_settings.CellCountX, _settings.CellCountZ);
       }
 
       private void OnEnable() {
@@ -413,7 +413,10 @@ namespace HexMap.Map {
       }
 
       public bool CreateMap(int x, int z) {
-         if (x <= 0 || x % HexMetrics.ChunkSizeX != 0 || z <= 0 || z % HexMetrics.ChunkSizeZ != 0) {
+         if (
+            x <= 0 || x % HexMetrics.ChunkSizeX != 0 ||
+            z <= 0 || z % HexMetrics.ChunkSizeZ != 0
+         ) {
             Debug.LogError($"Unsupported map size, must be multiple of {HexMetrics.ChunkSizeX}.");
             return false;
          }

@@ -22,9 +22,9 @@ MonoBehaviour:
   _elevationMaximum: 8
   _mapBorderX: 5
   _mapBorderZ: 5
-  _regionBorder: 2
-  _regionCount: 3
+  _regionBorder: 5
+  _regionCount: 2
   _erosionPercentage: 50
   _jitterProbability: 0.25
-  _highRiseProbability: 0.35
+  _highRiseProbability: 0.5
   _sinkProbability: 0.2

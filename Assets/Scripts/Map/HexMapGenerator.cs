@@ -24,6 +24,10 @@ namespace HexMap.Map {
          _hexGrid = GetComponentInParent<HexGrid>();
       }
 
+      private void Start() {
+         GenerateMap(20, 15);
+      }
+
       public void GenerateMap(int x, int z) {
          Random.State originalRandomState = Random.state;
          if (_generatorSettings.UseFixedSeed) {
