@@ -277,6 +277,7 @@ namespace HexMap.Map {
                regions.Add(region);
                region.xMin = _hexGrid.GetCellCountX() * 2 / 3 + _generatorSettings.RegionBorder;
                region.xMax = _hexGrid.GetCellCountX() - _generatorSettings.MapBorderX;
+               regions.Add(region);
                break;
             case 4:
                region.xMin = _generatorSettings.MapBorderX;
